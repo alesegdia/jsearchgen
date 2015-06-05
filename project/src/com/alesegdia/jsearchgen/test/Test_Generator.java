@@ -49,7 +49,7 @@ public class Test_Generator {
 			e.printStackTrace();
 		}
 		t1 = System.nanoTime();
-		ggm2.BuildFromPath(ggm.buildPath, ggm.initialRoom);
+		ggm2.BuildFromPath(ggm.CloneBuildData());
 		t2 = System.nanoTime();
 		System.out.println("time to rebuild: " + (t2 - t1));
 		

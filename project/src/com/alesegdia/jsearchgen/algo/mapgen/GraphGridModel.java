@@ -61,7 +61,6 @@ public class GraphGridModel {
 				int room_index = RNG.rng.nextInt(0, remaining_rooms.size()-1);
 				RoomInstance selected = remaining_rooms.get(room_index);
 				InsertFirstRoom(selected);
-
 			} catch(IndexOutOfBoundsException e) {
 				System.err.println("remaining_rooms list empty!");
 			}
@@ -71,7 +70,7 @@ public class GraphGridModel {
 	private void InsertFirstRoom(RoomInstance selected) throws Exception {
 		selected.globalPosition.Set(30, 10);
 		AttachRoom(selected, 30, 10);
-		this.initialRoom = selected;
+		this.ggbd.initial_room = selected;
 	}
 
 	public GraphGridModel(List<RoomInstance> remaining_rooms, boolean insert_first) throws Exception {
@@ -99,7 +98,17 @@ public class GraphGridModel {
 		System.out.println("Closed doors: " + this.closed);
 	}
 
-	public List<DoorPairEntry> buildPath = new LinkedList<DoorPairEntry>();
+	private GraphGridBuildData ggbd = new GraphGridBuildData();
+	
+	public GraphGridBuildData CloneBuildData() {
+		return new GraphGridBuildData(this.ggbd);
+	}
+	
+	public List<DoorPairEntry> CloneBuildPath() {
+		List<DoorPairEntry> build_path = new LinkedList<DoorPairEntry>();
+		build_path.addAll(ggbd.build_path);
+		return build_path;
+	}
 	
 	public boolean InsertRandomFeasibleRoom() {
 		// precompute if needed 
@@ -124,24 +133,24 @@ public class GraphGridModel {
 			this.remaining_rooms.remove(door.ri_owner);
 			this.added_dpes.add(fde);
 			
-			if( ++a < 10 ) this.buildPath.add(fde);
+			if( ++a < 10 ) this.ggbd.build_path.add(fde);
 			return true;
 		}
 		else return false;
 	}
 	
-	public void BuildFromPath(List<DoorPairEntry> buildPath, RoomInstance initial) {
+	public void BuildFromPath(GraphGridBuildData ggbd) {
 		
-		remaining_rooms.remove(initial);
-		initial.globalPosition.Set(30, 10);
-		AttachRoom(initial, 30, 10);
+		remaining_rooms.remove(ggbd.initial_room);
+		ggbd.initial_room.globalPosition.Set(30, 10);
+		AttachRoom(ggbd.initial_room, 30, 10);
 
-		for( DoorPairEntry dpe : buildPath ) {
+		for( DoorPairEntry dpe : ggbd.build_path ) {
 			this.AttachRoom(dpe.other_door.ri_owner, dpe.relativeToSolutionMap.x, dpe.relativeToSolutionMap.y);
 			this.Connect(dpe.other_door, dpe.this_door);
 			this.tilemap.Set(dpe.other_door.GetGlobalPosition().y, dpe.other_door.GetGlobalPosition().x, 2);
 			this.added_dpes.add(dpe);
-			this.buildPath.add(dpe);
+			this.ggbd.build_path.add(dpe);
 		}
 	}
 
@@ -255,6 +264,5 @@ public class GraphGridModel {
 	public List<RoomInstance> GetRooms() {
 		return this.added_rooms;
 	}
-
 
 }
