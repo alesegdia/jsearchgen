@@ -58,11 +58,6 @@ public class Test_Generator {
 		FloydWarshallSolver fwsolver = new FloydWarshallSolver();
 		fwsolver.Solve(mgm.CloneSCM());
 
-		// get minimum path matrix
-		DoorBitsModel dbpm = new DoorBitsModel(mgm);
-		GeneticSolver gsolver = new GeneticSolver(dbpm);
-		gsolver.Solve();
-		
 		// debug stuff
 		MapGraphInstance mgi = mgm.CreateCleanInstance();
 		mgm.Debug();

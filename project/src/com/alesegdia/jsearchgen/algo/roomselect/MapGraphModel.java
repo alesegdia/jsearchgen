@@ -39,7 +39,6 @@ public class MapGraphModel {
 			possibleLinksPerRoom.add(new ArrayList<DoorPairEntry>());
 			i++;
 		}
-		System.out.println("END i: " + i);
 
 		possibleLinksUpperMatrix = new UpperMatrix2D<List<DoorPairEntry>>(i, i, null);
 		simplifiedConnectionMatrix = new UpperMatrix2D<Float>(i, i, -1.f);
@@ -69,7 +68,6 @@ public class MapGraphModel {
 					simplifiedConnectionMatrix.Set(i, j, Float.MAX_VALUE);
 				}
 			}
-			System.out.println();
 		}
 	
 	}
