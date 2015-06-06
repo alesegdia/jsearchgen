@@ -1,6 +1,6 @@
 package com.alesegdia.jsearchgen.test;
 
-import com.alesegdia.jsearchgen.core.util.UpperMatrix2D;
+import com.alesegdia.jsearchgen.util.UpperMatrix2D;
 
 public class Test_UpperMatrix {
 

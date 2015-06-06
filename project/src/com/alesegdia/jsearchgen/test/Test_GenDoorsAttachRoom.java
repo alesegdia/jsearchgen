@@ -3,12 +3,12 @@ package com.alesegdia.jsearchgen.test;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.alesegdia.jsearchgen.algo.mapgen.GraphGridModel;
-import com.alesegdia.jsearchgen.algo.mapgen.RandomSolver;
-import com.alesegdia.jsearchgen.core.data.Prefabs;
-import com.alesegdia.jsearchgen.core.data.RoomInstance;
-import com.alesegdia.jsearchgen.core.map.render.TileMapRenderer;
-import com.alesegdia.jsearchgen.core.util.RNG;
+import com.alesegdia.jsearchgen.model.map.GraphGridModel;
+import com.alesegdia.jsearchgen.model.room.Prefabs;
+import com.alesegdia.jsearchgen.model.room.RoomInstance;
+import com.alesegdia.jsearchgen.solver.RandomSolver;
+import com.alesegdia.jsearchgen.util.RNG;
+import com.alesegdia.jsearchgen.view.TileMapRenderer;
 
 public class Test_GenDoorsAttachRoom {
 	
