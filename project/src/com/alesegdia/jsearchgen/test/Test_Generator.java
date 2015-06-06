@@ -37,7 +37,8 @@ public class Test_Generator {
 		long t1 = System.nanoTime();
 		generator.Solve();
 		long t2 = System.nanoTime();
-		System.out.println("time to solve: " + (t2 - t1));
+		long solve_time = t2 - t1;
+		System.out.println("time to solve: " + solve_time);
 		
 		GraphGridModel ggm2 = null;
 		try {
@@ -49,7 +50,9 @@ public class Test_Generator {
 		t1 = System.nanoTime();
 		ggm2.BuildFromPath(ggm.CloneBuildData());
 		t2 = System.nanoTime();
-		System.out.println("time to rebuild: " + (t2 - t1));
+		long rebuild_time = t2 - t1;
+		System.out.println("time to rebuild: " + rebuild_time);
+		System.out.println("rebuild times faster than solve: " + (solve_time / rebuild_time) );
 		
 		// compute first and last rooms
 		MapGraphModel mgm = new MapGraphModel(new GraphGridSimpleProxy(ggm));
