@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.alesegdia.jsearchgen.algo.mapgen.GraphGridModel;
 import com.alesegdia.jsearchgen.algo.mapgen.RandomSolver;
-import com.alesegdia.jsearchgen.algo.mapgen.proxy.GraphGridAllProxy;
 import com.alesegdia.jsearchgen.algo.mapgen.proxy.GraphGridSimpleProxy;
 import com.alesegdia.jsearchgen.algo.roomselect.FloydWarshallSolver;
 import com.alesegdia.jsearchgen.algo.roomselect.MapGraphModel;
@@ -14,8 +13,6 @@ import com.alesegdia.jsearchgen.core.data.Prefabs;
 import com.alesegdia.jsearchgen.core.data.RoomInstance;
 import com.alesegdia.jsearchgen.core.map.render.GraphGridSolutionRenderer;
 import com.alesegdia.jsearchgen.core.util.RNG;
-import com.alesegdia.jsearchgen.trash.DoorBitsModel;
-import com.alesegdia.jsearchgen.trash.GeneticSolver;
 
 public class Test_Generator {
 
