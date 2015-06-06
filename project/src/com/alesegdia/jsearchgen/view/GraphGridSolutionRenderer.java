@@ -15,18 +15,24 @@ import com.alesegdia.jsearchgen.model.map.GraphGridModel;
 import com.alesegdia.jsearchgen.model.map.TileMap;
 import com.alesegdia.jsearchgen.model.map.TileType;
 import com.alesegdia.jsearchgen.model.room.RoomInstance;
+import com.alesegdia.jsearchgen.solver.FloydWarshallSolver;
 
 public class GraphGridSolutionRenderer extends JComponent implements KeyListener {
 	
 	private GraphGridModel ggs;
 	private TileMap map;
 	private Dimension dimension;
+	int r_start = 0;
+	int r_end = 1;
 	
 	public GraphGridSolutionRenderer(final GraphGridModel ggs)
 	{
 		this.ggs = ggs;
 		this.map = ggs.CreateTileMapWithDoors();
-
+		FloydWarshallSolver fws = new FloydWarshallSolver();
+		fws.Solve(ggs.graph_matrix.Clone());
+		r_start = fws.GetSpawnRoom();
+		r_end = fws.GetGoalRoom();
 		this.dimension = new Dimension(map.cols * 10, map.rows * 10);
 		this.setFocusable(true);
 		this.addKeyListener(this);
@@ -34,9 +40,9 @@ public class GraphGridSolutionRenderer extends JComponent implements KeyListener
 
     Font f = new Font("Sans", Font.BOLD, 20);
 	private String current_mode = "DPES";
+	private Font fb = new Font("Sans", Font.BOLD, 30);
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-	     g.setFont(f); 
 
 		for( int i = 0; i < this.map.cols; i++ )
 		{
@@ -57,8 +63,19 @@ public class GraphGridSolutionRenderer extends JComponent implements KeyListener
 				g.fillRect(i * 10, j * 10, 10, 10);
 			}
 		}
+	     g.setFont(f); 
+
 		for( RoomInstance ri : ggs.added_rooms ) {
+			if( ri.id == r_start ) {
+			     g.setFont(fb ); 
+			     g.setColor(new Color(128,0,0));
+			} else if( ri.id == r_end ) {
+			     g.setFont(fb); 
+			     g.setColor(new Color(0,0,128));
+			} else {
+			     g.setFont(f); 
 		     g.setColor(new Color(255,0,0));
+			}
 			g.drawString(Integer.toString(ri.id), ri.globalPosition.x * 10 + 60, ri.globalPosition.y * 10+ 60);
 		}
 	     g.setColor(new Color(0,0,0));

@@ -36,4 +36,8 @@ public class UpperMatrix2D<T> extends Matrix2D<T> {
 		}
 	}
 
+	public UpperMatrix2D<T> Clone() {
+		return new UpperMatrix2D<T>(this);
+	}
+
 }

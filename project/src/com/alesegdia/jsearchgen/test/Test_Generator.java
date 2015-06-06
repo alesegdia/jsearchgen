@@ -68,6 +68,12 @@ public class Test_Generator {
 		MapGraphModel mgm = new MapGraphModel(new GraphGridSimpleProxy(ggm));
 		FloydWarshallSolver fwsolver = new FloydWarshallSolver();
 		fwsolver.Solve(mgm.CloneSCM());
+		mgm.CloneSCM().Debug();
+		
+		fwsolver = new FloydWarshallSolver();
+		fwsolver.Solve(ggm.graph_matrix.Clone());
+		ggm.graph_matrix.Debug();
+
 
 		// debug stuff
 		MapGraphInstance mgi = mgm.CreateCleanInstance();

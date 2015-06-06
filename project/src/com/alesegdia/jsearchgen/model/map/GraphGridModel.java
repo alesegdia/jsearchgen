@@ -159,7 +159,7 @@ public class GraphGridModel {
 		this_door.connected_room 	= other_door.ri_owner;
 		other_door.connected_door = this_door;
 		this_door.connected_door = other_door;
-		graph_matrix.Set(other_door.connected_room.id, this_door.connected_room.id, other_door.connected_room.globalPosition.distance(this_door.connected_room.globalPosition));
+		graph_matrix.SetUpper(other_door.connected_room.id, this_door.connected_room.id, other_door.connected_room.globalPosition.distance(this_door.connected_room.globalPosition));
 	}
 
 	/**

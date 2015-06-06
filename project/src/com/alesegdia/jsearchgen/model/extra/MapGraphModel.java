@@ -34,7 +34,7 @@ public class MapGraphModel {
 		// Asignamos ID para cada habitación
 		int i = 0;
 		for( RoomInstance roominstance : dpp.GetRooms() ) {
-			roominstance.id = i;
+			//roominstance.id = i;
 			possibleLinksPerRoom.add(new ArrayList<DoorPairEntry>());
 			i++;
 		}
