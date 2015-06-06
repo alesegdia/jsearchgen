@@ -21,16 +21,16 @@ public class GraphGridAllProxy implements IMapGenProxy {
 
 	@Override
 	public List<DoorPairEntry> GetDoorPairList() {
-		List<DoorPairEntry> feasible_doors = new LinkedList<DoorPairEntry>();
+		List<DoorPairEntry> feasible_dpes = new LinkedList<DoorPairEntry>();
 		List<RoomInstance> rooms = GetRooms();
 		for( int i = 0; i < rooms.size(); i++ ) {
 			RoomInstance outer = rooms.get(i);
 			for( int j = i+1; j < rooms.size(); j++ ) {
 				RoomInstance inner = rooms.get(j);
-				feasible_doors.addAll(HandleRoomVsRoom(inner, outer));
+				feasible_dpes.addAll(HandleRoomVsRoom(inner, outer));
 			}
 		}
-		return feasible_doors;
+		return feasible_dpes;
 	}
 
 	private List<DoorPairEntry> HandleRoomVsRoom(RoomInstance inner, RoomInstance outer) {
@@ -44,10 +44,10 @@ public class GraphGridAllProxy implements IMapGenProxy {
 				dy = Math.abs(inner_global.y - outer_global.y);
 				if( dx + dy == 1 ) {
 					// creamos el par y lo metemos en la lista a devolver
-					Vec2 relative_to_this_map = this.ggs.IsPossibleDoorCombination( inner_door, outer_door, false );
-					if( relative_to_this_map != null ) {
+					Vec2 map_offset = this.ggs.IsPossibleDoorCombination( inner_door, outer_door );
+					if( map_offset != null ) {
 						DoorPairEntry dpe = new DoorPairEntry();
-						dpe.relativeToSolutionMap = relative_to_this_map;
+						dpe.relativeToSolutionMap = map_offset;
 						dpe.other_door = inner_door;
 						dpe.this_door = outer_door;
 						dpes.add(dpe);

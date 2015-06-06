@@ -6,6 +6,7 @@ import java.util.List;
 import com.alesegdia.jsearchgen.algo.mapgen.GraphGridModel;
 import com.alesegdia.jsearchgen.algo.mapgen.RandomSolver;
 import com.alesegdia.jsearchgen.algo.mapgen.proxy.GraphGridAllProxy;
+import com.alesegdia.jsearchgen.algo.mapgen.proxy.GraphGridSimpleProxy;
 import com.alesegdia.jsearchgen.algo.roomselect.FloydWarshallSolver;
 import com.alesegdia.jsearchgen.algo.roomselect.MapGraphModel;
 import com.alesegdia.jsearchgen.algo.roomselect.MapGraphInstance;
@@ -54,7 +55,7 @@ public class Test_Generator {
 		System.out.println("time to rebuild: " + (t2 - t1));
 		
 		// compute first and last rooms
-		MapGraphModel mgm = new MapGraphModel(new GraphGridAllProxy(ggm));
+		MapGraphModel mgm = new MapGraphModel(new GraphGridSimpleProxy(ggm));
 		FloydWarshallSolver fwsolver = new FloydWarshallSolver();
 		fwsolver.Solve(mgm.CloneSCM());
 

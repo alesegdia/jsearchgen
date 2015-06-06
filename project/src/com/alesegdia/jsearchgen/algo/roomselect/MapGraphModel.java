@@ -62,14 +62,11 @@ public class MapGraphModel {
 					r1 = rooms.get(i);
 					r2 = rooms.get(j);
 					simplifiedConnectionMatrix.Set(i, j, r1.globalPosition.distance(r2.globalPosition));
-				}
-				else
-				{
+				} else {
 					simplifiedConnectionMatrix.Set(i, j, Float.MAX_VALUE);
 				}
 			}
 		}
-	
 	}
 	
 	public int NumRooms() {

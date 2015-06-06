@@ -129,7 +129,10 @@ public class GraphGridModel {
 			Door door = fde.other_door;
 			this.AttachRoom(fde.other_door.ri_owner, fde.relativeToSolutionMap.x, fde.relativeToSolutionMap.y);
 			Connect(fde.other_door, fde.this_door);
-			this.tilemap.Set(door.GetGlobalPosition().y, door.GetGlobalPosition().x, 2);
+			this.closed.add(fde.other_door);
+			this.closed.add(fde.this_door);
+			this.opened.remove((Object)fde.other_door);
+			this.opened.remove((Object)fde.this_door);
 			this.remaining_rooms.remove(door.ri_owner);
 			this.added_dpes.add(fde);
 			
@@ -186,67 +189,74 @@ public class GraphGridModel {
 		return feasible_entries;
 	}
 
-	private Vec2 CheckInsert(Door door_other, Door door_this, int dr, int dc, Door.Type doortype, boolean apply)
+	private Vec2 CheckInsert(Door door_other, Door door_this, int dr, int dc, Door.Type doortype)
 	{
+		Vec2 ret = null;
 		if( door_other.type == door_this.type )
 		{
 			Vec2 this_global = door_this.GetGlobalPosition();
 			if( door_other.type == doortype )
 			{
-				if( !apply || this.tilemap.Get(this_global.y + dr, this_global.x + dc) == TileType.FREE )
+				if( this.tilemap.Get(this_global.y + dr, this_global.x + dc) == TileType.FREE )
 				{
-					Vec2 tmp = new Vec2(this_global.y + dr - door_other.localPosition.y, this_global.x + dc - door_other.localPosition.x);
-					if( !apply ) return tmp;
-					else if( !this.tilemap.CollideWith(door_other.ri_owner.prefab.map, tmp.x, tmp.y) )
+					Vec2 offset = new Vec2(this_global.y + dr - door_other.localPosition.y, this_global.x + dc - door_other.localPosition.x);
+					if( !this.tilemap.CollideWith(door_other.ri_owner.prefab.map, offset.x, offset.y) )
 					{
-						TileMap tm = new TileMap(this.tilemap);
-						tm.Apply(door_other.ri_owner.prefab.map, tmp.y, tmp.x);
-
-						return tmp;
+						ret = offset;
 					}
 				}
 			}
 		}
-		return null;
-	}
-
-	public Vec2 IsPossibleDoorCombination(Door door_other, Door door_this, boolean apply) {
-		Vec2 pos = null;  pos = CheckInsert(door_other, door_this,   1,   0,   Door.Type.HORIZONTAL,  apply);
-		if( pos == null ) pos = CheckInsert(door_other, door_this,  -1,   0,   Door.Type.HORIZONTAL,  apply);
-		if( pos == null ) pos = CheckInsert(door_other, door_this,   0,   1,   Door.Type.VERTICAL, 	  apply);
-		if( pos == null ) pos = CheckInsert(door_other, door_this,   0,  -1,   Door.Type.VERTICAL,    apply);
-
-		return pos;
+		return ret;
 	}
 
 	public Vec2 IsPossibleDoorCombination(Door door_other, Door door_this) {
-		return IsPossibleDoorCombination(door_other, door_this, true);
+		Vec2 pos = null;  pos = CheckInsert(door_other, door_this,   1,   0,   Door.Type.HORIZONTAL);
+		if( pos == null ) pos = CheckInsert(door_other, door_this,  -1,   0,   Door.Type.HORIZONTAL);
+		if( pos == null ) pos = CheckInsert(door_other, door_this,   0,   1,   Door.Type.VERTICAL);
+		if( pos == null ) pos = CheckInsert(door_other, door_this,   0,  -1,   Door.Type.VERTICAL);
+
+		return pos;
 	}
 
 	public void RenderCanvas() {
 		(new TileMapRenderer(new TileMap(this.CreateTileMapWithDoors()))).Show();
 	}
 
-	public TileMap CreateTileMapWithDoors( )
+	public TileMap CreateTileMapWithDoors( ) {
+		return CreateTileMapWithDoors(false, false, false);
+	}
+	
+	public TileMap CreateTileMapWithDoors( boolean show_closed, boolean show_opened, boolean show_dpes )
 	{
 		TileMap tm = new TileMap(this.tilemap);
 
-		for( Door door : this.closed )
-		{
-			if( door.type == Door.Type.HORIZONTAL) {
-				tm.Set(door.GetGlobalPosition().y, door.GetGlobalPosition().x, TileType.DOOR);
-				tm.Set(door.connected_door.GetGlobalPosition().y, door.connected_door.GetGlobalPosition().x, TileType.DOOR);
-			} else {
-				tm.Set(door.GetGlobalPosition().y, door.GetGlobalPosition().x, TileType.DOOR);
-				tm.Set(door.connected_door.GetGlobalPosition().y, door.connected_door.GetGlobalPosition().x, TileType.DOOR);
+		if( show_closed ) {
+			for( Door door : this.closed )
+			{
+				if( door.type == Door.Type.HORIZONTAL) {
+					tm.Set(door.GetGlobalPosition().y, door.GetGlobalPosition().x, TileType.DOORL);
+				} else {
+					tm.Set(door.GetGlobalPosition().y, door.GetGlobalPosition().x, TileType.DOORH);
+				}
 			}
 		}
-		for( Door door : this.opened )
-		{
-			if( door.type == Door.Type.HORIZONTAL) {
-				tm.Set(door.GetGlobalPosition().y, door.GetGlobalPosition().x, TileType.DOORL);
-			} else {
-				tm.Set(door.GetGlobalPosition().y, door.GetGlobalPosition().x, TileType.DOORH);
+		
+		if( show_opened ) {
+			for( Door door : this.opened )
+			{
+				if( door.type == Door.Type.HORIZONTAL) {
+					tm.Set(door.GetGlobalPosition().y, door.GetGlobalPosition().x, TileType.DOORL);
+				} else {
+					tm.Set(door.GetGlobalPosition().y, door.GetGlobalPosition().x, TileType.DOORH);
+				}
+			}
+		}
+		
+		if( show_dpes ) {
+			for( DoorPairEntry dpe : this.added_dpes ) {
+				tm.Set(dpe.other_door.GetGlobalPosition().y, dpe.other_door.GetGlobalPosition().x, TileType.DPES);
+				tm.Set(dpe.this_door.GetGlobalPosition().y, dpe.this_door.GetGlobalPosition().x, TileType.DPES);
 			}
 		}
 
