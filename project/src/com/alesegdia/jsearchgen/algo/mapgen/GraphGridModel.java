@@ -11,6 +11,7 @@ import com.alesegdia.jsearchgen.core.map.TileMap;
 import com.alesegdia.jsearchgen.core.map.TileType;
 import com.alesegdia.jsearchgen.core.map.render.TileMapRenderer;
 import com.alesegdia.jsearchgen.core.util.RNG;
+import com.alesegdia.jsearchgen.core.util.UpperMatrix2D;
 import com.alesegdia.jsearchgen.core.util.Vec2;
 
 /**
@@ -40,6 +41,8 @@ public class GraphGridModel {
 	public List<DoorPairEntry> all_feasible_dpes = new LinkedList<DoorPairEntry>();
 	public RoomInstance initialRoom;
 	public State state = State.UNINITIALISED;
+	
+	public UpperMatrix2D<Float> graph_matrix;
 
 	public GraphGridModel( int rows, int cols )
 	{
@@ -68,6 +71,7 @@ public class GraphGridModel {
 	}
 
 	private void InsertFirstRoom(RoomInstance selected) throws Exception {
+		graph_matrix = new UpperMatrix2D<Float>(this.remaining_rooms.size(), this.remaining_rooms.size(), -1f);
 		selected.globalPosition.Set(30, 10);
 		AttachRoom(selected, 30, 10);
 		this.ggbd.initial_room = selected;
@@ -126,34 +130,30 @@ public class GraphGridModel {
 		{
 			int door_index = RNG.rng.nextInt(feasible_door_pairs.size());
 			DoorPairEntry fde = feasible_door_pairs.get(door_index);
-			Door door = fde.other_door;
-			this.AttachRoom(fde.other_door.ri_owner, fde.relativeToSolutionMap.x, fde.relativeToSolutionMap.y);
-			Connect(fde.other_door, fde.this_door);
-			this.closed.add(fde.other_door);
-			this.closed.add(fde.this_door);
-			this.opened.remove((Object)fde.other_door);
-			this.opened.remove((Object)fde.this_door);
-			this.remaining_rooms.remove(door.ri_owner);
-			this.added_dpes.add(fde);
-			
-			if( ++a < 10 ) this.ggbd.build_path.add(fde);
+			ConnectDPE(fde);
 			return true;
 		}
 		else return false;
 	}
 	
-	public void BuildFromPath(GraphGridBuildData ggbd) {
+	public void ConnectDPE(DoorPairEntry dpe) {
+		this.AttachRoom(dpe.other_door.ri_owner, dpe.relativeToSolutionMap.x, dpe.relativeToSolutionMap.y);
+		this.Connect(dpe.other_door, dpe.this_door);
+		this.closed.add(dpe.other_door);
+		this.closed.add(dpe.this_door);
+		this.opened.remove((Object)dpe.other_door);
+		this.opened.remove((Object)dpe.this_door);
+		this.remaining_rooms.remove(dpe.other_door.ri_owner);
+		this.added_dpes.add(dpe);
+		if( ++a < 10 ) this.ggbd.build_path.add(dpe);
+	}
+	
+	public void BuildFromPath(GraphGridBuildData ggbd) throws Exception {
 		
-		remaining_rooms.remove(ggbd.initial_room);
-		ggbd.initial_room.globalPosition.Set(30, 10);
-		AttachRoom(ggbd.initial_room, 30, 10);
+		this.InsertFirstRoom(ggbd.initial_room);
 
 		for( DoorPairEntry dpe : ggbd.build_path ) {
-			this.AttachRoom(dpe.other_door.ri_owner, dpe.relativeToSolutionMap.x, dpe.relativeToSolutionMap.y);
-			this.Connect(dpe.other_door, dpe.this_door);
-			this.tilemap.Set(dpe.other_door.GetGlobalPosition().y, dpe.other_door.GetGlobalPosition().x, 2);
-			this.added_dpes.add(dpe);
-			this.ggbd.build_path.add(dpe);
+			ConnectDPE(dpe);
 		}
 	}
 
@@ -162,6 +162,7 @@ public class GraphGridModel {
 		this_door.connected_room 	= other_door.ri_owner;
 		other_door.connected_door = this_door;
 		this_door.connected_door = other_door;
+		graph_matrix.Set(other_door.connected_room.id, this_door.connected_room.id, other_door.connected_room.globalPosition.distance(this_door.connected_room.globalPosition));
 	}
 
 	/**

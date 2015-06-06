@@ -1,5 +1,6 @@
 package com.alesegdia.jsearchgen.test;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -9,6 +10,7 @@ import com.alesegdia.jsearchgen.algo.mapgen.proxy.GraphGridSimpleProxy;
 import com.alesegdia.jsearchgen.algo.roomselect.FloydWarshallSolver;
 import com.alesegdia.jsearchgen.algo.roomselect.MapGraphModel;
 import com.alesegdia.jsearchgen.algo.roomselect.MapGraphInstance;
+import com.alesegdia.jsearchgen.core.data.DoorPairEntry;
 import com.alesegdia.jsearchgen.core.data.Prefabs;
 import com.alesegdia.jsearchgen.core.data.RoomInstance;
 import com.alesegdia.jsearchgen.core.map.render.GraphGridSolutionRenderer;
@@ -16,7 +18,7 @@ import com.alesegdia.jsearchgen.core.util.RNG;
 
 public class Test_Generator {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		
 		// setup rng
 		RNG.rng = new RNG();
@@ -24,6 +26,12 @@ public class Test_Generator {
 		
 		// generate map layout
 		List<RoomInstance> selected_list = Prefabs.GenerateALot();
+		int i = 0;
+		for( RoomInstance roominstance : selected_list ) {
+			roominstance.id = i;
+			i++;
+		}
+
 		List<RoomInstance> clone = new LinkedList<RoomInstance>();
 		clone.addAll(selected_list);
 		GraphGridModel ggm = null;
@@ -39,6 +47,8 @@ public class Test_Generator {
 		long t2 = System.nanoTime();
 		long solve_time = t2 - t1;
 		System.out.println("time to solve: " + solve_time);
+		
+		ggm.graph_matrix.Debug();
 		
 		GraphGridModel ggm2 = null;
 		try {
