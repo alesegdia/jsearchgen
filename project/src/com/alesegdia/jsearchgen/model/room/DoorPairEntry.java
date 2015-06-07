@@ -6,6 +6,7 @@ public class DoorPairEntry {
 	public Door other_door;
 	public Vec2 relativeToSolutionMap;
 	public Door this_door;
+	public float fitness;
 	
 	@Override
 	public String toString() {

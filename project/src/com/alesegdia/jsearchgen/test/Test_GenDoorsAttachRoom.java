@@ -6,7 +6,7 @@ import java.util.List;
 import com.alesegdia.jsearchgen.model.map.GraphGridModel;
 import com.alesegdia.jsearchgen.model.room.Prefabs;
 import com.alesegdia.jsearchgen.model.room.RoomInstance;
-import com.alesegdia.jsearchgen.solver.RandomSolver;
+import com.alesegdia.jsearchgen.solver.RandomGenerator;
 import com.alesegdia.jsearchgen.util.RNG;
 import com.alesegdia.jsearchgen.view.TileMapRenderer;
 

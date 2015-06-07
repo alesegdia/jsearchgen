@@ -4,29 +4,23 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.alesegdia.jsearchgen.model.map.GraphGridModel;
+import com.alesegdia.jsearchgen.model.room.DoorPairEntry;
 import com.alesegdia.jsearchgen.model.room.RoomInstance;
 import com.alesegdia.jsearchgen.util.RNG;
 
-public class RandomSolver implements ISolver {
+public class RandomGenerator extends MapGenerator {
 
-	List<RoomInstance> startRoomList = new LinkedList<RoomInstance>();
-	private GraphGridModel randomModel;
-
-	public RandomSolver ( GraphGridModel first_solution ) {
-		this.randomModel = first_solution;
+	public RandomGenerator(GraphGridModel ggm) {
+		super(ggm);
 	}
 
 	@Override
-	public void Solve()
+	protected boolean Step() throws Exception
 	{
-		while( !randomModel.IsComplete() )
-		{
-			if( !randomModel.InsertRandomFeasibleRoom() )
-			{
-				System.err.println("ERROR: can't build a complete solution from this partial solution and this list of remaining rooms: ");
-				break;
-			}
-		}
+		List<DoorPairEntry> feasible_door_pairs = this.ggm.ComputeAllFeasibleDPE();
+		DoorPairEntry random = this.ggm.GetRandomDPE(feasible_door_pairs);
+		this.ggm.ConnectDPE(random);
+		return random != null;
 	}
 
 }

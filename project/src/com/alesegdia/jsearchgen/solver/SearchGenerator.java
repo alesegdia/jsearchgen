@@ -3,36 +3,23 @@ package com.alesegdia.jsearchgen.solver;
 import java.util.List;
 
 import com.alesegdia.jsearchgen.model.map.GraphGridModel;
+import com.alesegdia.jsearchgen.model.room.DoorPairEntry;
 import com.alesegdia.jsearchgen.model.room.RoomInstance;
 
-public class SearchSolver implements ISolver {
+public class SearchGenerator extends MapGenerator {
 
-	List<RoomInstance> rooms = null;
-	
-	public void Setup(List<RoomInstance> rooms) {
-		this.rooms = rooms;
+	public SearchGenerator(GraphGridModel ggm) {
+		super(ggm);
 	}
-	
+
 	@Override
-	public void Solve() throws Exception {
-		if( this.rooms == null ) {
-			throw new Exception("room list is null!");
-		}
-		GraphGridModel sm = null;
-		
-		while(!sm.GetRemainingRooms().isEmpty()) {
-			//List<ISearchSolution> sols = sm.GetPossibleSolutions();
-			//ISearchSolution best = GetBest(sm, sols);
-			//sm.ApplySolutionToModel(best);
-			//ISerializedSearchSolution sss;
-		}
+	protected boolean Step()
+	{
+		List<DoorPairEntry> feasible_door_pairs = this.ggm.ComputeAllFeasibleDPE();
+		DoorPairEntry random = this.ggm.GetBestDPE(feasible_door_pairs);
+		this.ggm.ConnectDPE(random);
+		return random != null;
 	}
 
-	/*
-	private ISearchSolution GetBest(ISearchModel sm, List<ISearchSolution> sols) {
-		for( ISearchSolution sol : sols ) sm.ComputeFintess(sol);
-		return null;
-	}
-	*/
 
 }

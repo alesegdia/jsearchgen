@@ -26,8 +26,8 @@ public class GraphGridModel {
 		FINISHED 			// ya se introdujeron todas las habitaciones
 	}
 
-	private static final int SOLUTION_WIDTH = 100;
-	private static final int SOLUTION_HEIGHT = 200;
+	private static final int SOLUTION_WIDTH = 200;
+	private static final int SOLUTION_HEIGHT = 100;
 	/**
 	 * TileMap representing the entire map as a Matrix2D, with proper rooms placed
 	 */
@@ -113,7 +113,7 @@ public class GraphGridModel {
 		return build_path;
 	}
 	
-	public boolean InsertRandomFeasibleRoom() {
+	public List<DoorPairEntry> ComputeAllFeasibleDPE() {
 		// precompute if needed 
 		// extract feasible doors for each room
 		List<DoorPairEntry> feasible_door_pairs = new LinkedList<DoorPairEntry>();
@@ -124,15 +124,29 @@ public class GraphGridModel {
 			feasible_door_pairs.addAll(l);
 			all_feasible_dpes.addAll(l);
 		}
-
-		if( !feasible_door_pairs.isEmpty() )
-		{
-			int door_index = RNG.rng.nextInt(feasible_door_pairs.size());
-			DoorPairEntry fde = feasible_door_pairs.get(door_index);
-			ConnectDPE(fde);
-			return true;
+		return feasible_door_pairs;
+	}
+	
+	public DoorPairEntry GetBestDPE(List<DoorPairEntry> feasible_door_pairs) {
+		DoorPairEntry best = null;
+		if( !feasible_door_pairs.isEmpty() ) {
+			best = feasible_door_pairs.get(0);
+			for( DoorPairEntry dpe : feasible_door_pairs ) {
+				if( dpe.fitness > best.fitness ) {
+					best = dpe;
+				}
+			}
 		}
-		else return false;
+		return best;
+	}
+
+	public DoorPairEntry GetRandomDPE(List<DoorPairEntry> feasible_door_pairs) {
+		DoorPairEntry dpe = null;
+		if( !feasible_door_pairs.isEmpty() ) {
+			int door_index = RNG.rng.nextInt(feasible_door_pairs.size());
+			dpe = feasible_door_pairs.get(door_index);
+		}
+		return dpe;
 	}
 
 	public void ConnectDPE(DoorPairEntry dpe) {
@@ -202,6 +216,7 @@ public class GraphGridModel {
 		} else {
 			this.graph_matrix.SetUpper(r1.id, r2.id, r1.globalPosition.distance(dpe.relativeToSolutionMap));
 			float fitness = ComputeFitness();
+			dpe.fitness = fitness;
 			this.graph_matrix.SetUpper(r1.id, r2.id, Float.MAX_VALUE);
 			return fitness;
 		}
@@ -278,13 +293,13 @@ public class GraphGridModel {
 		}
 		
 		if( show_dpes ) {
-			for( DoorPairEntry dpe : this.added_dpes ) {
-				tm.Set(dpe.other_door.GetGlobalPosition().y, dpe.other_door.GetGlobalPosition().x, TileType.DPES);
-				tm.Set(dpe.this_door.GetGlobalPosition().y, dpe.this_door.GetGlobalPosition().x, TileType.DPES);
-			}
 			for( DoorPairEntry dpe : this.all_feasible_dpes ) {
 				tm.Set(dpe.other_door.GetGlobalPosition().y, dpe.other_door.GetGlobalPosition().x, TileType.OPENED);
 				tm.Set(dpe.this_door.GetGlobalPosition().y, dpe.this_door.GetGlobalPosition().x, TileType.OPENED);
+			}
+			for( DoorPairEntry dpe : this.added_dpes ) {
+				tm.Set(dpe.other_door.GetGlobalPosition().y, dpe.other_door.GetGlobalPosition().x, TileType.DPES);
+				tm.Set(dpe.this_door.GetGlobalPosition().y, dpe.this_door.GetGlobalPosition().x, TileType.DPES);
 			}
 		}
 

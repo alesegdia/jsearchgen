@@ -12,11 +12,11 @@ import com.alesegdia.jsearchgen.model.room.DoorPairEntry;
 import com.alesegdia.jsearchgen.model.room.Prefabs;
 import com.alesegdia.jsearchgen.model.room.RoomInstance;
 import com.alesegdia.jsearchgen.solver.FloydWarshallSolver;
-import com.alesegdia.jsearchgen.solver.RandomSolver;
+import com.alesegdia.jsearchgen.solver.RandomGenerator;
 import com.alesegdia.jsearchgen.util.RNG;
 import com.alesegdia.jsearchgen.view.GraphGridSolutionRenderer;
 
-public class Test_Generator {
+public class Test_ModelSolvers {
 
 	public static void main(String[] args) throws Exception {
 		
@@ -26,24 +26,14 @@ public class Test_Generator {
 		
 		// generate map layout
 		List<RoomInstance> selected_list = Prefabs.GenerateALot();
-		int i = 0;
-		for( RoomInstance roominstance : selected_list ) {
-			roominstance.id = i;
-			i++;
-		}
-
 		List<RoomInstance> clone = new LinkedList<RoomInstance>();
 		clone.addAll(selected_list);
+		
 		GraphGridModel ggm = null;
-		try {
-			ggm = new GraphGridModel(selected_list);
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		RandomSolver generator = new RandomSolver(ggm);
+		ggm = new GraphGridModel(selected_list);
+		RandomGenerator generator = new RandomGenerator(ggm);
 		long t1 = System.nanoTime();
-		generator.Solve();
+		generator.Generate();
 		long t2 = System.nanoTime();
 		long solve_time = t2 - t1;
 		System.out.println("time to solve: " + solve_time);
@@ -77,7 +67,7 @@ public class Test_Generator {
 
 		// debug stuff
 		MapGraphInstance mgi = mgm.CreateCleanInstance();
-		mgm.Debug();
+		//mgm.Debug();
 		GraphGridSolutionRenderer ggsr = new GraphGridSolutionRenderer((GraphGridModel) ggm);
 		GraphGridSolutionRenderer ggsr2 = new GraphGridSolutionRenderer((GraphGridModel) ggm2);
 

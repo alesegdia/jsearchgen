@@ -21,6 +21,8 @@ public class RoomInstance {
 	public String name;
 	public int id;
 	
+	public static int nextID = 0;
+	
 	/** Holds the map. Doesn't need to copy since this map won't change,
 	 * we will place doors by adding them properly to the list
 	 * @param map physical map that this doors identifies with
@@ -28,8 +30,16 @@ public class RoomInstance {
 	public RoomInstance(RoomPrefab prefab)
 	{
 		this.prefab = prefab;
+		this.id = RoomInstance.nextID++;
 	}
 	
+	public RoomInstance(RoomInstance ri) {
+		this(ri.prefab);
+		for( Door door : ri.doors ) {
+			AddDoor(door.localPosition.x, door.localPosition.y, door.type);
+		}
+	}
+
 	/** Adds a door to this room. Just for internal purposes.
 	 * @param x relative to room x coordinate
 	 * @param y relative to room y coordinate 
