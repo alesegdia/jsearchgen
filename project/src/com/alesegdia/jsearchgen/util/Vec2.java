@@ -26,5 +26,10 @@ public class Vec2 {
 	public Float distance(Vec2 other) {
 		return (float) Math.sqrt( Math.pow(this.x - other.x,2) + Math.pow(this.y - other.y, 2) );
 	}
+
+	public void Set(Vec2 other) {
+		this.x = other.x;
+		this.y = other.y;
+	}
 	
 }

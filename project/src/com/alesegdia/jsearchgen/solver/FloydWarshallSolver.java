@@ -16,7 +16,7 @@ public class FloydWarshallSolver {
 	
 	public void Solve(UpperMatrix2D<Float> matrix) {
 		min_distances = matrix;
-		//min_distances.Debug();
+
 		for( int i = 0; i < matrix.cols; i++ ) {
 			min_distances.Set(i, i, 0.f);
 		}
@@ -45,9 +45,6 @@ public class FloydWarshallSolver {
 		this.spawn_room = biggest_r1;
 		this.goal_room = biggest_r2;
 		this.distance = biggest_value;
-		//min_distances.Debug();
-
-		System.out.println("MAS LEJANAS: " + biggest_r1 + ", " + biggest_r2 + " con " + biggest_value);
 	}
 
 	public int GetSpawnRoom() {
