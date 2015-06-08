@@ -4,8 +4,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.alesegdia.jsearchgen.model.map.GraphGridModel;
-import com.alesegdia.jsearchgen.model.room.Prefabs;
+import com.alesegdia.jsearchgen.model.room.PrefabManager;
 import com.alesegdia.jsearchgen.model.room.RoomInstance;
+import com.alesegdia.jsearchgen.model.room.InstanceManager;
 import com.alesegdia.jsearchgen.solver.RandomGenerator;
 import com.alesegdia.jsearchgen.solver.SearchGenerator;
 import com.alesegdia.jsearchgen.util.RNG;
@@ -18,11 +19,13 @@ public class Test_Generators {
 		RNG.rng = new RNG();
 		RNG.rng.setSeed(0xDEADFEED);
 		
-		Prefabs.Initialize();
+		PrefabManager pmgr = new PrefabManager();
+		InstanceManager rm = new InstanceManager(pmgr);
+		InstanceManager rm2 = new InstanceManager(pmgr);
 
 		// generate and clone room list
-		List<RoomInstance> selected_list = Prefabs.GenerateALot();
-		List<RoomInstance> clone = CloneListRooms(selected_list);
+		List<RoomInstance> selected_list = rm.GenerateALot();
+		List<RoomInstance> clone = CloneListRooms(selected_list, rm2);
 		
 		// create ggm and generators
 		GraphGridModel ggm = null;
@@ -54,11 +57,10 @@ public class Test_Generators {
 
 	}
 
-	private static List<RoomInstance> CloneListRooms(List<RoomInstance> selected_list) {
-		RoomInstance.nextID = 0;
+	private static List<RoomInstance> CloneListRooms(List<RoomInstance> selected_list, InstanceManager rmgr) {
 		List<RoomInstance> l = new LinkedList<RoomInstance>();
 		for( RoomInstance ri : selected_list ) {
-			l.add(new RoomInstance(ri));
+			l.add(rmgr.CreateRoomInstance(ri));
 		}
 		return l;
 	}

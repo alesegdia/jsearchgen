@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.alesegdia.jsearchgen.model.map.TileMap;
-import com.alesegdia.jsearchgen.model.room.Prefabs;
+import com.alesegdia.jsearchgen.model.room.PrefabManager;
 import com.alesegdia.jsearchgen.view.TileMapRenderer;
 
 public class Test_TileMap {
@@ -32,17 +32,18 @@ public class Test_TileMap {
 
 		// CONSOLE DEBUG ***************************
 		br();
-		Prefabs.prefabs.get(0).GetTileMap().Render();
+		PrefabManager pmgr = new PrefabManager();
+		pmgr.prefabs.get(0).GetTileMap().Render();
 		br();
 		mini.Render();
 		br();
-		System.out.println(Prefabs.prefabs.get(0).GetTileMap().CollideWith(mini, 0, 0));
-		System.out.println(Prefabs.prefabs.get(0).GetTileMap().CollideWith(mini, 9, 0));
-		Prefabs.prefabs.get(0).GetTileMap().Apply(mini, 1, 9);
+		System.out.println(pmgr.prefabs.get(0).GetTileMap().CollideWith(mini, 0, 0));
+		System.out.println(pmgr.prefabs.get(0).GetTileMap().CollideWith(mini, 9, 0));
+		pmgr.prefabs.get(0).GetTileMap().Apply(mini, 1, 9);
 		// *****************************************
 		
 		// GRAPHICAL DEBUG *************************
-		TileMapRenderer mr = new TileMapRenderer(Prefabs.prefabs.get(0).GetTileMap());
+		TileMapRenderer mr = new TileMapRenderer(pmgr.prefabs.get(0).GetTileMap());
 		mr.Show();
 		(new TileMapRenderer(mini)).Show();
 		// *****************************************

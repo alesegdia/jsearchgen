@@ -9,8 +9,9 @@ import com.alesegdia.jsearchgen.model.extra.MapGraphInstance;
 import com.alesegdia.jsearchgen.model.extra.MapGraphModel;
 import com.alesegdia.jsearchgen.model.map.GraphGridModel;
 import com.alesegdia.jsearchgen.model.room.DoorPairEntry;
-import com.alesegdia.jsearchgen.model.room.Prefabs;
+import com.alesegdia.jsearchgen.model.room.PrefabManager;
 import com.alesegdia.jsearchgen.model.room.RoomInstance;
+import com.alesegdia.jsearchgen.model.room.InstanceManager;
 import com.alesegdia.jsearchgen.solver.FloydWarshallSolver;
 import com.alesegdia.jsearchgen.solver.RandomGenerator;
 import com.alesegdia.jsearchgen.util.RNG;
@@ -24,10 +25,11 @@ public class Test_ModelSolvers {
 		RNG.rng = new RNG();
 		RNG.rng.setSeed(0xDEADFEED);
 
-		Prefabs.Initialize();
+		PrefabManager pmgr = new PrefabManager();
+		InstanceManager rm = new InstanceManager(pmgr);
 
 		// generate map layout
-		List<RoomInstance> selected_list = Prefabs.GenerateALot();
+		List<RoomInstance> selected_list = rm.GenerateALot();
 		List<RoomInstance> clone = new LinkedList<RoomInstance>();
 		clone.addAll(selected_list);
 		
