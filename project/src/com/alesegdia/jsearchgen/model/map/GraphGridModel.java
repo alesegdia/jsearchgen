@@ -20,14 +20,8 @@ import com.alesegdia.jsearchgen.view.TileMapRenderer;
  */
 public class GraphGridModel {
 	
-	public enum State {
-		UNINITIALISED,		// antes de introducir siquiera una habitación
-		UNFINISHED,		// aún no se han introducido todas las habitaciones
-		FINISHED 			// ya se introdujeron todas las habitaciones
-	}
-
 	private static final int SOLUTION_WIDTH = 200;
-	private static final int SOLUTION_HEIGHT = 100;
+	private static final int SOLUTION_HEIGHT = 200;
 	/**
 	 * TileMap representing the entire map as a Matrix2D, with proper rooms placed
 	 */
@@ -39,7 +33,6 @@ public class GraphGridModel {
 	public List<DoorPairEntry> added_dpes = new LinkedList<DoorPairEntry>();
 	public List<DoorPairEntry> all_feasible_dpes = new LinkedList<DoorPairEntry>();
 	public RoomInstance initialRoom;
-	public State state = State.UNINITIALISED;
 	
 	public UpperMatrix2D<Float> graph_matrix;
 
@@ -132,6 +125,13 @@ public class GraphGridModel {
 		if( !feasible_door_pairs.isEmpty() ) {
 			best = feasible_door_pairs.get(0);
 			for( DoorPairEntry dpe : feasible_door_pairs ) {
+				if( added_rooms.size() > 1 )
+					try {
+						ComputeFitness(dpe);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				if( dpe.fitness > best.fitness ) {
 					best = dpe;
 				}
@@ -194,13 +194,6 @@ public class GraphGridModel {
 					fde.relativeToSolutionMap = relative_to_this_map;
 					fde.other_door = door_other;
 					fde.this_door = door_this;
-					try {
-						//ComputeFitness(fde);
-						if( added_rooms.size() > 1 ) ComputeFitness(fde);
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
 					feasible_entries.add(fde);
 				}
 			}
@@ -263,10 +256,10 @@ public class GraphGridModel {
 	}
 
 	public TileMap CreateTileMapWithDoors( ) {
-		return CreateTileMapWithDoors(false, false, false);
+		return CreateTileMapWithDoors(false, false, false, false);
 	}
 	
-	public TileMap CreateTileMapWithDoors( boolean show_closed, boolean show_opened, boolean show_dpes )
+	public TileMap CreateTileMapWithDoors( boolean show_closed, boolean show_opened, boolean show_dpes, boolean show_room_feasible_doors )
 	{
 		TileMap tm = new TileMap(this.tilemap);
 
@@ -300,6 +293,14 @@ public class GraphGridModel {
 			for( DoorPairEntry dpe : this.added_dpes ) {
 				tm.Set(dpe.other_door.GetGlobalPosition().y, dpe.other_door.GetGlobalPosition().x, TileType.DPES);
 				tm.Set(dpe.this_door.GetGlobalPosition().y, dpe.this_door.GetGlobalPosition().x, TileType.DPES);
+			}
+		}
+		
+		if( show_room_feasible_doors ) {
+			for( RoomInstance ri : this.added_rooms ) {
+				for( Door door : ri.doors ) {
+					tm.Set(door.localPosition.y + ri.globalPosition.y, door.localPosition.x + ri.globalPosition.x, TileType.OPENED);
+				}
 			}
 		}
 
