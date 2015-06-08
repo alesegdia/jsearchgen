@@ -61,11 +61,11 @@ public class RoomInstance {
 	 */
 	public void GenerateRandomDoors(RNG rng, int num_doors)
 	{
-		List<RoomPrefab.PotentialDoorEntry> possible_doors = new ArrayList<RoomPrefab.PotentialDoorEntry>(this.prefab.potentialDoors);
+		List<PotentialDoorEntry> possible_doors = new ArrayList<PotentialDoorEntry>(this.prefab.potentialDoors);
 		while(num_doors > 0 && possible_doors.size() > 0)
 		{
 			int selected = rng.nextInt(possible_doors.size());
-			RoomPrefab.PotentialDoorEntry pde = possible_doors.get(selected);
+			PotentialDoorEntry pde = possible_doors.get(selected);
 			this.AddDoor(pde.localPosition.x, pde.localPosition.y, pde.type);
 			possible_doors.remove(selected);
 			num_doors--;
@@ -73,7 +73,9 @@ public class RoomInstance {
 	}
 
 	public void GenerateAllDoors(RNG rng) {
-		GenerateRandomDoors(rng, this.prefab.potentialDoors.size());
+		for( PotentialDoorEntry pde : this.prefab.potentialDoors ) {
+			this.AddDoor(pde.localPosition.x, pde.localPosition.y, pde.type);
+		}
 	}
 
 	public TileMap CreateTileMapWithDoors( )
