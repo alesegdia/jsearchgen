@@ -24,6 +24,7 @@ public class GraphGridSolutionRenderer extends JComponent implements KeyListener
 	private Dimension dimension;
 	int r_start = 0;
 	int r_end = 1;
+	public static int TILE_SIZE = 5;
 	
 	public GraphGridSolutionRenderer(final GraphGridModel ggs)
 	{
@@ -33,14 +34,14 @@ public class GraphGridSolutionRenderer extends JComponent implements KeyListener
 		fws.Solve(ggs.graph_matrix.Clone());
 		r_start = fws.GetSpawnRoom();
 		r_end = fws.GetGoalRoom();
-		this.dimension = new Dimension(map.cols * 10, map.rows * 10);
+		this.dimension = new Dimension(map.cols * TILE_SIZE, map.rows * TILE_SIZE);
 		this.setFocusable(true);
 		this.addKeyListener(this);
 	}
 
-    Font f = new Font("Sans", Font.BOLD, 20);
+    Font f = new Font("Sans", Font.BOLD, 10);
 	private String current_mode = "DPES";
-	private Font fb = new Font("Sans", Font.BOLD, 30);
+	private Font fb = new Font("Sans", Font.BOLD, 15);
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 
@@ -60,7 +61,7 @@ public class GraphGridSolutionRenderer extends JComponent implements KeyListener
 				case TileType.OPENED: 	c = Color.blue; 			break;
 				}
 				g.setColor(c);
-				g.fillRect(i * 10, j * 10, 10, 10);
+				g.fillRect(i * TILE_SIZE, j * TILE_SIZE, TILE_SIZE, TILE_SIZE);
 			}
 		}
 	     g.setFont(f); 
@@ -76,7 +77,7 @@ public class GraphGridSolutionRenderer extends JComponent implements KeyListener
 			     g.setFont(f); 
 		     g.setColor(new Color(255,0,0));
 			}
-			g.drawString(Integer.toString(ri.id), ri.globalPosition.x * 10 + 60, ri.globalPosition.y * 10+ 60);
+			g.drawString(Integer.toString(ri.id), ri.globalPosition.x * TILE_SIZE + 30, ri.globalPosition.y * TILE_SIZE + 30);
 		}
 	     g.setColor(new Color(0,0,0));
 		g.drawString(current_mode , 20, 20);
@@ -108,16 +109,20 @@ public class GraphGridSolutionRenderer extends JComponent implements KeyListener
 	public void keyPressed(KeyEvent e) {
 		if( e.getKeyCode() == KeyEvent.VK_F1 ) {
 			System.out.println("F1");
-			map = ggs.CreateTileMapWithDoors(true, false, false);
+			map = ggs.CreateTileMapWithDoors(true, false, false, false);
 			this.current_mode = "CLOSED";
 		} else if( e.getKeyCode() == KeyEvent.VK_F2 )	{
 			System.out.println("F2");
-			map = ggs.CreateTileMapWithDoors(false, true, false);
+			map = ggs.CreateTileMapWithDoors(false, true, false, false);
 			this.current_mode = "OPENED";
 		} else if( e.getKeyCode() == KeyEvent.VK_F3 )	{
 			System.out.println("F3");
-			map = ggs.CreateTileMapWithDoors(false, false, true);
+			map = ggs.CreateTileMapWithDoors(false, false, true, false);
 			this.current_mode = "DPES";
+		} else if( e.getKeyCode() == KeyEvent.VK_F4 )	{
+			System.out.println("F4");
+			map = ggs.CreateTileMapWithDoors(false, false, false, true);
+			this.current_mode = "OPENEDDOORS";
 		}
 		this.repaint();
 	}
