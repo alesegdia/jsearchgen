@@ -18,6 +18,8 @@ public class Test_Generators {
 		RNG.rng = new RNG();
 		RNG.rng.setSeed(0xDEADFEED);
 		
+		Prefabs.Initialize();
+
 		// generate and clone room list
 		List<RoomInstance> selected_list = Prefabs.GenerateALot();
 		List<RoomInstance> clone = CloneListRooms(selected_list);
@@ -35,7 +37,7 @@ public class Test_Generators {
 		random_generator.Generate();
 		long t2 = System.nanoTime();
 		long solve_time = t2 - t1;
-		System.out.println("time to solve RANDOM: " + solve_time);
+		System.out.println("time to solve RANDOM: " + solve_time/10e9);
 		
 		// generate search
 		t1 = System.nanoTime();

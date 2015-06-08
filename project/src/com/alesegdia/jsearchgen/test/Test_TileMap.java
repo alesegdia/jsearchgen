@@ -32,17 +32,17 @@ public class Test_TileMap {
 
 		// CONSOLE DEBUG ***************************
 		br();
-		Prefabs.room0.GetTileMap().Render();
+		Prefabs.prefabs.get(0).GetTileMap().Render();
 		br();
 		mini.Render();
 		br();
-		System.out.println(Prefabs.room0.GetTileMap().CollideWith(mini, 0, 0));
-		System.out.println(Prefabs.room0.GetTileMap().CollideWith(mini, 9, 0));
-		Prefabs.room0.GetTileMap().Apply(mini, 1, 9);
+		System.out.println(Prefabs.prefabs.get(0).GetTileMap().CollideWith(mini, 0, 0));
+		System.out.println(Prefabs.prefabs.get(0).GetTileMap().CollideWith(mini, 9, 0));
+		Prefabs.prefabs.get(0).GetTileMap().Apply(mini, 1, 9);
 		// *****************************************
 		
 		// GRAPHICAL DEBUG *************************
-		TileMapRenderer mr = new TileMapRenderer(Prefabs.room0.GetTileMap());
+		TileMapRenderer mr = new TileMapRenderer(Prefabs.prefabs.get(0).GetTileMap());
 		mr.Show();
 		(new TileMapRenderer(mini)).Show();
 		// *****************************************

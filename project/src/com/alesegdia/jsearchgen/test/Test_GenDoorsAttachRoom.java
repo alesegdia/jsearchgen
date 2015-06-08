@@ -21,9 +21,10 @@ public class Test_GenDoorsAttachRoom {
 	public static void main(String[] args) {
 
 		RNG rng = new RNG();
-		RoomInstance room1 = new RoomInstance(Prefabs.room0);
-		RoomInstance room2 = new RoomInstance(Prefabs.room0);
-		RoomInstance room3 = new RoomInstance(Prefabs.room1);
+		Prefabs.Initialize();
+		RoomInstance room1 = new RoomInstance(Prefabs.prefabs.get(0));
+		RoomInstance room2 = new RoomInstance(Prefabs.prefabs.get(0));
+		RoomInstance room3 = new RoomInstance(Prefabs.prefabs.get(0));
 
 		/**
 		 * GENERATE RANDOM DOORS
@@ -42,7 +43,7 @@ public class Test_GenDoorsAttachRoom {
 		 */
 		GraphGridModel gs = new GraphGridModel(15,30);
 		gs.AttachRoom(room1, 0, 0);
-		System.out.println("room0 potential doors: " + Prefabs.room0.potentialDoors);
+		System.out.println("room0 potential doors: " + Prefabs.prefabs.get(0).potentialDoors);
 
 		List<RoomInstance> initial_rooms = new LinkedList<RoomInstance>();
 		initial_rooms.add(room1);

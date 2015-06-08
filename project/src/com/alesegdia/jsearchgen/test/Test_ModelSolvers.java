@@ -23,7 +23,9 @@ public class Test_ModelSolvers {
 		// setup rng
 		RNG.rng = new RNG();
 		RNG.rng.setSeed(0xDEADFEED);
-		
+
+		Prefabs.Initialize();
+
 		// generate map layout
 		List<RoomInstance> selected_list = Prefabs.GenerateALot();
 		List<RoomInstance> clone = new LinkedList<RoomInstance>();
