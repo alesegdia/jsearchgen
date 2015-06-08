@@ -19,8 +19,9 @@ public class RandomGenerator extends MapGenerator {
 	{
 		List<DoorPairEntry> feasible_door_pairs = this.ggm.ComputeAllFeasibleDPE();
 		DoorPairEntry random = this.ggm.GetRandomDPE(feasible_door_pairs);
-		this.ggm.ConnectDPE(random);
-		return random != null;
+		if( random == null ) return false;
+		else this.ggm.ConnectDPE(random);
+		return true;
 	}
 
 }
