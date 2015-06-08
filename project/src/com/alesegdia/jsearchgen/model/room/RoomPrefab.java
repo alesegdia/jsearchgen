@@ -10,17 +10,9 @@ import com.alesegdia.jsearchgen.util.Vec2;
 
 public class RoomPrefab {
 	
-	public class PotentialDoorEntry {
-		public Vec2 localPosition = new Vec2(0,0);
-		public Door.Type type;
-		public String toString()
-		{
-			return "<" + localPosition.x + ", " + localPosition.y + " type " + (type==Door.Type.HORIZONTAL?"HOR":"VER") + ">";
-		}
-	}
-
 	public TileMap map;
 	public List<PotentialDoorEntry> potentialDoors = new ArrayList<PotentialDoorEntry>();
+	public int id;
 	
 	public RoomPrefab(TileMap map)
 	{
@@ -64,26 +56,20 @@ public class RoomPrefab {
 
 				
 				// VERTICAL AND HORIZONTAL ARE EXCLUSIVE. A DOOR CAN'T BE OF BOTH TYPES
-				if( check_horizontal )
-				{
-					PotentialDoorEntry pde = new PotentialDoorEntry();
-					pde.type = Door.Type.HORIZONTAL;
-					pde.localPosition.x = c;
-					pde.localPosition.y = r;
-					potentialDoors.add(pde);
-				}
-				else if( check_vertical )
-				{
-					PotentialDoorEntry pde = new PotentialDoorEntry();
-					pde.type = Door.Type.VERTICAL;
-					pde.localPosition.x = c;
-					pde.localPosition.y = r;
-					potentialDoors.add(pde);
-				}
+				if( check_horizontal ) AddPDE(c, r, Door.Type.HORIZONTAL);
+				else if( check_vertical ) AddPDE(c, r, Door.Type.VERTICAL);
 			}
 		}
 	}
 
+	void AddPDE(int c, int r, Door.Type type) {
+		PotentialDoorEntry pde = new PotentialDoorEntry();
+		pde.type = type;
+		pde.localPosition = new Vec2(c, r);
+		pde.prefab = this;
+		potentialDoors.add(pde);
+	}
+	
 	public TileMap GetTileMap() {
 		return map;
 	}
