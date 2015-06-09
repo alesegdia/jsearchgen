@@ -1,23 +1,19 @@
-package com.alesegdia.jsearchgen.generator;
+package com.alesegdia.jsearchgen.generatorsolver;
 
 import java.util.List;
 
 import com.alesegdia.jsearchgen.model.map.GraphGridModel;
 import com.alesegdia.jsearchgen.model.room.DoorPairEntry;
 
-public class RandomGenerator extends MapGenerator {
-
-	public RandomGenerator(GraphGridModel ggm) {
-		super(ggm);
-	}
+public class RandomSolver implements IMapGenSolver {
 
 	@Override
-	protected boolean Step() throws Exception
+	public boolean Step(GraphGridModel ggm) throws Exception
 	{
-		List<DoorPairEntry> feasible_door_pairs = this.ggm.ComputeAllFeasibleDPE();
-		DoorPairEntry random = this.ggm.GetRandomDPE(feasible_door_pairs);
+		List<DoorPairEntry> feasible_door_pairs = ggm.ComputeAllFeasibleDPE();
+		DoorPairEntry random = ggm.GetRandomDPE(feasible_door_pairs);
 		if( random == null ) return false;
-		else this.ggm.ConnectDPE(random);
+		else ggm.ConnectDPE(random);
 		return true;
 	}
 
