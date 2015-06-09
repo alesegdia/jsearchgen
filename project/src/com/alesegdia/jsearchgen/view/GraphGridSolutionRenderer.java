@@ -11,11 +11,11 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.KeyStroke;
 
+import com.alesegdia.jsearchgen.matrixsolver.FloydWarshallSolver;
 import com.alesegdia.jsearchgen.model.map.GraphGridModel;
 import com.alesegdia.jsearchgen.model.map.TileMap;
 import com.alesegdia.jsearchgen.model.map.TileType;
 import com.alesegdia.jsearchgen.model.room.RoomInstance;
-import com.alesegdia.jsearchgen.solver.FloydWarshallSolver;
 
 public class GraphGridSolutionRenderer extends JComponent implements KeyListener {
 	

@@ -1,4 +1,4 @@
-package com.alesegdia.jsearchgen.solver;
+package com.alesegdia.jsearchgen.matrixsolver;
 
 import com.alesegdia.jsearchgen.util.UpperMatrix2D;
 

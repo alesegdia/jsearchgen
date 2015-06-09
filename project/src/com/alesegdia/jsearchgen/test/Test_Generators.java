@@ -3,8 +3,8 @@ package com.alesegdia.jsearchgen.test;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.alesegdia.jsearchgen.generator.RandomGenerator;
-import com.alesegdia.jsearchgen.generator.BestSearchGenerator;
+import com.alesegdia.jsearchgen.generatorsolver.BestSearchSolver;
+import com.alesegdia.jsearchgen.generatorsolver.RandomSolver;
 import com.alesegdia.jsearchgen.model.map.GraphGridModel;
 import com.alesegdia.jsearchgen.model.room.PrefabManager;
 import com.alesegdia.jsearchgen.model.room.RoomInstance;

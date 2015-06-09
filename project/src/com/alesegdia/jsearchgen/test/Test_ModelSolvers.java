@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.alesegdia.jsearchgen.generator.RandomGenerator;
+import com.alesegdia.jsearchgen.generatorsolver.RandomSolver;
+import com.alesegdia.jsearchgen.matrixsolver.FloydWarshallSolver;
 import com.alesegdia.jsearchgen.model.extra.GraphGridSimpleProxy;
 import com.alesegdia.jsearchgen.model.extra.MapGraphInstance;
 import com.alesegdia.jsearchgen.model.extra.MapGraphModel;
@@ -13,7 +14,6 @@ import com.alesegdia.jsearchgen.model.room.DoorPairEntry;
 import com.alesegdia.jsearchgen.model.room.PrefabManager;
 import com.alesegdia.jsearchgen.model.room.RoomInstance;
 import com.alesegdia.jsearchgen.model.room.InstanceManager;
-import com.alesegdia.jsearchgen.solver.FloydWarshallSolver;
 import com.alesegdia.jsearchgen.util.RNG;
 import com.alesegdia.jsearchgen.view.GraphGridSolutionRenderer;
 
