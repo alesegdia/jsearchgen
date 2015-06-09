@@ -1,4 +1,4 @@
-package com.alesegdia.jsearchgen.solver;
+package com.alesegdia.jsearchgen.generator;
 
 import java.util.List;
 
