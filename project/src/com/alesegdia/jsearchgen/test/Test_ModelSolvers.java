@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.alesegdia.jsearchgen.generator.RandomGenerator;
 import com.alesegdia.jsearchgen.model.extra.GraphGridSimpleProxy;
 import com.alesegdia.jsearchgen.model.extra.MapGraphInstance;
 import com.alesegdia.jsearchgen.model.extra.MapGraphModel;
@@ -13,14 +14,13 @@ import com.alesegdia.jsearchgen.model.room.PrefabManager;
 import com.alesegdia.jsearchgen.model.room.RoomInstance;
 import com.alesegdia.jsearchgen.model.room.InstanceManager;
 import com.alesegdia.jsearchgen.solver.FloydWarshallSolver;
-import com.alesegdia.jsearchgen.solver.RandomGenerator;
 import com.alesegdia.jsearchgen.util.RNG;
 import com.alesegdia.jsearchgen.view.GraphGridSolutionRenderer;
 
 public class Test_ModelSolvers {
 
 	public static void main(String[] args) throws Exception {
-		
+		/*
 		// setup rng
 		RNG.rng = new RNG();
 		RNG.rng.setSeed(0xDEADFEED);
@@ -29,7 +29,8 @@ public class Test_ModelSolvers {
 		InstanceManager rm = new InstanceManager(pmgr);
 
 		// generate map layout
-		List<RoomInstance> selected_list = rm.GenerateALot();
+		int num_prefabs[] = { 10, 10 };
+		List<RoomInstance> selected_list = rm.GenerateALot(num_prefabs);
 		List<RoomInstance> clone = new LinkedList<RoomInstance>();
 		clone.addAll(selected_list);
 		
@@ -79,6 +80,6 @@ public class Test_ModelSolvers {
 		ggsr2.Show();	
 		
 		//mgi.Debug();
-
+		*/
 	}
 }

@@ -1,4 +1,4 @@
-package com.alesegdia.jsearchgen.solver;
+package com.alesegdia.jsearchgen.generator;
 
 import com.alesegdia.jsearchgen.model.map.GraphGridModel;
 
@@ -14,7 +14,7 @@ public class MapGenerator {
 	public void Generate() throws Exception {
 		while(!this.ggm.IsComplete()){
 			if(!this.Step()) {
-				throw new Exception("ERROR: can't build a complete solution from this partial solution and this list of remaining rooms " + this.ggm.remaining_rooms);
+				throw new Exception("ERROR: can't build a complete solution from this partial solution and this list of remaining rooms " + this.ggm);
 			}
 		}
 	}
