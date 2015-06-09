@@ -3,12 +3,12 @@ package com.alesegdia.jsearchgen.test;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.alesegdia.jsearchgen.generator.RandomGenerator;
+import com.alesegdia.jsearchgen.generator.BestSearchGenerator;
 import com.alesegdia.jsearchgen.model.map.GraphGridModel;
 import com.alesegdia.jsearchgen.model.room.PrefabManager;
 import com.alesegdia.jsearchgen.model.room.RoomInstance;
 import com.alesegdia.jsearchgen.model.room.InstanceManager;
-import com.alesegdia.jsearchgen.solver.RandomGenerator;
-import com.alesegdia.jsearchgen.solver.SearchGenerator;
 import com.alesegdia.jsearchgen.util.RNG;
 import com.alesegdia.jsearchgen.view.GraphGridSolutionRenderer;
 
@@ -16,16 +16,18 @@ public class Test_Generators {
 
 	public static void main(String[] args) throws Exception {
 		
+		/*
 		RNG.rng = new RNG();
 		RNG.rng.setSeed(0xDEADFEED);
-		
+	
 		PrefabManager pmgr = new PrefabManager();
 		InstanceManager rm = new InstanceManager(pmgr);
 		InstanceManager rm2 = new InstanceManager(pmgr);
 
 		// generate and clone room list
-		List<RoomInstance> selected_list = rm.GenerateALot();
-		List<RoomInstance> clone = CloneListRooms(selected_list, rm2);
+		int[] num_prefabs = { 10, 10 };
+		rm.GenerateALot(num_prefabs);
+		List<RoomInstance> clone = CloneListRooms(rm.allRemainingRooms, rm2);
 		
 		// create ggm and generators
 		GraphGridModel ggm = null;
@@ -33,7 +35,7 @@ public class Test_Generators {
 		ggm = new GraphGridModel(selected_list);
 		ggm2 = new GraphGridModel(clone);
 		RandomGenerator random_generator = new RandomGenerator(ggm);
-		SearchGenerator search_generator = new SearchGenerator(ggm2);
+		BestSearchGenerator search_generator = new BestSearchGenerator(ggm2);
 		
 		// generate random
 		long t1 = System.nanoTime();
@@ -48,12 +50,13 @@ public class Test_Generators {
 		t2 = System.nanoTime();
 		solve_time = t2 - t1;
 		System.out.println("time to solve SEARCH: " + solve_time);
-
+		System.out.println("time for FITNESS CALCULATION: " + GraphGridModel.fitness_time);
+		
 		GraphGridSolutionRenderer ggsr = new GraphGridSolutionRenderer((GraphGridModel) ggm);
 		GraphGridSolutionRenderer ggsr2 = new GraphGridSolutionRenderer((GraphGridModel) ggm2);
 		ggsr.Show();	
 		ggsr2.Show();	
-
+		*/
 
 	}
 

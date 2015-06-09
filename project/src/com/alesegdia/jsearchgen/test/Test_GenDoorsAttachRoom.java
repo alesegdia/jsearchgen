@@ -3,10 +3,10 @@ package com.alesegdia.jsearchgen.test;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.alesegdia.jsearchgen.generator.RandomGenerator;
 import com.alesegdia.jsearchgen.model.map.GraphGridModel;
 import com.alesegdia.jsearchgen.model.room.PrefabManager;
 import com.alesegdia.jsearchgen.model.room.RoomInstance;
-import com.alesegdia.jsearchgen.solver.RandomGenerator;
 import com.alesegdia.jsearchgen.util.RNG;
 import com.alesegdia.jsearchgen.view.TileMapRenderer;
 
@@ -20,16 +20,17 @@ public class Test_GenDoorsAttachRoom {
 
 	public static void main(String[] args) {
 
+		/*
 		RNG rng = new RNG();
 		PrefabManager pmgr = new PrefabManager();
 
 		RoomInstance room1 = new RoomInstance(pmgr.prefabs.get(0));
 		RoomInstance room2 = new RoomInstance(pmgr.prefabs.get(0));
 		RoomInstance room3 = new RoomInstance(pmgr.prefabs.get(0));
+		 */
 
 		/**
 		 * GENERATE RANDOM DOORS
-		 */
 		RNG.rng.setSeed(1234);
 		room1.GenerateRandomDoors(RNG.rng, 3);
 		room2.GenerateRandomDoors(RNG.rng, 2);
@@ -38,10 +39,10 @@ public class Test_GenDoorsAttachRoom {
 		//(new MapRenderer(room1.CreateTileMapWithDoors())).Show();
 		//(new MapRenderer(room2.CreateTileMapWithDoors())).Show();
 		//(new MapRenderer(room3.CreateTileMapWithDoors())).Show();
+		 */
 
 		/**
 		 * ATTACH ROOM TO SOLUTION TEST
-		 */
 		GraphGridModel gs = new GraphGridModel(15,30);
 		gs.AttachRoom(room1, 0, 0);
 		System.out.println("room0 potential doors: " + pmgr.prefabs.get(0).potentialDoors);
@@ -69,6 +70,8 @@ public class Test_GenDoorsAttachRoom {
 		//gese.RenderCanvas();
 		//prob.InsertRandomFeasibleRoom(sol);
 		//sol.Render();
+		 * 
+		 */
 	}
 
 }
