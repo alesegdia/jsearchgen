@@ -8,8 +8,11 @@ public class DoorPairEntry {
 	public Door this_door;
 	public float fitness;
 	
-	@Override
-	public String toString() {
-		return "\t<" + other_door.ri_owner.id + " " + other_door.GetGlobalPosition() + ", " + this_door.ri_owner.id + " " + this_door.GetGlobalPosition() + ">"; 
+	public boolean Equals(DoorPairEntry other) {
+		return this.other_door.ri_owner.prefab == other.other_door.ri_owner.prefab &&
+				this.this_door.ri_owner.prefab == other.this_door.ri_owner.prefab &&
+				this.relativeToSolutionMap.x == other.relativeToSolutionMap.x &&
+				this.relativeToSolutionMap.y == other.relativeToSolutionMap.y;
 	}
+	
 }

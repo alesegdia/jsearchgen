@@ -15,6 +15,7 @@ public class Test_Machine {
 		gc.render_at_finish = true;
 		gc.generation_type = GenerationType.RANDOM;
 		gc.random_seed = 0xDEADBEEF;
+		gc.cache_enabled = true;
 		dm.Reset(gc);
 		dm.Run();
 		

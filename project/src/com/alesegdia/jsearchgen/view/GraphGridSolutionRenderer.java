@@ -19,6 +19,7 @@ import com.alesegdia.jsearchgen.solver.FloydWarshallSolver;
 
 public class GraphGridSolutionRenderer extends JComponent implements KeyListener {
 	
+	public static boolean blocked = true;
 	private GraphGridModel ggs;
 	private TileMap map;
 	private Dimension dimension;
@@ -29,6 +30,7 @@ public class GraphGridSolutionRenderer extends JComponent implements KeyListener
 	public GraphGridSolutionRenderer(final GraphGridModel ggs)
 	{
 		this.ggs = ggs;
+		blocked = true;
 		this.map = ggs.CreateTileMapWithDoors();
 		FloydWarshallSolver fws = new FloydWarshallSolver();
 		fws.Solve(ggs.graph_matrix.Clone());
@@ -123,6 +125,10 @@ public class GraphGridSolutionRenderer extends JComponent implements KeyListener
 			System.out.println("F4");
 			map = ggs.CreateTileMapWithDoors(false, false, false, true);
 			this.current_mode = "OPENEDDOORS";
+		} else if( e.getKeyCode() == KeyEvent.VK_F5 )	{
+			System.out.println("BEFORE: " + blocked);
+			blocked = false;
+			System.out.println("AFTER: " + blocked);
 		}
 		this.repaint();
 	}
@@ -131,6 +137,12 @@ public class GraphGridSolutionRenderer extends JComponent implements KeyListener
 	public void keyReleased(KeyEvent e) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public void Update() {
+		blocked = true;
+		this.repaint();
+		map = ggs.CreateTileMapWithDoors(false,false,true,false);
 	}
 
 }

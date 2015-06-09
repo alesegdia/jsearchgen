@@ -32,7 +32,7 @@ public class DungeonMachine {
 		} else if( config.generation_type == GenerationType.BEST_SEARCH ) {
 			this.mapgenerator = new BestSearchGenerator(ggm);
 		}
-
+		ggm.cache_enabled = config.cache_enabled;
 	}
 	
 	public void Run() throws Exception {
@@ -43,10 +43,6 @@ public class DungeonMachine {
 		System.out.println("Config used: \n" + this.config);
 		System.out.println("SOLVE TIME: " + solve_time/10e8);
 		System.out.println("FITNESS TIME: " + GraphGridModel.fitness_time/10e8);
-		if( config.render_at_finish ) {
-			GraphGridSolutionRenderer ggsr = new GraphGridSolutionRenderer(ggm);
-			ggsr.Show();
-		}
 	}
 	
 }
