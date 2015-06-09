@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.alesegdia.jsearchgen.model.room.Door;
 import com.alesegdia.jsearchgen.model.room.DoorPairEntry;
+import com.alesegdia.jsearchgen.model.room.InstanceManager;
 import com.alesegdia.jsearchgen.model.room.RoomInstance;
 import com.alesegdia.jsearchgen.solver.FloydWarshallSolver;
 import com.alesegdia.jsearchgen.util.RNG;
@@ -28,7 +29,6 @@ public class GraphGridModel {
 	public TileMap tilemap;
 	public List<Door> opened = new LinkedList<Door>();
 	public List<Door> closed = new LinkedList<Door>();
-	public List<RoomInstance> remaining_rooms = new LinkedList<RoomInstance>();
 	public List<RoomInstance> added_rooms = new LinkedList<RoomInstance>();
 	public List<DoorPairEntry> added_dpes = new LinkedList<DoorPairEntry>();
 	public List<DoorPairEntry> all_feasible_dpes = new LinkedList<DoorPairEntry>();
@@ -36,25 +36,27 @@ public class GraphGridModel {
 	
 	public UpperMatrix2D<Float> graph_matrix;
 
-	public GraphGridModel( int rows, int cols )
+	InstanceManager imgr;
+
+	public GraphGridModel( InstanceManager imgr, int rows, int cols )
 	{
+		this.imgr = imgr;
 		tilemap = new TileMap(rows, cols, TileType.FREE);
 	}
 
-	GraphGridModel( GraphGridModel other )
+	GraphGridModel( InstanceManager imgr, GraphGridModel other )
 	{
+		//this(imgr);
 		tilemap = new TileMap(other.tilemap);
 	}
 
 	static int a = 0;
-	public GraphGridModel(List<RoomInstance> remaining_rooms, int width, int height, boolean insert_first) throws Exception {
-		this(height, width);
-		this.remaining_rooms = remaining_rooms;
+	public GraphGridModel(InstanceManager imgr, int width, int height, boolean insert_first) throws Exception {
+		this(imgr, height, width);
 		if( insert_first ) {
 			try {
 				// insertamos la primera elegida de forma aleatoria
-				int room_index = RNG.rng.nextInt(0, remaining_rooms.size()-1);
-				RoomInstance selected = remaining_rooms.get(room_index);
+				RoomInstance selected = imgr.PopRandomRoom();
 				InsertFirstRoom(selected);
 			} catch(IndexOutOfBoundsException e) {
 				System.err.println("remaining_rooms list empty!");
@@ -63,23 +65,22 @@ public class GraphGridModel {
 	}
 
 	private void InsertFirstRoom(RoomInstance selected) throws Exception {
-		graph_matrix = new UpperMatrix2D<Float>(this.remaining_rooms.size(), this.remaining_rooms.size(), Float.MAX_VALUE);
+		graph_matrix = new UpperMatrix2D<Float>(imgr.NumRooms()+1, imgr.NumRooms()+1, Float.MAX_VALUE);
 		selected.globalPosition.Set(30, 10);
 		AttachRoom(selected, 30, 10);
 		this.ggbd.initial_room = selected;
 	}
 
-	public GraphGridModel(List<RoomInstance> remaining_rooms, boolean insert_first) throws Exception {
-		this(remaining_rooms, SOLUTION_WIDTH, SOLUTION_HEIGHT, insert_first);
+	public GraphGridModel(InstanceManager imgr, boolean insert_first) throws Exception {
+		this(imgr, SOLUTION_WIDTH, SOLUTION_HEIGHT, insert_first);
 	}
 
-	public GraphGridModel(List<RoomInstance> remaining_rooms) throws Exception {
-		this(remaining_rooms, SOLUTION_WIDTH, SOLUTION_HEIGHT, true);
+	public GraphGridModel(InstanceManager imgr) throws Exception {
+		this(imgr, SOLUTION_WIDTH, SOLUTION_HEIGHT, true);
 	}
 
 	public void AttachRoom(RoomInstance room, int r, int c)
 	{
-		remaining_rooms.remove(room);
 		//System.out.println("Attach at r:" + r + ", c:" + c);
 		this.tilemap.Apply(room.prefab.map, r, c);
 		room.globalPosition.x = c;
@@ -110,15 +111,21 @@ public class GraphGridModel {
 		// precompute if needed 
 		// extract feasible doors for each room
 		List<DoorPairEntry> feasible_door_pairs = new LinkedList<DoorPairEntry>();
-		for( Iterator<RoomInstance> it = remaining_rooms.iterator(); it.hasNext(); )
+		for( Iterator<RoomInstance> it = imgr.PrefabModelIterator(); it.hasNext(); )
 		{
 			RoomInstance room = it.next();
+			System.out.println("ROOM");
+
+			if( imgr.remainingInstancesPerPrefab.get(room.prefab.id).size() > 0 ){
 			List<DoorPairEntry> l = this.GetFeasibleDoorsForRoom(room);
 			feasible_door_pairs.addAll(l);
 			all_feasible_dpes.addAll(l);
+			}
 		}
 		return feasible_door_pairs;
 	}
+	
+	public static long fitness_time = 0;
 	
 	public DoorPairEntry GetBestDPE(List<DoorPairEntry> feasible_door_pairs) {
 		DoorPairEntry best = null;
@@ -127,7 +134,12 @@ public class GraphGridModel {
 			for( DoorPairEntry dpe : feasible_door_pairs ) {
 				if( added_rooms.size() > 1 )
 					try {
+						long t1 = System.nanoTime();
 						ComputeFitness(dpe);
+						long t2 = System.nanoTime();
+						long solve_time = t2 - t1;
+						fitness_time += solve_time;
+
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -148,15 +160,22 @@ public class GraphGridModel {
 		}
 		return dpe;
 	}
+	
 
 	public void ConnectDPE(DoorPairEntry dpe) {
-		this.AttachRoom(dpe.other_door.ri_owner, dpe.relativeToSolutionMap.x, dpe.relativeToSolutionMap.y);
-		this.Connect(dpe.other_door, dpe.this_door);
+		RoomInstance room_to_attach = this.imgr.PopInstanceOf(dpe.other_door.ri_owner.prefab);
+		this.AttachRoom(room_to_attach, dpe.relativeToSolutionMap.x, dpe.relativeToSolutionMap.y);
+		Door door = new Door();
+		door.ri_owner = room_to_attach;
+		door.localPosition.Set(dpe.other_door.localPosition);
+		door.type = dpe.other_door.type;
+		dpe.other_door = door;
+		this.Connect(door, dpe.this_door);
 		this.closed.add(dpe.other_door);
 		this.closed.add(dpe.this_door);
 		this.opened.remove((Object)dpe.other_door);
 		this.opened.remove((Object)dpe.this_door);
-		this.remaining_rooms.remove(dpe.other_door.ri_owner);
+		//this.remaining_rooms.remove(dpe.other_door.ri_owner);
 		this.added_dpes.add(dpe);
 		if( ++a < 10 ) this.ggbd.build_path.add(dpe);
 	}
@@ -203,14 +222,14 @@ public class GraphGridModel {
 	
 	float ComputeFitness(DoorPairEntry dpe) throws Exception {
 		RoomInstance r1 = dpe.this_door.ri_owner;
-		RoomInstance r2 = dpe.other_door.ri_owner;
-		if( this.graph_matrix.GetUpper(r1.id, r2.id) != Float.MAX_VALUE ) {
-			throw new Exception("el enlace " + r1.id + ", " + r2.id + " estaba creado " + this.graph_matrix.GetUpper(r1.id, r2.id));
+		int r2_id = imgr.GetLastIDForPrefab(dpe.other_door.ri_owner.prefab);
+		if( this.graph_matrix.GetUpper(r1.id, r2_id) != Float.MAX_VALUE ) {
+			throw new Exception("el enlace " + r1.id + ", " + r2_id + " estaba creado " + this.graph_matrix.GetUpper(r1.id, r2_id));
 		} else {
-			this.graph_matrix.SetUpper(r1.id, r2.id, r1.globalPosition.distance(dpe.relativeToSolutionMap));
+			this.graph_matrix.SetUpper(r1.id, r2_id, r1.globalPosition.distance(dpe.relativeToSolutionMap));
 			float fitness = ComputeFitness();
 			dpe.fitness = fitness;
-			this.graph_matrix.SetUpper(r1.id, r2.id, Float.MAX_VALUE);
+			this.graph_matrix.SetUpper(r1.id, r2_id, Float.MAX_VALUE);
 			return fitness;
 		}
 	}
@@ -286,10 +305,6 @@ public class GraphGridModel {
 		}
 		
 		if( show_dpes ) {
-			for( DoorPairEntry dpe : this.all_feasible_dpes ) {
-				tm.Set(dpe.other_door.GetGlobalPosition().y, dpe.other_door.GetGlobalPosition().x, TileType.OPENED);
-				tm.Set(dpe.this_door.GetGlobalPosition().y, dpe.this_door.GetGlobalPosition().x, TileType.OPENED);
-			}
 			for( DoorPairEntry dpe : this.added_dpes ) {
 				tm.Set(dpe.other_door.GetGlobalPosition().y, dpe.other_door.GetGlobalPosition().x, TileType.DPES);
 				tm.Set(dpe.this_door.GetGlobalPosition().y, dpe.this_door.GetGlobalPosition().x, TileType.DPES);
@@ -308,11 +323,12 @@ public class GraphGridModel {
 	}
 
 	public List<RoomInstance> GetRemainingRooms() {
-		return this.remaining_rooms;
+		return this.imgr.allRemainingRooms;
 	}
 
 	public boolean IsComplete() {
-		return remaining_rooms.size() == 0;
+		int sz = this.imgr.allRemainingRooms.size();
+		return this.imgr.allRemainingRooms.size() == 0;
 	}
 
 	public List<RoomInstance> GetRooms() {

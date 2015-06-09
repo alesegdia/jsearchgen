@@ -10,34 +10,34 @@ import com.alesegdia.jsearchgen.util.RNG;
 
 public class InstanceManager {
 
-	public List<RoomInstance> instances;
+	public List<LinkedList<RoomInstance>> remainingInstancesPerPrefab;
 	public List<RoomInstance> modelInstances;
 	private PrefabManager prefabMgr;
 	private int nextID = 0;
-
+	public List<RoomInstance> allRemainingRooms = new LinkedList<RoomInstance>();
+	
 	public InstanceManager(PrefabManager pm) {
 		this.prefabMgr = pm;
-		instances = new ArrayList<RoomInstance>();
+		remainingInstancesPerPrefab = new ArrayList<LinkedList<RoomInstance>>();
 		modelInstances = new ArrayList<RoomInstance>();
 		
+		int i = 1;
 		for( RoomPrefab prefab : prefabMgr.prefabs ) {
 			RoomInstance ri = new RoomInstance(prefab);
-			//modelInstances.add(ri);
+			remainingInstancesPerPrefab.add(new LinkedList<RoomInstance>());
+			ri.GenerateAllDoors(RNG.rng);
+			ri.id = i * 1000;
+			i++;
+			modelInstances.add(ri);
 		}
-	}
-	
-	public Iterator<PotentialDoorEntry> GetPrefabDoorsIterator(int prefab_id) {
-		return prefabMgr.prefabs.get(prefab_id).potentialDoors.iterator();
-	}
-	
-	public Iterator<PotentialDoorEntry> GetInstancePrefabDoorsIterator(int prefab_id, int instance_id) {
-		return prefabMgr.prefabs.get(instances.get(instance_id).prefab.id).potentialDoors.iterator();
 	}
 	
 	public RoomInstance CreateRoomInstance(RoomPrefab prefab) {
 		RoomInstance ri = new RoomInstance(prefab);
 		ri.id = nextID;
 		nextID++;
+		this.remainingInstancesPerPrefab.get(prefab.id).add(ri);
+		allRemainingRooms.add(ri);
 		return ri;
 	}
 	
@@ -45,47 +45,17 @@ public class InstanceManager {
 		RoomInstance ri = new RoomInstance(instance);
 		ri.id = nextID;
 		nextID++;
+		this.remainingInstancesPerPrefab.get(ri.prefab.id).add(ri);
 		return ri;
 	}
 	
-	public List<RoomInstance> GenerateSampleRoomList()
+	public void GenerateALot(int num_instances_per_prefab[])
 	{
-		List<RoomInstance> initial_rooms = new LinkedList<RoomInstance>();
-		RoomInstance room1 = CreateRoomInstance(prefabMgr.prefabs.get(0));
-		RoomInstance room2 = CreateRoomInstance(prefabMgr.prefabs.get(0));
-		RoomInstance room3 = CreateRoomInstance(prefabMgr.prefabs.get(1));
-		room1.GenerateRandomDoors(RNG.rng, 10);
-		room2.GenerateRandomDoors(RNG.rng, 10);
-		room3.GenerateRandomDoors(RNG.rng, 10);
-		room1.name = "room1";
-		room2.name = "room2";
-		room3.name = "room3";
-		initial_rooms.add(room1);
-		initial_rooms.add(room2);
-		initial_rooms.add(room3);
-		return initial_rooms;
-	}
-	
-	public List<RoomInstance> GenerateFixedDoorRoomList()
-	{
-		List<RoomInstance> initial_rooms = new LinkedList<RoomInstance>();
-		RoomInstance room1 = CreateRoomInstance(prefabMgr.prefabs.get(0));
-		RoomInstance room2 = CreateRoomInstance(prefabMgr.prefabs.get(1));
-		room1.AddDoor(12, 14, Type.HORIZONTAL);
-		room2.AddDoor(3, 1, Type.HORIZONTAL);
-		room1.name = "room1";
-		room2.name = "room2";
-		initial_rooms.add(room1);
-		initial_rooms.add(room2);
-		return initial_rooms;
-	}
-	
-	public List<RoomInstance> GenerateALot()
-	{
-		List<RoomInstance> ret = new LinkedList<RoomInstance>();
-		ret.addAll(GenerateSetWithAllDoors(prefabMgr.prefabs.get(1), 10));
-		ret.addAll(GenerateSetWithAllDoors(prefabMgr.prefabs.get(0), 10));
-		return ret;
+		int i = 0;
+		for( RoomPrefab prefab : prefabMgr.prefabs ) {
+			GenerateSetWithAllDoors(prefab, num_instances_per_prefab[i]);
+			i++;
+		}
 	}
 	
 	public List<RoomInstance> GenerateSetWithRandomDoors( RoomPrefab prefab, int num_rooms )
@@ -127,7 +97,30 @@ public class InstanceManager {
 		return retlist;
 	}
 
+	public RoomInstance PopInstanceOf(RoomPrefab prefab) {
+		RoomInstance ri = this.remainingInstancesPerPrefab.get(prefab.id).pollLast();
+		this.allRemainingRooms.remove((Object)ri);
+		return ri;
+	}
 
+	public RoomInstance PopRandomRoom() {
+		int room_index = RNG.rng.nextInt(this.allRemainingRooms.size());
+		RoomInstance ri = allRemainingRooms.get(room_index);
+		allRemainingRooms.remove((Object)ri);
+		this.remainingInstancesPerPrefab.get(ri.prefab.id).remove((Object)ri);
+		return ri;
+	}
 
-	
+	public int NumRooms() {
+		return this.allRemainingRooms.size();
+	}
+
+	public Iterator<RoomInstance> PrefabModelIterator() {
+		return this.modelInstances.iterator();
+	}
+
+	public int GetLastIDForPrefab(RoomPrefab prefab) {
+		return this.remainingInstancesPerPrefab.get(prefab.id).getLast().id;
+	}
+
 }
