@@ -1,12 +1,9 @@
 package com.alesegdia.jsearchgen.solver;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import com.alesegdia.jsearchgen.model.map.GraphGridModel;
 import com.alesegdia.jsearchgen.model.room.DoorPairEntry;
-import com.alesegdia.jsearchgen.model.room.RoomInstance;
-import com.alesegdia.jsearchgen.util.RNG;
 
 public class RandomGenerator extends MapGenerator {
 
