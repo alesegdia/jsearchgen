@@ -1,2 +1,6 @@
 
 00
+project/.gradle
+gradlew*
+project/build
+project/gradle
