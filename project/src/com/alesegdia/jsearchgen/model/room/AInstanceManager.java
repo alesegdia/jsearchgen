@@ -19,9 +19,8 @@ public abstract class AInstanceManager {
 		ri.id = this.nextID;
 		this.nextID++;
 	}
-
-	protected abstract RoomInstance CreateRoomInstance(RoomInstance instance);
-	protected abstract RoomInstance CreateRoomInstance(RoomPrefab prefab);
+	
+	public abstract void OnRoomInstanceCreated(RoomInstance ri);
 	public abstract int NumRooms();
 	public abstract Iterator<RoomInstance> RemainingInstanceslIterator();
 	public abstract RoomInstance PopRandomAvailableRoom();
@@ -77,6 +76,22 @@ public abstract class AInstanceManager {
 		}
 		return retlist;
 	}
+	
+	protected RoomInstance CreateRoomInstance(RoomPrefab prefab) {
+		RoomInstance ri = new RoomInstance(prefab);
+		AssignNextID(ri);
+		OnRoomInstanceCreated(ri);
+		return ri;
+	}
+	
+	protected RoomInstance CreateRoomInstance(RoomInstance instance) {
+		RoomInstance ri = new RoomInstance(instance);
+		AssignNextID(ri);
+		OnRoomInstanceCreated(ri);
+		return ri;
+	}
 
 	
+
+
 }

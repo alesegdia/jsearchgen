@@ -31,23 +31,6 @@ public class PrefabModelInstanceManager extends AInstanceManager {
 	}
 	
 	@Override
-	protected RoomInstance CreateRoomInstance(RoomPrefab prefab) {
-		RoomInstance ri = new RoomInstance(prefab);
-		AssignNextID(ri);
-		this.remainingInstancesPerPrefab.get(prefab.id).add(ri);
-		allRemainingRooms.add(ri);
-		return ri;
-	}
-	
-	@Override
-	protected RoomInstance CreateRoomInstance(RoomInstance instance) {
-		RoomInstance ri = new RoomInstance(instance);
-		AssignNextID(ri);
-		this.remainingInstancesPerPrefab.get(ri.prefab.id).add(ri);
-		return ri;
-	}
-	
-	@Override
 	public RoomInstance PopInstanceFromModel(RoomInstance instance) {
 		RoomInstance ri = this.remainingInstancesPerPrefab.get(instance.prefab.id).pollLast();
 		this.allRemainingRooms.remove((Object)ri);
@@ -88,4 +71,11 @@ public class PrefabModelInstanceManager extends AInstanceManager {
 		return this.allRemainingRooms.size() == 0;
 	}
 
+	@Override
+	public void OnRoomInstanceCreated(RoomInstance ri) {
+		this.remainingInstancesPerPrefab.get(ri.prefab.id).add(ri);
+		allRemainingRooms.add(ri);
+	}
+
+	
 }
