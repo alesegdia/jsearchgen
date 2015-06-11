@@ -9,14 +9,13 @@ import com.alesegdia.jsearchgen.util.UpperMatrix2D;
 
 public class MapGraphInstance {
 	
-	public class RoomPDEIterator implements Iterator {
+	public class RoomPDEIterator implements Iterator<DoorPairEntry> {
 
 		private BitSet bs;
 		private int currentBit;
 		private MapGraphModel mgm;
 		private int r2_index;
 		private int r1_index;
-		private boolean set;
 
 		public RoomPDEIterator( MapGraphModel mgm, BitSet bitSet, int r1_index, int r2_index ) {
 			this(mgm, bitSet, r1_index, r2_index, true);
@@ -27,7 +26,6 @@ public class MapGraphInstance {
 			this.mgm = mgm;
 			this.r1_index = r1_index;
 			this.r2_index = r2_index;
-			this.set = set;
 		}
 		
 		@Override

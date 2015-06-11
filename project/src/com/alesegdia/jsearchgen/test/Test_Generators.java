@@ -60,12 +60,14 @@ public class Test_Generators {
 
 	}
 
+	/*
 	private static List<RoomInstance> CloneListRooms(List<RoomInstance> selected_list, PrefabModelInstanceManager rmgr) {
 		List<RoomInstance> l = new LinkedList<RoomInstance>();
 		for( RoomInstance ri : selected_list ) {
-			l.add(rmgr.CreateRoomInstance(ri));
+			l.add(rmgr.OnRoomInstanceCreated(ri));
 		}
 		return l;
 	}
+	*/
 	
 }

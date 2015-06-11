@@ -1,6 +1,5 @@
 package com.alesegdia.jsearchgen.model.extra;
 
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -8,7 +7,6 @@ import com.alesegdia.jsearchgen.model.map.GraphGridModel;
 import com.alesegdia.jsearchgen.model.room.Door;
 import com.alesegdia.jsearchgen.model.room.DoorPairEntry;
 import com.alesegdia.jsearchgen.model.room.RoomInstance;
-import com.alesegdia.jsearchgen.util.RNG;
 import com.alesegdia.jsearchgen.util.Vec2;
 
 public class GraphGridAllProxy implements IMapGenProxy {

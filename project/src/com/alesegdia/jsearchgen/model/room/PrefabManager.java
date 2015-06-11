@@ -1,12 +1,9 @@
 package com.alesegdia.jsearchgen.model.room;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import com.alesegdia.jsearchgen.model.map.TileMap;
-import com.alesegdia.jsearchgen.model.room.Door.Type;
-import com.alesegdia.jsearchgen.util.RNG;
 
 public final class PrefabManager {
 

@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.alesegdia.jsearchgen.model.map.TileMap;
 import com.alesegdia.jsearchgen.model.map.TileType;
-import com.alesegdia.jsearchgen.model.room.Door.Type;
 import com.alesegdia.jsearchgen.util.Vec2;
 
 public class RoomPrefab {

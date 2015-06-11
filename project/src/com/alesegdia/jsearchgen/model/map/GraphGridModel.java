@@ -8,7 +8,6 @@ import com.alesegdia.jsearchgen.matrixsolver.FloydWarshallSolver;
 import com.alesegdia.jsearchgen.model.room.AInstanceManager;
 import com.alesegdia.jsearchgen.model.room.Door;
 import com.alesegdia.jsearchgen.model.room.DoorPairEntry;
-import com.alesegdia.jsearchgen.model.room.PrefabModelInstanceManager;
 import com.alesegdia.jsearchgen.model.room.RoomInstance;
 import com.alesegdia.jsearchgen.util.RNG;
 import com.alesegdia.jsearchgen.util.UpperMatrix2D;
@@ -107,9 +106,6 @@ public class GraphGridModel {
 		build_path.addAll(ggbd.build_path);
 		return build_path;
 	}
-	
-	private List<DoorPairEntry> cache = new LinkedList<DoorPairEntry>();
-	private RoomInstance lastAddedRoom;
 	
 	public List<DoorPairEntry> ComputeAllFeasibleDPE() {
 		// precompute if needed 
