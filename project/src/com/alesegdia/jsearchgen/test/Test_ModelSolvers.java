@@ -13,7 +13,7 @@ import com.alesegdia.jsearchgen.model.map.GraphGridModel;
 import com.alesegdia.jsearchgen.model.room.DoorPairEntry;
 import com.alesegdia.jsearchgen.model.room.PrefabManager;
 import com.alesegdia.jsearchgen.model.room.RoomInstance;
-import com.alesegdia.jsearchgen.model.room.InstanceManager;
+import com.alesegdia.jsearchgen.model.room.PrefabModelInstanceManager;
 import com.alesegdia.jsearchgen.util.RNG;
 import com.alesegdia.jsearchgen.view.GraphGridSolutionRenderer;
 

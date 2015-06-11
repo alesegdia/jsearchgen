@@ -4,7 +4,8 @@ import com.alesegdia.jsearchgen.generatorsolver.BestSearchSolver;
 import com.alesegdia.jsearchgen.generatorsolver.IMapGenSolver;
 import com.alesegdia.jsearchgen.generatorsolver.RandomSolver;
 import com.alesegdia.jsearchgen.model.map.GraphGridModel;
-import com.alesegdia.jsearchgen.model.room.InstanceManager;
+import com.alesegdia.jsearchgen.model.room.AInstanceManager;
+import com.alesegdia.jsearchgen.model.room.PrefabModelInstanceManager;
 import com.alesegdia.jsearchgen.model.room.PrefabManager;
 import com.alesegdia.jsearchgen.util.RNG;
 import com.alesegdia.jsearchgen.view.GraphGridSolutionRenderer;
@@ -22,7 +23,7 @@ public class DungeonMachine {
 		RNG.rng = new RNG();
 		RNG.rng.setSeed(config.random_seed);
 		PrefabManager pmgr = new PrefabManager();
-		InstanceManager rm = new InstanceManager(pmgr);
+		AInstanceManager rm = new PrefabModelInstanceManager(pmgr);
 		rm.GenerateALot(config.num_instances_per_prefab);
 		this.ggm = new GraphGridModel(rm);
 		if( config.generation_type == GenerationType.RANDOM ) {

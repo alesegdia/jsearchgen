@@ -1,0 +1,82 @@
+package com.alesegdia.jsearchgen.model.room;
+
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+
+import com.alesegdia.jsearchgen.util.RNG;
+
+public abstract class AInstanceManager {
+
+	private int nextID = 0;
+	protected PrefabManager prefabMgr;
+
+	public AInstanceManager(PrefabManager pm) {
+		this.prefabMgr = pm;
+	}
+
+	protected void AssignNextID( RoomInstance ri ) {
+		ri.id = this.nextID;
+		this.nextID++;
+	}
+
+	protected abstract RoomInstance CreateRoomInstance(RoomInstance instance);
+	protected abstract RoomInstance CreateRoomInstance(RoomPrefab prefab);
+	public abstract int NumRooms();
+	public abstract Iterator<RoomInstance> RemainingInstanceslIterator();
+	public abstract RoomInstance PopRandomAvailableRoom();
+	public abstract boolean IsThereAvailableInstances(RoomInstance room);
+	public abstract RoomInstance PopInstanceFromModel(RoomInstance instance);
+	public abstract boolean RemainingRoomsEmpty();
+	public abstract int GetLastModelIDForInstance(RoomInstance ri);
+
+	public void GenerateALot(int num_instances_per_prefab[])
+	{
+		int i = 0;
+		for( RoomPrefab prefab : prefabMgr.prefabs ) {
+			GenerateSetWithAllDoors(prefab, num_instances_per_prefab[i]);
+			i++;
+		}
+	}
+	
+	public List<RoomInstance> GenerateSetWithRandomDoors( RoomPrefab prefab, int num_rooms )
+	{
+		List<RoomInstance> retlist = new LinkedList<RoomInstance>();
+		for( int i = 0; i < num_rooms; i++ )
+		{
+			RoomInstance ri = CreateRoomInstance(prefab);
+			ri.GenerateRandomDoors(RNG.rng, 10);
+			retlist.add(ri);
+		}
+		return retlist;
+	}
+	
+	public List<RoomInstance> GenerateSetWithAllDoors( RoomPrefab prefab, int num_rooms )
+	{
+		List<RoomInstance> retlist = new LinkedList<RoomInstance>();
+		for( int i = 0; i < num_rooms; i++ )
+		{
+			RoomInstance ri = CreateRoomInstance(prefab);
+			ri.GenerateAllDoors(RNG.rng);
+			retlist.add(ri);
+		}
+		return retlist;
+	}
+	
+	public List<RoomInstance> GenerateSetWithSameRandomDoors( RoomPrefab prefab, int num_rooms )
+	{
+		List<RoomInstance> retlist = new LinkedList<RoomInstance>();
+		RoomInstance sample = CreateRoomInstance(prefab);
+		sample.GenerateRandomDoors(RNG.rng, 10);
+		retlist.add(sample);
+		for( int i = 0; i < num_rooms - 1; i++ )
+		{
+			RoomInstance ri = CreateRoomInstance(sample);
+			System.out.println(ri.doors.size());
+			retlist.add(ri);
+		}
+		return retlist;
+	}
+
+	
+}

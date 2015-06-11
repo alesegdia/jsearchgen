@@ -5,9 +5,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.alesegdia.jsearchgen.matrixsolver.FloydWarshallSolver;
+import com.alesegdia.jsearchgen.model.room.AInstanceManager;
 import com.alesegdia.jsearchgen.model.room.Door;
 import com.alesegdia.jsearchgen.model.room.DoorPairEntry;
-import com.alesegdia.jsearchgen.model.room.InstanceManager;
+import com.alesegdia.jsearchgen.model.room.PrefabModelInstanceManager;
 import com.alesegdia.jsearchgen.model.room.RoomInstance;
 import com.alesegdia.jsearchgen.util.RNG;
 import com.alesegdia.jsearchgen.util.UpperMatrix2D;
@@ -36,27 +37,27 @@ public class GraphGridModel {
 	
 	public UpperMatrix2D<Float> graph_matrix;
 
-	InstanceManager imgr;
+	AInstanceManager imgr;
 
-	public GraphGridModel( InstanceManager imgr, int rows, int cols )
+	public GraphGridModel( AInstanceManager imgr, int rows, int cols )
 	{
 		this.imgr = imgr;
 		tilemap = new TileMap(rows, cols, TileType.FREE);
 	}
 
-	GraphGridModel( InstanceManager imgr, GraphGridModel other )
+	GraphGridModel( AInstanceManager imgr, GraphGridModel other )
 	{
 		//this(imgr);
 		tilemap = new TileMap(other.tilemap);
 	}
 
 	static int a = 0;
-	public GraphGridModel(InstanceManager imgr, int width, int height, boolean insert_first) throws Exception {
+	public GraphGridModel(AInstanceManager imgr, int width, int height, boolean insert_first) throws Exception {
 		this(imgr, height, width);
 		if( insert_first ) {
 			try {
 				// insertamos la primera elegida de forma aleatoria
-				RoomInstance selected = imgr.PopRandomRoom();
+				RoomInstance selected = imgr.PopRandomAvailableRoom();
 				InsertFirstRoom(selected);
 			} catch(IndexOutOfBoundsException e) {
 				System.err.println("remaining_rooms list empty!");
@@ -71,11 +72,11 @@ public class GraphGridModel {
 		this.ggbd.initial_room = selected;
 	}
 
-	public GraphGridModel(InstanceManager imgr, boolean insert_first) throws Exception {
+	public GraphGridModel(AInstanceManager imgr, boolean insert_first) throws Exception {
 		this(imgr, SOLUTION_WIDTH, SOLUTION_HEIGHT, insert_first);
 	}
 
-	public GraphGridModel(InstanceManager imgr) throws Exception {
+	public GraphGridModel(AInstanceManager imgr) throws Exception {
 		this(imgr, SOLUTION_WIDTH, SOLUTION_HEIGHT, true);
 	}
 
@@ -114,11 +115,10 @@ public class GraphGridModel {
 		// precompute if needed 
 		// extract feasible doors for each room
 		List<DoorPairEntry> feasible_door_pairs = new LinkedList<DoorPairEntry>();
-		for( Iterator<RoomInstance> it = imgr.PrefabModelIterator(); it.hasNext(); )
+		for( Iterator<RoomInstance> it = imgr.RemainingInstanceslIterator(); it.hasNext(); )
 		{
 			RoomInstance room = it.next();
-
-			if( imgr.remainingInstancesPerPrefab.get(room.prefab.id).size() > 0 ){
+			if( imgr.IsThereAvailableInstances(room) ){
 			List<DoorPairEntry> l = this.GetFeasibleDoorsForRoom(room);
 			feasible_door_pairs.addAll(l);
 			System.out.println("ROOM " + l.size());
@@ -181,10 +181,9 @@ public class GraphGridModel {
 		}
 		return dpe;
 	}
-	
 
 	public void ConnectDPE(DoorPairEntry dpe) {
-		RoomInstance room_to_attach = this.imgr.PopInstanceOf(dpe.other_door.ri_owner.prefab);
+		RoomInstance room_to_attach = this.imgr.PopInstanceFromModel(dpe.other_door.ri_owner);
 		this.AttachRoom(room_to_attach, dpe.relativeToSolutionMap.x, dpe.relativeToSolutionMap.y);
 		Door door = new Door();
 		door.ri_owner = room_to_attach;
@@ -243,7 +242,7 @@ public class GraphGridModel {
 	
 	float ComputeFitness(DoorPairEntry dpe) throws Exception {
 		RoomInstance r1 = dpe.this_door.ri_owner;
-		int r2_id = imgr.GetLastIDForPrefab(dpe.other_door.ri_owner.prefab);
+		int r2_id = imgr.GetLastModelIDForInstance(dpe.other_door.ri_owner);
 		if( this.graph_matrix.GetUpper(r1.id, r2_id) != Float.MAX_VALUE ) {
 			throw new Exception("el enlace " + r1.id + ", " + r2_id + " estaba creado " + this.graph_matrix.GetUpper(r1.id, r2_id));
 		} else {
@@ -343,13 +342,8 @@ public class GraphGridModel {
 		return tm;
 	}
 
-	public List<RoomInstance> GetRemainingRooms() {
-		return this.imgr.allRemainingRooms;
-	}
-
 	public boolean IsComplete() {
-		int sz = this.imgr.allRemainingRooms.size();
-		return this.imgr.allRemainingRooms.size() == 0;
+		return this.imgr.RemainingRoomsEmpty();
 	}
 
 	public List<RoomInstance> GetRooms() {
