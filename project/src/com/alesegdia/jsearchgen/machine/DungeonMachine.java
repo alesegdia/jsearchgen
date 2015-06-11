@@ -5,8 +5,10 @@ import com.alesegdia.jsearchgen.generatorsolver.IMapGenSolver;
 import com.alesegdia.jsearchgen.generatorsolver.RandomSolver;
 import com.alesegdia.jsearchgen.model.map.GraphGridModel;
 import com.alesegdia.jsearchgen.model.room.AInstanceManager;
+import com.alesegdia.jsearchgen.model.room.BruteInstanceManager;
 import com.alesegdia.jsearchgen.model.room.PrefabModelInstanceManager;
 import com.alesegdia.jsearchgen.model.room.PrefabManager;
+import com.alesegdia.jsearchgen.test.ManagerType;
 import com.alesegdia.jsearchgen.util.RNG;
 import com.alesegdia.jsearchgen.view.GraphGridSolutionRenderer;
 
@@ -23,14 +25,24 @@ public class DungeonMachine {
 		RNG.rng = new RNG();
 		RNG.rng.setSeed(config.random_seed);
 		PrefabManager pmgr = new PrefabManager();
-		AInstanceManager rm = new PrefabModelInstanceManager(pmgr);
+		
+		AInstanceManager rm;
+		if( config.manager_type == ManagerType.BRUTE_FORCE ) {
+			rm = new BruteInstanceManager(pmgr);
+		} else {
+			rm = new PrefabModelInstanceManager(pmgr);
+		}
+		
 		rm.GenerateALot(config.num_instances_per_prefab);
+		
 		this.ggm = new GraphGridModel(rm);
+
 		if( config.generation_type == GenerationType.RANDOM ) {
 			this.mapgenerator = new RandomSolver();
 		} else if( config.generation_type == GenerationType.BEST_SEARCH ) {
 			this.mapgenerator = new BestSearchSolver();
 		}
+
 		ggm.cache_enabled = config.cache_enabled;
 		this.ggsr = new GraphGridSolutionRenderer(ggm);
 

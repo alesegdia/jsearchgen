@@ -21,7 +21,7 @@ public abstract class AInstanceManager {
 	}
 	
 	public abstract void OnRoomInstanceCreated(RoomInstance ri);
-	public abstract int NumRooms();
+	public abstract int NumRemainingRooms();
 	public abstract Iterator<RoomInstance> RemainingInstanceslIterator();
 	public abstract RoomInstance PopRandomAvailableRoom();
 	public abstract boolean IsThereAvailableInstances(RoomInstance room);

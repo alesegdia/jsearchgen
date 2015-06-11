@@ -5,7 +5,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.alesegdia.jsearchgen.model.room.Door.Type;
 import com.alesegdia.jsearchgen.util.RNG;
 
 public class PrefabModelInstanceManager extends AInstanceManager {
@@ -47,7 +46,7 @@ public class PrefabModelInstanceManager extends AInstanceManager {
 	}
 
 	@Override
-	public int NumRooms() {
+	public int NumRemainingRooms() {
 		return this.allRemainingRooms.size();
 	}
 

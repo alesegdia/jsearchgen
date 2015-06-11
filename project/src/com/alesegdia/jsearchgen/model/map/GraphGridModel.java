@@ -66,7 +66,7 @@ public class GraphGridModel {
 	}
 
 	private void InsertFirstRoom(RoomInstance selected) throws Exception {
-		graph_matrix = new UpperMatrix2D<Float>(imgr.NumRooms()+1, imgr.NumRooms()+1, Float.MAX_VALUE);
+		graph_matrix = new UpperMatrix2D<Float>(imgr.NumRemainingRooms()+1, imgr.NumRemainingRooms()+1, Float.MAX_VALUE);
 		selected.globalPosition.Set(30, 10);
 		AttachRoom(selected, 30, 10);
 		this.ggbd.initial_room = selected;
