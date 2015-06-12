@@ -4,6 +4,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.alesegdia.jsearchgen.config.DoorGenType;
+import com.alesegdia.jsearchgen.config.GenerationConfig;
 import com.alesegdia.jsearchgen.util.RNG;
 
 public abstract class AInstanceManager {
@@ -29,7 +31,23 @@ public abstract class AInstanceManager {
 	public abstract boolean RemainingRoomsEmpty();
 	public abstract int GetLastModelIDForInstance(RoomInstance ri);
 
-	public void GenerateALot(int num_instances_per_prefab[])
+	public void GenRooms(GenerationConfig gc) {
+		int i = 0;
+		int num_instances_per_prefab[] = gc.num_instances_per_prefab;
+		for( RoomPrefab prefab : prefabMgr.prefabs ) {
+			int n = num_instances_per_prefab[i];
+			if( gc.doorgen_type == DoorGenType.RANDOM && gc.cloned_rooms ) {
+				this.GenerateSetWithSameRandomDoors(prefab, n);
+			} else if ( gc.doorgen_type == DoorGenType.RANDOM && !gc.cloned_rooms ) {
+				this.GenerateSetWithRandomDoors(prefab, n);
+			} else if ( gc.doorgen_type == DoorGenType.ALL ) {
+				this.GenerateSetWithAllDoors(prefab, n);
+			}
+			i++;
+		}
+	}
+	
+	public void GenerateWithAllDoors(int num_instances_per_prefab[])
 	{
 		int i = 0;
 		for( RoomPrefab prefab : prefabMgr.prefabs ) {

@@ -130,6 +130,7 @@ public class MapGraphModel {
 
 	Integer numPossibleConnections = null;
 	Integer numAllLinks = null;
+	private int goalRoom;
 	private int spawnRoom;
 	public int NumPossibleRoomConnections() {
 		if( numPossibleConnections == null ) {
