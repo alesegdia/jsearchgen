@@ -4,10 +4,14 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.alesegdia.jsearchgen.config.CacheType;
 import com.alesegdia.jsearchgen.matrixsolver.FloydWarshallSolver;
 import com.alesegdia.jsearchgen.model.room.AInstanceManager;
 import com.alesegdia.jsearchgen.model.room.Door;
 import com.alesegdia.jsearchgen.model.room.DoorPairEntry;
+import com.alesegdia.jsearchgen.model.room.DpeAlwaysCache;
+import com.alesegdia.jsearchgen.model.room.DpeDummyCache;
+import com.alesegdia.jsearchgen.model.room.IDpeCache;
 import com.alesegdia.jsearchgen.model.room.RoomInstance;
 import com.alesegdia.jsearchgen.util.RNG;
 import com.alesegdia.jsearchgen.util.UpperMatrix2D;
@@ -126,30 +130,28 @@ public class GraphGridModel {
 	}
 	
 	public static long fitness_time = 0;
-	private List<DoorPairEntry> cached_dpes = new LinkedList<DoorPairEntry>();
-	public boolean cache_enabled;
+	IDpeCache fitness_cache = new DpeDummyCache();
 	public DoorPairEntry GetBestDPE(List<DoorPairEntry> feasible_door_pairs) {
 		DoorPairEntry best = null;
 		if( !feasible_door_pairs.isEmpty() ) {
 			best = feasible_door_pairs.get(0);
 			for( DoorPairEntry dpe : feasible_door_pairs ) {
 				if( added_rooms.size() > 1 ) {
-					float fitness = GetIfCached(dpe);
-					if( fitness == -1f ) {
-					try {
-						long t1 = System.nanoTime();
-						ComputeFitness(dpe);
-						long t2 = System.nanoTime();
-						long solve_time = t2 - t1;
-						fitness_time += solve_time;
-						if(cache_enabled) cached_dpes.add(dpe);
-
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+					DoorPairEntry cached_dpe = fitness_cache.Precached(dpe);
+					if( cached_dpe == null ) {
+						try {
+							long t1 = System.nanoTime();
+							ComputeFitness(dpe);
+							long t2 = System.nanoTime();
+							long solve_time = t2 - t1;
+							fitness_time += solve_time;
+							fitness_cache.Cache(dpe);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 					} else {
-						dpe.fitness = fitness;
+						dpe.fitness = cached_dpe.fitness;
 					}
 				}
 				if( dpe.fitness > best.fitness ) {
@@ -158,15 +160,6 @@ public class GraphGridModel {
 			}
 		}
 		return best;
-	}
-
-	private float GetIfCached(DoorPairEntry other) {
-		for( DoorPairEntry dpe : cached_dpes ) {
-			if( dpe.Equals(other) ) {
-				return dpe.fitness;
-			}
-		}
-		return -1f;
 	}
 
 	public DoorPairEntry GetRandomDPE(List<DoorPairEntry> feasible_door_pairs) {
@@ -344,6 +337,14 @@ public class GraphGridModel {
 
 	public List<RoomInstance> GetRooms() {
 		return this.added_rooms;
+	}
+
+	public void SetupCache(CacheType cache_type) {
+		if( cache_type == CacheType.NO_CACHE ) {
+			this.fitness_cache = new DpeDummyCache();
+		} else if ( cache_type == CacheType.ALWAYS ) {
+			this.fitness_cache = new DpeAlwaysCache();
+		}
 	}
 
 }

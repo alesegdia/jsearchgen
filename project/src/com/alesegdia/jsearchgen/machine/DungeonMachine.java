@@ -39,13 +39,15 @@ public class DungeonMachine {
 		
 		this.ggm = new GraphGridModel(rm);
 
+		this.ggm.SetupCache(config.cache_type);
+		
 		if( config.solver_type == SolverType.RANDOM ) {
 			this.mapgenerator = new RandomSolver();
 		} else if( config.solver_type == SolverType.BEST_SEARCH ) {
 			this.mapgenerator = new BestSearchSolver();
 		}
 
-		ggm.cache_enabled = config.cache_enabled;
+		
 		this.ggsr = new GraphGridSolutionRenderer(ggm);
 
 	}
