@@ -1,9 +1,11 @@
-package com.alesegdia.jsearchgen.model.room;
+package com.alesegdia.jsearchgen.fitness;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public class DpeAlwaysCache implements IDpeCache {
+import com.alesegdia.jsearchgen.model.room.DoorPairEntry;
+
+public class DpeAlwaysCache implements IDpeFitnessCache {
 
 	List<DoorPairEntry> cached_dpes = new LinkedList<DoorPairEntry>();
 	float param;

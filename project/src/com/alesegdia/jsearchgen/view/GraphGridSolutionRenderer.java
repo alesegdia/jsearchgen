@@ -27,18 +27,22 @@ public class GraphGridSolutionRenderer extends JComponent implements KeyListener
 	int r_end = 1;
 	public static int TILE_SIZE = 5;
 	
+	public void ComputePath() {
+		FloydWarshallSolver fws = new FloydWarshallSolver();
+		fws.Solve(ggs.graph_matrix.Clone());
+		r_start = fws.GetSpawnRoom();
+		r_end = fws.GetGoalRoom();
+	}
+	
 	public GraphGridSolutionRenderer(final GraphGridModel ggs)
 	{
 		this.ggs = ggs;
 		blocked = true;
 		this.map = ggs.CreateTileMapWithDoors();
-		FloydWarshallSolver fws = new FloydWarshallSolver();
-		fws.Solve(ggs.graph_matrix.Clone());
-		r_start = fws.GetSpawnRoom();
-		r_end = fws.GetGoalRoom();
 		this.dimension = new Dimension(map.cols * TILE_SIZE, map.rows * TILE_SIZE);
 		this.setFocusable(true);
 		this.addKeyListener(this);
+		ComputePath();
 	}
 
     Font f = new Font("Sans", Font.BOLD, 10);
@@ -68,6 +72,10 @@ public class GraphGridSolutionRenderer extends JComponent implements KeyListener
 		}
 	     g.setFont(f); 
 
+	     ComputePath();
+	     System.out.println("start: " + r_start);
+	     System.out.println("end: " + r_end);
+	     
 		for( RoomInstance ri : ggs.added_rooms ) {
 			if( ri.id == r_start ) {
 			     g.setFont(fb ); 

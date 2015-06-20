@@ -5,13 +5,14 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.alesegdia.jsearchgen.config.CacheType;
+import com.alesegdia.jsearchgen.fitness.DpeAlwaysCache;
+import com.alesegdia.jsearchgen.fitness.DpeDummyCache;
+import com.alesegdia.jsearchgen.fitness.IDpeFitnessCache;
+import com.alesegdia.jsearchgen.fitness.MultiObjectiveFitness;
 import com.alesegdia.jsearchgen.matrixsolver.FloydWarshallSolver;
 import com.alesegdia.jsearchgen.model.room.AInstanceManager;
 import com.alesegdia.jsearchgen.model.room.Door;
 import com.alesegdia.jsearchgen.model.room.DoorPairEntry;
-import com.alesegdia.jsearchgen.model.room.DpeAlwaysCache;
-import com.alesegdia.jsearchgen.model.room.DpeDummyCache;
-import com.alesegdia.jsearchgen.model.room.IDpeCache;
 import com.alesegdia.jsearchgen.model.room.RoomInstance;
 import com.alesegdia.jsearchgen.util.RNG;
 import com.alesegdia.jsearchgen.util.UpperMatrix2D;
@@ -129,8 +130,27 @@ public class GraphGridModel {
 		return feasible_door_pairs;
 	}
 	
+	void ComputeFitness(DoorPairEntry dpe) throws Exception {
+		RoomInstance r1 = dpe.this_door.ri_owner;
+		int r2_id = imgr.GetLastModelIDForInstance(dpe.other_door.ri_owner);
+		if( this.graph_matrix.GetUpper(r1.id, r2_id) != Float.MAX_VALUE ) {
+			throw new Exception("el enlace " + r1.id + ", " + r2_id + " estaba creado " + this.graph_matrix.GetUpper(r1.id, r2_id));
+		} else {
+			this.graph_matrix.SetUpper(r1.id, r2_id, r1.globalPosition.distance(dpe.relativeToSolutionMap));
+			ComputeFitness(dpe.fitness);
+			this.graph_matrix.SetUpper(r1.id, r2_id, Float.MAX_VALUE);
+		}
+	}
+
+	private void ComputeFitness(MultiObjectiveFitness fitness) {
+		FloydWarshallSolver fws = new FloydWarshallSolver();
+		fws.Solve(new UpperMatrix2D<Float>(graph_matrix));
+		fitness.overall_fitness = fws.GetDistance();
+	}
+	
 	public static long fitness_time = 0;
-	IDpeCache fitness_cache = new DpeDummyCache();
+	IDpeFitnessCache fitness_cache = new DpeDummyCache();
+	
 	public DoorPairEntry GetBestDPE(List<DoorPairEntry> feasible_door_pairs) {
 		DoorPairEntry best = null;
 		if( !feasible_door_pairs.isEmpty() ) {
@@ -154,7 +174,7 @@ public class GraphGridModel {
 						dpe.fitness = cached_dpe.fitness;
 					}
 				}
-				if( dpe.fitness > best.fitness ) {
+				if( dpe.fitness.overall_fitness > best.fitness.overall_fitness ) {
 					best = dpe;
 				}
 			}
@@ -229,26 +249,6 @@ public class GraphGridModel {
 		return feasible_entries;
 	}
 	
-	float ComputeFitness(DoorPairEntry dpe) throws Exception {
-		RoomInstance r1 = dpe.this_door.ri_owner;
-		int r2_id = imgr.GetLastModelIDForInstance(dpe.other_door.ri_owner);
-		if( this.graph_matrix.GetUpper(r1.id, r2_id) != Float.MAX_VALUE ) {
-			throw new Exception("el enlace " + r1.id + ", " + r2_id + " estaba creado " + this.graph_matrix.GetUpper(r1.id, r2_id));
-		} else {
-			this.graph_matrix.SetUpper(r1.id, r2_id, r1.globalPosition.distance(dpe.relativeToSolutionMap));
-			float fitness = ComputeFitness();
-			dpe.fitness = fitness;
-			this.graph_matrix.SetUpper(r1.id, r2_id, Float.MAX_VALUE);
-			return fitness;
-		}
-	}
-
-	private float ComputeFitness() {
-		FloydWarshallSolver fws = new FloydWarshallSolver();
-		fws.Solve(new UpperMatrix2D<Float>(graph_matrix));
-		return fws.GetDistance();
-	}
-
 	private Vec2 CheckInsert(Door door_other, Door door_this, int dr, int dc, Door.Type doortype)
 	{
 		Vec2 ret = null;

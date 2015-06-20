@@ -1,6 +1,8 @@
-package com.alesegdia.jsearchgen.model.room;
+package com.alesegdia.jsearchgen.fitness;
 
-public interface IDpeCache {
+import com.alesegdia.jsearchgen.model.room.DoorPairEntry;
+
+public interface IDpeFitnessCache {
 	
 	/**
 	 * Returns cached fitness if any. Returns 
