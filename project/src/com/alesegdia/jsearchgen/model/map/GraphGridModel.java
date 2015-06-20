@@ -8,7 +8,8 @@ import com.alesegdia.jsearchgen.config.CacheType;
 import com.alesegdia.jsearchgen.fitness.DpeAlwaysCache;
 import com.alesegdia.jsearchgen.fitness.DpeDummyCache;
 import com.alesegdia.jsearchgen.fitness.IDpeFitnessCache;
-import com.alesegdia.jsearchgen.fitness.MultiObjectiveFitness;
+import com.alesegdia.jsearchgen.fitness.IFitnessSolver;
+import com.alesegdia.jsearchgen.fitness.MainPathLengthFitnessSolver;
 import com.alesegdia.jsearchgen.matrixsolver.FloydWarshallSolver;
 import com.alesegdia.jsearchgen.model.room.AInstanceManager;
 import com.alesegdia.jsearchgen.model.room.Door;
@@ -137,15 +138,15 @@ public class GraphGridModel {
 			throw new Exception("el enlace " + r1.id + ", " + r2_id + " estaba creado " + this.graph_matrix.GetUpper(r1.id, r2_id));
 		} else {
 			this.graph_matrix.SetUpper(r1.id, r2_id, r1.globalPosition.distance(dpe.relativeToSolutionMap));
-			ComputeFitness(dpe.fitness);
+			dpe.fitness = ComputeFitness();
 			this.graph_matrix.SetUpper(r1.id, r2_id, Float.MAX_VALUE);
 		}
 	}
 
-	private void ComputeFitness(MultiObjectiveFitness fitness) {
-		FloydWarshallSolver fws = new FloydWarshallSolver();
-		fws.Solve(new UpperMatrix2D<Float>(graph_matrix));
-		fitness.overall_fitness = fws.GetDistance();
+	IFitnessSolver fitnessSolver = new MainPathLengthFitnessSolver();
+	
+	private float ComputeFitness() {
+		return fitnessSolver.ComputeFitness(graph_matrix);
 	}
 	
 	public static long fitness_time = 0;
@@ -174,7 +175,7 @@ public class GraphGridModel {
 						dpe.fitness = cached_dpe.fitness;
 					}
 				}
-				if( dpe.fitness.overall_fitness > best.fitness.overall_fitness ) {
+				if( dpe.fitness > best.fitness ) {
 					best = dpe;
 				}
 			}
