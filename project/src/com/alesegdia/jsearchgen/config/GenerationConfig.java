@@ -1,7 +1,5 @@
 package com.alesegdia.jsearchgen.config;
 
-import com.alesegdia.jsearchgen.model.map.GraphGridModel;
-
 
 public class GenerationConfig {
 
