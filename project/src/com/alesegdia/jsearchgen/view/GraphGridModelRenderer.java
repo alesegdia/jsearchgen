@@ -17,7 +17,7 @@ import com.alesegdia.jsearchgen.model.map.TileMap;
 import com.alesegdia.jsearchgen.model.map.TileType;
 import com.alesegdia.jsearchgen.model.room.RoomInstance;
 
-public class GraphGridSolutionRenderer extends JComponent implements KeyListener {
+public class GraphGridModelRenderer extends JComponent implements KeyListener {
 	
 	public static boolean blocked = true;
 	private GraphGridModel ggs;
@@ -34,7 +34,7 @@ public class GraphGridSolutionRenderer extends JComponent implements KeyListener
 		r_end = fws.GetGoalRoom();
 	}
 	
-	public GraphGridSolutionRenderer(final GraphGridModel ggs)
+	public GraphGridModelRenderer(final GraphGridModel ggs)
 	{
 		this.ggs = ggs;
 		blocked = true;

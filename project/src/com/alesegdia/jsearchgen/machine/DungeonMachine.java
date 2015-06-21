@@ -12,14 +12,14 @@ import com.alesegdia.jsearchgen.model.room.BruteInstanceManager;
 import com.alesegdia.jsearchgen.model.room.PrefabModelInstanceManager;
 import com.alesegdia.jsearchgen.model.room.PrefabManager;
 import com.alesegdia.jsearchgen.util.RNG;
-import com.alesegdia.jsearchgen.view.GraphGridSolutionRenderer;
+import com.alesegdia.jsearchgen.view.GraphGridModelRenderer;
 
 public class DungeonMachine {
 
 	private GenerationConfig config;
 	private GraphGridModel ggm;
 	private IMapGenSolver mapgenerator;
-	GraphGridSolutionRenderer ggsr;
+	GraphGridModelRenderer ggsr;
 
 	public void Reset(GenerationConfig config) throws Exception {
 		
@@ -48,7 +48,7 @@ public class DungeonMachine {
 		}
 
 		
-		this.ggsr = new GraphGridSolutionRenderer(ggm);
+		this.ggsr = new GraphGridModelRenderer(ggm);
 
 	}
 	
