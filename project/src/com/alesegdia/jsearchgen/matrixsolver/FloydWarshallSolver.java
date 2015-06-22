@@ -1,6 +1,7 @@
 package com.alesegdia.jsearchgen.matrixsolver;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.alesegdia.jsearchgen.util.UpperMatrix2D;
@@ -38,12 +39,18 @@ public class FloydWarshallSolver {
 			min_distances.Set(i, i, 0.f);
 		}
 		
-		for( int k : used ) {
+		// no debería ser necesario, ordenado por definición
+		Collections.sort(used);
+		
+		//for( int k : used ) {
 		//for( int k = 0; k < matrix.cols; k++ ) {
-			for( int i : used ) {
+		for( int ki = 0; ki < used.size(); ki++ ) { int k = used.get(ki);
+			//for( int i : used ) {
 			//for( int i = 0; i < matrix.cols; i++ ) {
-				for( int j : used ) {
+			for( int ii = 0; ii < used.size(); ii++ ) { int i = used.get(ii);
+				//for( int j : used ) {
 				//for( int j = 0; j < matrix.cols; j++ ) {
+				for( int ji = ii; ji < used.size(); ji++ ) { int j = used.get(ji);
 					if( min_distances.GetUpper(i, j) > min_distances.GetUpper(i, k) + min_distances.GetUpper(k, j)) {
 						float newvalue =              min_distances.GetUpper(i, k) + min_distances.GetUpper(k, j);
 						min_distances.SetUpper(i, j, newvalue);
@@ -79,7 +86,7 @@ public class FloydWarshallSolver {
 			path.add(u);
 		}
 
-		System.out.println("PATH: " + path);
+		//System.out.println("PATH: " + path);
 	}
 
 	public int GetSpawnRoom() {
