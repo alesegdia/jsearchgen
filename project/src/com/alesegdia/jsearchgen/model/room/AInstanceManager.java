@@ -89,7 +89,7 @@ public abstract class AInstanceManager {
 		for( int i = 0; i < num_rooms - 1; i++ )
 		{
 			RoomInstance ri = CreateRoomInstance(sample);
-			System.out.println(ri.doors.size());
+			//System.out.println(ri.doors.size());
 			retlist.add(ri);
 		}
 		return retlist;

@@ -123,7 +123,7 @@ public class GraphGridModel {
 			if( imgr.IsThereAvailableInstances(room) ){
 			List<DoorPairEntry> l = this.GetFeasibleDoorsForRoom(room);
 			feasible_door_pairs.addAll(l);
-			System.out.println("ROOM " + l.size());
+			//System.out.println("ROOM " + l.size());
 
 			all_feasible_dpes.addAll(l);
 			}

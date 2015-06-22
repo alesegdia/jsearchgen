@@ -73,8 +73,8 @@ public class GraphGridModelRenderer extends JComponent implements KeyListener {
 	     g.setFont(f); 
 
 	     ComputePath();
-	     System.out.println("start: " + r_start);
-	     System.out.println("end: " + r_end);
+	     //System.out.println("start: " + r_start);
+	     //System.out.println("end: " + r_end);
 	     
 		for( RoomInstance ri : ggs.added_rooms ) {
 			if( ri.id == r_start ) {

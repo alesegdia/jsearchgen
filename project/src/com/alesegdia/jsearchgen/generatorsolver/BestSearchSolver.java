@@ -11,7 +11,7 @@ public class BestSearchSolver implements IMapGenSolver {
 	public boolean Step(GraphGridModel ggm)
 	{
 		List<DoorPairEntry> feasible_door_pairs = ggm.ComputeAllFeasibleDPE();
-		System.out.println(feasible_door_pairs.size());
+		//System.out.println(feasible_door_pairs.size());
 		DoorPairEntry random = ggm.GetBestDPE(feasible_door_pairs);
 		ggm.ConnectDPE(random);
 		return random != null;
