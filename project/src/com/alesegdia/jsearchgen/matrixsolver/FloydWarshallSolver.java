@@ -1,5 +1,8 @@
 package com.alesegdia.jsearchgen.matrixsolver;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.alesegdia.jsearchgen.util.UpperMatrix2D;
 
 
@@ -17,12 +20,29 @@ public class FloydWarshallSolver {
 	public void Solve(UpperMatrix2D<Float> matrix) {
 		min_distances = matrix;
 
+		List<Integer> used = new ArrayList<Integer>();
+		boolean ok = false;
+		for( int i = 0; i < matrix.cols; i++ ) {
+			ok = false;
+			for( int j = 0; j < matrix.cols && !ok; j++ ) {
+				if( matrix.GetUpper(i, j) != Float.MAX_VALUE ) {
+					used.add(i);
+					ok = true;
+				}
+			}
+		}
+		
+
 		for( int i = 0; i < matrix.cols; i++ ) {
 			min_distances.Set(i, i, 0.f);
 		}
-		for( int k = 0; k < matrix.cols; k++ ) {
-			for( int i = 0; i < matrix.cols; i++ ) {
-				for( int j = 0; j < matrix.cols; j++ ) {
+		
+		for( int k : used ) {
+		//for( int k = 0; k < matrix.cols; k++ ) {
+			for( int i : used ) {
+			//for( int i = 0; i < matrix.cols; i++ ) {
+				for( int j : used ) {
+				//for( int j = 0; j < matrix.cols; j++ ) {
 					if( min_distances.GetUpper(i, j) > min_distances.GetUpper(i, k) + min_distances.GetUpper(k, j)) {
 						float newvalue =              min_distances.GetUpper(i, k) + min_distances.GetUpper(k, j);
 						min_distances.SetUpper(i, j, newvalue);
