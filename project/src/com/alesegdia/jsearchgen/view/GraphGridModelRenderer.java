@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.List;
 
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -25,6 +26,7 @@ public class GraphGridModelRenderer extends JComponent implements KeyListener {
 	private Dimension dimension;
 	int r_start = 0;
 	int r_end = 1;
+	private List<Integer> path;
 	public static int TILE_SIZE = 5;
 	
 	public void ComputePath() {
@@ -32,6 +34,7 @@ public class GraphGridModelRenderer extends JComponent implements KeyListener {
 		fws.Solve(ggs.graph_matrix.Clone());
 		r_start = fws.GetSpawnRoom();
 		r_end = fws.GetGoalRoom();
+		path = fws.GetPath();
 	}
 	
 	public GraphGridModelRenderer(final GraphGridModel ggs)
@@ -83,6 +86,9 @@ public class GraphGridModelRenderer extends JComponent implements KeyListener {
 			} else if( ri.id == r_end ) {
 			     g.setFont(fb); 
 			     g.setColor(new Color(0,0,128));
+			} else if( path.contains(ri.id) ) {
+				g.setFont(fb);
+				g.setColor(new Color(0,0,255));
 			} else {
 			     g.setFont(f); 
 		     g.setColor(new Color(255,0,0));

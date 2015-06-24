@@ -17,6 +17,7 @@ public class FloydWarshallSolver {
 	private int spawn_room;
 	private int goal_room;
 	private float distance;
+	private List<Integer> path;
 	
 	public void Solve(UpperMatrix2D<Float> matrix) {
 		min_distances = matrix;
@@ -78,7 +79,7 @@ public class FloydWarshallSolver {
 		this.distance = biggest_value;
 		
 		int u = this.spawn_room;
-		List<Integer> path = new ArrayList<Integer>();
+		this.path = new ArrayList<Integer>();
 		path.add(u);
 		final int v = this.goal_room;
 		while( u != v ) {
@@ -99,6 +100,10 @@ public class FloydWarshallSolver {
 
 	public float GetDistance() {
 		return distance;
+	}
+	
+	public List<Integer> GetPath() {
+		return path;
 	}
 
 }
