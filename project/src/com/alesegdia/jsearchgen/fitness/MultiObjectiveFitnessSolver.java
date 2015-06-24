@@ -1,5 +1,8 @@
 package com.alesegdia.jsearchgen.fitness;
 
+import java.util.List;
+
+import com.alesegdia.jsearchgen.matrixsolver.FloodFillFitnessSolver;
 import com.alesegdia.jsearchgen.matrixsolver.FloydWarshallSolver;
 import com.alesegdia.jsearchgen.util.UpperMatrix2D;
 
@@ -25,13 +28,26 @@ public class MultiObjectiveFitnessSolver implements IFitnessSolver {
 	 */
 	float room_condensation;
 
+	private List<Integer> path;
+
+	private void ComputeAllFitness(UpperMatrix2D<Float> graph_matrix) {
+		UpperMatrix2D<Float> clone = new UpperMatrix2D<Float>(graph_matrix);
+		FloydWarshallSolver fws = new FloydWarshallSolver();
+		fws.Solve(new UpperMatrix2D<Float>(graph_matrix));
+		//return fws.GetDistance();
+
+		FloodFillFitnessSolver ffs = new FloodFillFitnessSolver();
+		ffs.Solve(clone, fws.GetPath());
+
+		this.alt_path_branching = ffs.GetBranchingFitness();
+		this.alt_path_length = ffs.GetBranchingFitness();
+		this.main_path_length = fws.GetDistance();
+	}
 	
 	@Override
 	public float ComputeFitness(UpperMatrix2D<Float> graph_matrix) {
-		FloydWarshallSolver fws = new FloydWarshallSolver();
-		fws.Solve(new UpperMatrix2D<Float>(graph_matrix));
-		main_path_length = fws.GetDistance();
-		return 0.f;
+		float fitness = this.alt_path_branching + 0.5f * this.alt_path_length;
+		return fitness;
 	}
 
 }
