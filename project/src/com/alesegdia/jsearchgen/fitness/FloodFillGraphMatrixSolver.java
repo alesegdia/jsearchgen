@@ -1,11 +1,11 @@
-package com.alesegdia.jsearchgen.matrixsolver;
+package com.alesegdia.jsearchgen.fitness;
 
 import java.util.List;
 
 import com.alesegdia.jsearchgen.model.map.GraphMatrixLinksIterator;
 import com.alesegdia.jsearchgen.util.UpperMatrix2D;
 
-public class FloodFillFitnessSolver {
+public class FloodFillGraphMatrixSolver {
 	
 	private List<Integer> main_path;
 	private UpperMatrix2D<Boolean> visited;
