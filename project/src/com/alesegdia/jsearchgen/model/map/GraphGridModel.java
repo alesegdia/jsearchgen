@@ -10,6 +10,8 @@ import com.alesegdia.jsearchgen.fitness.DpeDummyCache;
 import com.alesegdia.jsearchgen.fitness.IDpeFitnessCache;
 import com.alesegdia.jsearchgen.fitness.IFitnessSolver;
 import com.alesegdia.jsearchgen.fitness.MainPathLengthFitnessSolver;
+import com.alesegdia.jsearchgen.fitness.MultiObjectiveFitnessSolver;
+import com.alesegdia.jsearchgen.fitness.ParametrizedMOFSolver;
 import com.alesegdia.jsearchgen.matrixsolver.FloydWarshallSolver;
 import com.alesegdia.jsearchgen.model.room.AInstanceManager;
 import com.alesegdia.jsearchgen.model.room.Door;
@@ -143,7 +145,7 @@ public class GraphGridModel {
 		}
 	}
 
-	IFitnessSolver fitnessSolver = new MainPathLengthFitnessSolver();
+	IFitnessSolver fitnessSolver = new ParametrizedMOFSolver(1f, 1f, 1f, 1f);
 	
 	private float ComputeFitness() {
 		return fitnessSolver.ComputeFitness(graph_matrix);
