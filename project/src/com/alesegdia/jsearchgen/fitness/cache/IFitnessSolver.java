@@ -1,4 +1,4 @@
-package com.alesegdia.jsearchgen.fitness;
+package com.alesegdia.jsearchgen.fitness.cache;
 
 import com.alesegdia.jsearchgen.util.UpperMatrix2D;
 

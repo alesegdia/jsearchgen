@@ -1,4 +1,4 @@
-package com.alesegdia.jsearchgen.fitness;
+package com.alesegdia.jsearchgen.fitness.solver;
 
 public class ParametrizedMOFSolver extends MultiObjectiveFitnessSolver {
 

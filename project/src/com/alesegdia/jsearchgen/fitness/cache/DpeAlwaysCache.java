@@ -1,4 +1,4 @@
-package com.alesegdia.jsearchgen.fitness;
+package com.alesegdia.jsearchgen.fitness.cache;
 
 import java.util.LinkedList;
 import java.util.List;

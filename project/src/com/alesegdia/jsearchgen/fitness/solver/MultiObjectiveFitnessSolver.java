@@ -1,7 +1,8 @@
-package com.alesegdia.jsearchgen.fitness;
+package com.alesegdia.jsearchgen.fitness.solver;
 
 import java.util.List;
 
+import com.alesegdia.jsearchgen.fitness.cache.IFitnessSolver;
 import com.alesegdia.jsearchgen.matrixsolver.FloydWarshallSolver;
 import com.alesegdia.jsearchgen.util.UpperMatrix2D;
 
