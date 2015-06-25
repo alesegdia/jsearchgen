@@ -9,9 +9,11 @@ import com.alesegdia.jsearchgen.fitness.cache.DpeAlwaysCache;
 import com.alesegdia.jsearchgen.fitness.cache.DpeDummyCache;
 import com.alesegdia.jsearchgen.fitness.cache.IDpeFitnessCache;
 import com.alesegdia.jsearchgen.fitness.cache.IFitnessSolver;
+import com.alesegdia.jsearchgen.fitness.solver.AdaptativeParametrizedMultiObjectiveFitnessCombinator;
 import com.alesegdia.jsearchgen.fitness.solver.MainPathLengthFitnessSolver;
+import com.alesegdia.jsearchgen.fitness.solver.MultiObjectiveFitness;
 import com.alesegdia.jsearchgen.fitness.solver.MultiObjectiveFitnessSolver;
-import com.alesegdia.jsearchgen.fitness.solver.ParametrizedMOFSolver;
+import com.alesegdia.jsearchgen.fitness.solver.ParametrizedMultiObjectiveFitnessCombinator;
 import com.alesegdia.jsearchgen.matrixsolver.FloydWarshallSolver;
 import com.alesegdia.jsearchgen.model.room.AInstanceManager;
 import com.alesegdia.jsearchgen.model.room.Door;
@@ -145,9 +147,9 @@ public class GraphGridModel {
 		}
 	}
 
-	IFitnessSolver fitnessSolver = new ParametrizedMOFSolver(1f, 1f, 1f, 1f);
+	IFitnessSolver fitnessSolver = new MultiObjectiveFitnessSolver(new AdaptativeParametrizedMultiObjectiveFitnessCombinator(1f, 1f, 1f, 0f));
 	
-	private float ComputeFitness() {
+	private MultiObjectiveFitness ComputeFitness() {
 		return fitnessSolver.ComputeFitness(graph_matrix);
 	}
 	
@@ -159,29 +161,28 @@ public class GraphGridModel {
 		if( !feasible_door_pairs.isEmpty() ) {
 			best = feasible_door_pairs.get(0);
 			for( DoorPairEntry dpe : feasible_door_pairs ) {
-				if( added_rooms.size() > 1 ) {
-					DoorPairEntry cached_dpe = fitness_cache.Precached(dpe);
-					if( cached_dpe == null ) {
-						try {
-							long t1 = System.nanoTime();
-							ComputeFitness(dpe);
-							long t2 = System.nanoTime();
-							long solve_time = t2 - t1;
-							fitness_time += solve_time;
-							fitness_cache.Cache(dpe);
-						} catch (Exception e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					} else {
-						dpe.fitness = cached_dpe.fitness;
+				DoorPairEntry cached_dpe = fitness_cache.Precached(dpe);
+				if( cached_dpe == null ) {
+					try {
+						long t1 = System.nanoTime();
+						ComputeFitness(dpe);
+						long t2 = System.nanoTime();
+						long solve_time = t2 - t1;
+						fitness_time += solve_time;
+						fitness_cache.Cache(dpe);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
+				} else {
+					dpe.fitness = cached_dpe.fitness;
 				}
-				if( dpe.fitness > best.fitness ) {
+				if( dpe.fitness.total_fitness > best.fitness.total_fitness ) {
 					best = dpe;
 				}
 			}
 		}
+		fitnessSolver.NotifySelected(best.fitness);
 		return best;
 	}
 
