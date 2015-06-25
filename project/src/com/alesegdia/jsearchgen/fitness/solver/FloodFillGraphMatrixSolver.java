@@ -25,10 +25,13 @@ public class FloodFillGraphMatrixSolver {
 	
 	private void RecursiveFloodFill( int current_room ) {
 		GraphMatrixLinksIterator it = new GraphMatrixLinksIterator( this.graph_matrix, current_room );
-		int i = 0;
+		int num_neighboors = 0;
 		while( it.hasNext() ) {
 			int neighboor = it.next();
-			i++;
+			num_neighboors++;
+			if( num_neighboors > 2 ) {
+				this.branching_fitness++;
+			}
 			if( !this.visited.GetUpper( current_room, it.next() ) ) {
 				this.visited.SetUpper(current_room, neighboor, true);
 				if( !this.main_path.contains(neighboor) ) {
@@ -36,9 +39,6 @@ public class FloodFillGraphMatrixSolver {
 				}
 				RecursiveFloodFill(neighboor);
 			}
-		}
-		if( i > 2 ) {
-			this.branching_fitness++;
 		}
 	}
 	
