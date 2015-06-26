@@ -50,9 +50,23 @@ public class PrefabModelInstanceManager extends AInstanceManager {
 		return this.allRemainingRooms.size();
 	}
 
+	IPrefabSelector mainPrefabSelector = new CyclePrefabSelector();
+	IPrefabSelector defaultDummyPrefabSelector = new DummyPrefabSelector();
+	
 	@Override
 	public Iterator<RoomInstance> RemainingInstanceslIterator() {
-		return this.modelInstances.iterator();
+		if( EnoughRoomsPerPrefab() ) {
+			return this.mainPrefabSelector.GetPrefabIterator(this.modelInstances);
+		} else {
+			return this.defaultDummyPrefabSelector.GetPrefabIterator(this.modelInstances);
+		}
+	}
+
+	private boolean EnoughRoomsPerPrefab() {
+		for( List<RoomInstance> lri : this.remainingInstancesPerPrefab ) {
+			if( lri.size() == 0 ) return false;
+		}
+		return true;
 	}
 
 	@Override
