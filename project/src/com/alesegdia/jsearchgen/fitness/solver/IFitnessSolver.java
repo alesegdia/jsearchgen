@@ -1,6 +1,5 @@
-package com.alesegdia.jsearchgen.fitness.cache;
+package com.alesegdia.jsearchgen.fitness.solver;
 
-import com.alesegdia.jsearchgen.fitness.solver.MultiObjectiveFitness;
 import com.alesegdia.jsearchgen.util.UpperMatrix2D;
 
 public interface IFitnessSolver {
