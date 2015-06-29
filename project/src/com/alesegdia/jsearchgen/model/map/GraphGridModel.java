@@ -144,7 +144,8 @@ public class GraphGridModel {
 		}
 	}
 
-	IFitnessSolver fitnessSolver = new MultiObjectiveFitnessSolver(new AdaptativeParametrizedMultiObjectiveFitnessCombinator(1f, 1f, 1f, 0f));
+	float params[] = { 1f, 1f, 1f, 0f };
+	IFitnessSolver fitnessSolver = new MultiObjectiveFitnessSolver(new AdaptativeParametrizedMultiObjectiveFitnessCombinator( params ));
 	
 	private MultiObjectiveFitness ComputeFitness() {
 		return fitnessSolver.ComputeFitness(graph_matrix);

@@ -2,9 +2,8 @@ package com.alesegdia.jsearchgen.fitness.solver;
 
 public class AdaptativeParametrizedMultiObjectiveFitnessCombinator extends ParametrizedMultiObjectiveFitnessCombinator {
 
-	public AdaptativeParametrizedMultiObjectiveFitnessCombinator(float p1,
-			float p2, float p3, float p4) {
-		super(p1, p2, p3, p4);
+	public AdaptativeParametrizedMultiObjectiveFitnessCombinator(float params[]) {
+		super(params);
 		// TODO Auto-generated constructor stub
 	}
 	
@@ -15,10 +14,7 @@ public class AdaptativeParametrizedMultiObjectiveFitnessCombinator extends Param
 	
 	@Override
 	public void NotifySelected(MultiObjectiveFitness fitness) {
-		fitnesses[0] = fitness.main_path_length;
-		fitnesses[1] = fitness.alt_path_branching;
-		fitnesses[2] = fitness.alt_path_length;
-		fitnesses[3] = fitness.room_condensation;
+		fitnesses = fitness.objectives;
 		int best = 0;
 		for( int i = 1; i < 4; i++ ) {
 			if( fitnesses[i] > fitnesses[best] ) {

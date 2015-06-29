@@ -21,10 +21,10 @@ public class MultiObjectiveFitnessSolver implements IFitnessSolver {
 		ffs.Solve(clone, fws.GetPath());
 
 		MultiObjectiveFitness mof = new MultiObjectiveFitness();
-		mof.alt_path_branching = ffs.GetBranchingFitness();
-		mof.alt_path_length = ffs.GetAltPathLengthFitness();
+		mof.objectives[MultiObjectiveFitness.FO_ALT_PATH_BRANCHING] = ffs.GetBranchingFitness();
+		mof.objectives[MultiObjectiveFitness.FO_ALT_PATH_LENGTH] = ffs.GetAltPathLengthFitness();
 		//mof.main_path_length = fws.GetDistance();
-		mof.main_path_length = fws.GetPath().size();
+		mof.objectives[MultiObjectiveFitness.FO_MAIN_PATH_LENGTH] = fws.GetPath().size();
 		return mof;
 	}
 	

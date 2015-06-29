@@ -10,8 +10,8 @@ public class MainPathLengthFitnessSolver implements IFitnessSolver {
 		FloydWarshallSolver fws = new FloydWarshallSolver();
 		fws.Solve(new UpperMatrix2D<Float>(graph_matrix));
 		MultiObjectiveFitness mof = new MultiObjectiveFitness();
-		mof.main_path_length = fws.GetDistance();
-		mof.total_fitness = mof.main_path_length;
+		mof.objectives[MultiObjectiveFitness.FO_MAIN_PATH_LENGTH] = fws.GetDistance();
+		mof.total_fitness = mof.objectives[MultiObjectiveFitness.FO_MAIN_PATH_LENGTH];
 		return mof;
 	}
 
