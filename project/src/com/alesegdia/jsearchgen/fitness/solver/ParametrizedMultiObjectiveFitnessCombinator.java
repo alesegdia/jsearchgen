@@ -3,7 +3,7 @@ package com.alesegdia.jsearchgen.fitness.solver;
 public class ParametrizedMultiObjectiveFitnessCombinator implements IMultiObjectiveFitnessCombinator {
 
 	protected float p_main_path_length, p_alt_path_branching, p_alt_path_length, p_room_condensation;
-	private float[] params;
+	protected float[] params;
 
 	public ParametrizedMultiObjectiveFitnessCombinator( float params[] ) {
 		this.params = params;
@@ -11,7 +11,7 @@ public class ParametrizedMultiObjectiveFitnessCombinator implements IMultiObject
 	
 	@Override
 	public void CombineFitness(MultiObjectiveFitness mof) {
-		for( int i = 0; i < 4; i++ ) {
+		for( int i = 0; i < MultiObjectiveFitness.NUM_OBJECTIVES; i++ ) {
 			mof.total_fitness += mof.objectives[i] * this.params[i];
 		}
 	}

@@ -7,7 +7,7 @@ public class AdaptativeParametrizedMultiObjectiveFitnessCombinator extends Param
 		// TODO Auto-generated constructor stub
 	}
 	
-	float fitnesses[] = new float[4];
+	float fitnesses[] = new float[MultiObjectiveFitness.NUM_OBJECTIVES];
 	
 	float attack = 0.5f;
 	float decay = 0.05f;
@@ -16,35 +16,16 @@ public class AdaptativeParametrizedMultiObjectiveFitnessCombinator extends Param
 	public void NotifySelected(MultiObjectiveFitness fitness) {
 		fitnesses = fitness.objectives;
 		int best = 0;
-		for( int i = 1; i < 4; i++ ) {
+		for( int i = 1; i < MultiObjectiveFitness.NUM_OBJECTIVES; i++ ) {
 			if( fitnesses[i] > fitnesses[best] ) {
 				best = i;
 			}
 		}
 		
-		if( best == 0 ) {
-			p_main_path_length *= decay;
-			p_alt_path_branching *= attack;
-			p_alt_path_length *= attack;
-			p_room_condensation *= attack;
-		} else if( best == 1 ) {
-			p_main_path_length *= attack;
-			p_alt_path_branching *= decay;
-			p_alt_path_length *= attack;
-			p_room_condensation *= attack;
-		} else if( best == 2 ) {
-			p_main_path_length *= attack;
-			p_alt_path_branching *= attack;
-			p_alt_path_length *= decay;
-			p_room_condensation *= attack;
-		} else if( best == 3 ) {
-			p_main_path_length *= attack;
-			p_alt_path_branching *= attack;
-			p_alt_path_length *= attack;
-			p_room_condensation *= decay;
+		for( int i = 0; i < MultiObjectiveFitness.NUM_OBJECTIVES; i++ ) {
+			if( i == best ) this.params[i] *= decay;
+			else this.params[i] *= attack;
 		}
-
 	}
-
 
 }

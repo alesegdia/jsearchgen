@@ -22,6 +22,8 @@ public class MultiObjectiveFitness {
 	 */
 	public static final int FO_ROOM_CONDENSATION = 3;
 	
+	public static final int NUM_OBJECTIVES = 4;
+	
 	
 	public float objectives[] = new float[4];
 
