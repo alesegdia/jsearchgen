@@ -3,5 +3,5 @@ package com.alesegdia.jsearchgen.config;
 public enum DoorGenType {
 	ALL,
 	RANDOM,
-	CUSTOM
+	CUSTOM_NOT_IMPL
 }
