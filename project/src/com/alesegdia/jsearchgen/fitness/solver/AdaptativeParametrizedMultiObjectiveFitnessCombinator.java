@@ -2,15 +2,17 @@ package com.alesegdia.jsearchgen.fitness.solver;
 
 public class AdaptativeParametrizedMultiObjectiveFitnessCombinator extends ParametrizedMultiObjectiveFitnessCombinator {
 
-	public AdaptativeParametrizedMultiObjectiveFitnessCombinator(float params[]) {
+	public AdaptativeParametrizedMultiObjectiveFitnessCombinator(float params[], float attack, float decay) {
 		super(params);
+		this.attack = attack;
+		this.decay = decay;
 		// TODO Auto-generated constructor stub
 	}
 	
 	float fitnesses[] = new float[MultiObjectiveFitness.NUM_OBJECTIVES];
 	
-	float attack = 0.5f;
-	float decay = 0.05f;
+	float attack;
+	float decay;
 	
 	@Override
 	public void NotifySelected(MultiObjectiveFitness fitness) {

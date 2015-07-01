@@ -1,8 +1,13 @@
 package com.alesegdia.jsearchgen.machine;
 
+import com.alesegdia.jsearchgen.config.CombinatorType;
 import com.alesegdia.jsearchgen.config.GenerationConfig;
 import com.alesegdia.jsearchgen.config.ManagerType;
 import com.alesegdia.jsearchgen.config.SolverType;
+import com.alesegdia.jsearchgen.fitness.solver.AdaptativeParametrizedMultiObjectiveFitnessCombinator;
+import com.alesegdia.jsearchgen.fitness.solver.IMultiObjectiveFitnessCombinator;
+import com.alesegdia.jsearchgen.fitness.solver.MultiObjectiveFitnessSolver;
+import com.alesegdia.jsearchgen.fitness.solver.ParametrizedMultiObjectiveFitnessCombinator;
 import com.alesegdia.jsearchgen.generatorsolver.BestSearchSolver;
 import com.alesegdia.jsearchgen.generatorsolver.IMapGenSolver;
 import com.alesegdia.jsearchgen.generatorsolver.RandomSolver;
@@ -36,10 +41,17 @@ public class DungeonMachine {
 		}
 		
 		rm.GenRooms(config);
-		
+		IMultiObjectiveFitnessCombinator combinator;
+		if( config.combinator_type == CombinatorType.PARAMETRIZED ) {
+			combinator = new ParametrizedMultiObjectiveFitnessCombinator(config.fitnesses_params);
+		} else /*if( config.combinator_type == CombinatorType.ADAPTATIVE_PARAMETRIZED ) */{
+			combinator = new AdaptativeParametrizedMultiObjectiveFitnessCombinator(config.fitnesses_params, config.combinator_attack, config.combinator_decay);
+		}
 		this.ggm = new GraphGridModel(rm);
 
 		this.ggm.SetupCache(config.cache_type);
+		
+		this.ggm.SetFitnessSolver(new MultiObjectiveFitnessSolver(combinator));
 		
 		if( config.solver_type == SolverType.RANDOM ) {
 			this.mapgenerator = new RandomSolver();

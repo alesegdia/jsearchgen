@@ -2,7 +2,6 @@ package com.alesegdia.jsearchgen.fitness.solver;
 
 public class ParametrizedMultiObjectiveFitnessCombinator implements IMultiObjectiveFitnessCombinator {
 
-	protected float p_main_path_length, p_alt_path_branching, p_alt_path_length, p_room_condensation;
 	protected float[] params;
 
 	public ParametrizedMultiObjectiveFitnessCombinator( float params[] ) {

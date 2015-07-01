@@ -40,7 +40,8 @@ public class GUIBuilder extends JPanel {
     private JComboBox<CombinatorType> jcb_combinatorType = new JComboBox<CombinatorType>();
     private JTextField jtf_combinatorDecay = new JTextField();
     private JTextField jtf_combinatorAttack = new JTextField();
-    private JTextField jtf_fitnesses[] = new JTextField[MultiObjectiveFitness.NUM_OBJECTIVES];
+    private JTextField jtf_fitnesses_params[] = new JTextField[MultiObjectiveFitness.NUM_OBJECTIVES];
+    private JTextField jtf_solver_params[] = new JTextField[MultiObjectiveFitness.NUM_OBJECTIVES];
     private JButton jbtn_generate = new JButton("Generate!");
     
 	public GUIBuilder () {
@@ -89,10 +90,12 @@ public class GUIBuilder extends JPanel {
 		};
 		
 		for( int i = 0; i < MultiObjectiveFitness.NUM_OBJECTIVES; i++ ) {
-			jtf_fitnesses[i] = new JTextField();
-			this.AddElement(fitnesses_labels[i], jtf_fitnesses[i]);
+			jtf_fitnesses_params[i] = new JTextField();
+			this.AddElement(fitnesses_labels[i], jtf_fitnesses_params[i]);
 		}
         
+		
+		
 		final GUIBuilder guib = this;
 		jbtn_generate.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
@@ -115,7 +118,14 @@ public class GUIBuilder extends JPanel {
 			gc.manager_type = 					this.jcb_managerType.getItemAt(jcb_managerType.getSelectedIndex());
 			gc.cache_type = 					this.jcb_cacheType.getItemAt(jcb_cacheType.getSelectedIndex());
 			gc.solver_type = 					this.jcb_solverType.getItemAt(jcb_solverType.getSelectedIndex());
+			gc.combinator_type =				this.jcb_combinatorType.getItemAt(jcb_combinatorType.getSelectedIndex());
+			gc.combinator_decay = 				Float.parseFloat(this.jtf_combinatorDecay.getText());
+			gc.combinator_attack = 				Float.parseFloat(this.jtf_combinatorAttack.getText());
 
+			for( int i = 0; i < GenerationConfig.MAX_PREFABS; i++ ) {
+				gc.fitnesses_params[i] = Float.parseFloat(this.jtf_fitnesses_params[i].getText());
+			}
+			
 			dm.Reset(gc);
 			dm.Run();
 		} catch (Exception e) {

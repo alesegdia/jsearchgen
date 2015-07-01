@@ -143,8 +143,11 @@ public class GraphGridModel {
 			this.graph_matrix.SetUpper(r1.id, r2_id, Float.MAX_VALUE);
 		}
 	}
+	public void SetFitnessSolver(IFitnessSolver solver) {
+		this.fitnessSolver = solver;
+	}
 
-	IFitnessSolver fitnessSolver = new MultiObjectiveFitnessSolver(new AdaptativeParametrizedMultiObjectiveFitnessCombinator( new float[]{1f,1f,1f,0f} ));
+	IFitnessSolver fitnessSolver;
 	
 	private MultiObjectiveFitness ComputeFitness() {
 		return fitnessSolver.ComputeFitness(graph_matrix);

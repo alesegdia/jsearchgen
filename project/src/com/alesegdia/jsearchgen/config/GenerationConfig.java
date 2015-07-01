@@ -13,12 +13,14 @@ public class GenerationConfig {
 	public DoorGenType doorgen_type; 			// way to generate doors at startup (random, 
 	public boolean cloned_rooms; 				// set to true if want to use same rooms for each prefab instance
 	public CacheType cache_type;
-	public float[] fitness_params = new float[MultiObjectiveFitness.NUM_OBJECTIVES];
 	
 	public GenerationConfig () {
 		num_instances_per_prefab = new int[MAX_PREFABS];
 	}
 	
 	public CombinatorType combinator_type;
+	public float combinator_decay;
+	public float combinator_attack;
+	public float[] fitnesses_params = new float[MultiObjectiveFitness.NUM_OBJECTIVES];
 
 }
