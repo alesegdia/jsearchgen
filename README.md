@@ -27,5 +27,6 @@ cd jsearchgen/project
 gradle eclipse
 ```
 
-Finally, open eclipse and import the project. That's it.
+Finally, open eclipse and import the project and that's it. Now you can run the tests
+at `com.alesegdia.jsearchgen.test` package.
 
