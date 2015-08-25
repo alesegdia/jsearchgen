@@ -26,6 +26,12 @@ public class DungeonMachine {
 	private IMapGenSolver mapgenerator;
 	GraphGridModelRenderer ggsr;
 
+	boolean show = false;
+	
+	public void setShow( boolean show ) {
+		this.show = show;
+	}
+	
 	public void Reset(GenerationConfig config, PrefabManager pmgr) throws Exception {
 		
 		this.config = config;
@@ -60,7 +66,7 @@ public class DungeonMachine {
 		}
 
 		
-		this.ggsr = new GraphGridModelRenderer(ggm);
+		if( show ) this.ggsr = new GraphGridModelRenderer(ggm);
 
 	}
 	
@@ -77,12 +83,14 @@ public class DungeonMachine {
 			if(!this.mapgenerator.Step(this.ggm)) {
 				throw new Exception("ERROR: can't build a complete solution from this partial solution and this list of remaining rooms " + this.ggm);
 			}
-			//this.ggsr.Update();
+			if( show ) this.ggsr.Update();
 		}
 		long t2 = System.nanoTime();
 
-		this.ggsr.Update();
-		this.ggsr.Show();
+		if( show ) {
+			this.ggsr.Update();
+			this.ggsr.Show();			
+		}
 		
 		return t2-t1;
 
