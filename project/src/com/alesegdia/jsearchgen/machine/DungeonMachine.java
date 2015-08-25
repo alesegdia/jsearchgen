@@ -65,23 +65,27 @@ public class DungeonMachine {
 	}
 	
 	public void Run() throws Exception {
-		long t1 = System.nanoTime();
-		Generate();
-		long t2 = System.nanoTime();
-		long solve_time = t2 - t1;
+		long solve_time = Generate();
 		System.out.println("Config used: \n" + this.config);
 		System.out.println("SOLVE TIME: " + solve_time/10e8);
 		System.out.println("FITNESS TIME: " + GraphGridModel.fitness_time/10e8);
 	}
 	
-	public void Generate() throws Exception {
-		this.ggsr.Show();
+	public long Generate() throws Exception {
+		long t1 = System.nanoTime();
 		while(!this.ggm.IsComplete()){
 			if(!this.mapgenerator.Step(this.ggm)) {
 				throw new Exception("ERROR: can't build a complete solution from this partial solution and this list of remaining rooms " + this.ggm);
 			}
-			this.ggsr.Update();
+			//this.ggsr.Update();
 		}
+		long t2 = System.nanoTime();
+
+		this.ggsr.Update();
+		this.ggsr.Show();
+		
+		return t2-t1;
+
 	}
 
 }
