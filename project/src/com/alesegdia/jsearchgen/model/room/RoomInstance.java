@@ -68,6 +68,18 @@ public class RoomInstance {
 			num_doors--;
 		}
 	}
+	
+	public void GenerateDivisorDoors(RNG rng, int divisor) {
+
+		for( int i = 0; i < prefab.potentialDoors.size(); i++ ) {
+			if( i % divisor == 0 ) {
+				PotentialDoorEntry pde = prefab.potentialDoors.get(i);
+				this.AddDoor(pde.localPosition.x, pde.localPosition.y, pde.type);
+			}
+			i++;
+		}
+	}
+
 
 	public void GenerateAllDoors(RNG rng) {
 		for( PotentialDoorEntry pde : this.prefab.potentialDoors ) {
@@ -94,4 +106,5 @@ public class RoomInstance {
 	public void RenderCanvas() {
 		(new TileMapRenderer(this.CreateTileMapWithDoors())).Show();
 	}
+
 }

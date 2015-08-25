@@ -39,14 +39,27 @@ public abstract class AInstanceManager {
 			if( gc.doorgen_type == DoorGenType.RANDOM && gc.cloned_rooms ) {
 				this.GenerateSetWithSameRandomDoors(prefab, n);
 			} else if ( gc.doorgen_type == DoorGenType.RANDOM && !gc.cloned_rooms ) {
-				this.GenerateSetWithRandomDoors(prefab, n);
+				this.GenerateSetWithRandomDoors(prefab, n, gc.divisor_n);
 			} else if ( gc.doorgen_type == DoorGenType.ALL ) {
 				this.GenerateSetWithAllDoors(prefab, n);
+			} else if ( gc.doorgen_type == DoorGenType.DIVISOR ) {
+				this.GenerateSetWithDivisorDoors(prefab, n, gc.divisor_n );
 			}
 			i++;
 		}
 	}
 	
+	private List<RoomInstance> GenerateSetWithDivisorDoors(RoomPrefab prefab, int num_rooms, int divisor) {
+		List<RoomInstance> retlist = new LinkedList<RoomInstance>();
+		for( int i = 0; i < num_rooms; i++ )
+		{
+			RoomInstance ri = CreateRoomInstance(prefab);
+			ri.GenerateDivisorDoors(RNG.rng, divisor);
+			retlist.add(ri);
+		}
+		return retlist;
+	}
+
 	public void GenerateWithAllDoors(int num_instances_per_prefab[])
 	{
 		int i = 0;
@@ -56,13 +69,15 @@ public abstract class AInstanceManager {
 		}
 	}
 	
-	public List<RoomInstance> GenerateSetWithRandomDoors( RoomPrefab prefab, int num_rooms )
+	public List<RoomInstance> GenerateSetWithRandomDoors( RoomPrefab prefab, int num_rooms, int divisor )
 	{
 		List<RoomInstance> retlist = new LinkedList<RoomInstance>();
 		for( int i = 0; i < num_rooms; i++ )
 		{
 			RoomInstance ri = CreateRoomInstance(prefab);
-			ri.GenerateRandomDoors(RNG.rng, 10);
+
+			int n = prefab.GetTileMap().cols + prefab.GetTileMap().rows/divisor;
+			ri.GenerateRandomDoors(RNG.rng, n);
 			retlist.add(ri);
 		}
 		return retlist;
@@ -84,7 +99,8 @@ public abstract class AInstanceManager {
 	{
 		List<RoomInstance> retlist = new LinkedList<RoomInstance>();
 		RoomInstance sample = CreateRoomInstance(prefab);
-		sample.GenerateRandomDoors(RNG.rng, 10);
+		int n = sample.prefab.GetTileMap().cols + sample.prefab.GetTileMap().rows/2;
+		sample.GenerateRandomDoors(RNG.rng, n);
 		retlist.add(sample);
 		for( int i = 0; i < num_rooms - 1; i++ )
 		{

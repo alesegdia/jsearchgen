@@ -21,6 +21,7 @@ public class GenerationConfig {
 	public float combinator_decay;
 	public float combinator_attack;
 	public float[] fitnesses_params = new float[MultiObjectiveFitness.NUM_OBJECTIVES];
+	public int divisor_n = 2;
 
 	
 	
