@@ -26,14 +26,11 @@ public class DungeonMachine {
 	private IMapGenSolver mapgenerator;
 	GraphGridModelRenderer ggsr;
 
-	public void Reset(GenerationConfig config) throws Exception {
+	public void Reset(GenerationConfig config, PrefabManager pmgr) throws Exception {
 		
 		this.config = config;
 		RNG.rng = new RNG();
 		RNG.rng.setSeed(config.random_seed);
-		PrefabManager pmgr = new PrefabManager();
-		pmgr.AddPrefab("rooms/room0.json");
-		pmgr.AddPrefab("rooms/room1.json");
 
 		
 		AInstanceManager rm;

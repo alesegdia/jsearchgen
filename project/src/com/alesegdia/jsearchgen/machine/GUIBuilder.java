@@ -24,6 +24,7 @@ import com.alesegdia.jsearchgen.config.GenerationConfig;
 import com.alesegdia.jsearchgen.config.ManagerType;
 import com.alesegdia.jsearchgen.config.SolverType;
 import com.alesegdia.jsearchgen.fitness.solver.MultiObjectiveFitness;
+import com.alesegdia.jsearchgen.model.room.PrefabManager;
 
 public class GUIBuilder extends JPanel {
 	
@@ -126,7 +127,10 @@ public class GUIBuilder extends JPanel {
 				gc.fitnesses_params[i] = Float.parseFloat(this.jtf_fitnesses_params[i].getText());
 			}
 			
-			dm.Reset(gc);
+			PrefabManager pmgr = new PrefabManager();
+			pmgr.AddPrefab("rooms/room0.json");
+			pmgr.AddPrefab("rooms/room1.json");
+			dm.Reset(gc, pmgr);
 			dm.Run();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

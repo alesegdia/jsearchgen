@@ -8,6 +8,7 @@ import com.alesegdia.jsearchgen.config.ManagerType;
 import com.alesegdia.jsearchgen.config.SolverType;
 import com.alesegdia.jsearchgen.fitness.solver.MultiObjectiveFitness;
 import com.alesegdia.jsearchgen.machine.DungeonMachine;
+import com.alesegdia.jsearchgen.model.room.PrefabManager;
 
 public class Test_Machine {
 
@@ -39,7 +40,10 @@ public class Test_Machine {
 	
 	static void LaunchMachineWithParams(GenerationConfig gc) throws Exception {
 		DungeonMachine dm = new DungeonMachine();
-		dm.Reset(gc);
+		PrefabManager pmgr = new PrefabManager();
+		pmgr.AddPrefab("rooms/room0.json");
+		pmgr.AddPrefab("rooms/room1.json");
+		dm.Reset(gc, pmgr);
 		dm.Run();
 	}
 	
