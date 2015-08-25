@@ -8,10 +8,8 @@ import com.alesegdia.jsearchgen.config.CacheType;
 import com.alesegdia.jsearchgen.fitness.cache.DpeAlwaysCache;
 import com.alesegdia.jsearchgen.fitness.cache.DpeDummyCache;
 import com.alesegdia.jsearchgen.fitness.cache.IDpeFitnessCache;
-import com.alesegdia.jsearchgen.fitness.solver.AdaptativeParametrizedMultiObjectiveFitnessCombinator;
 import com.alesegdia.jsearchgen.fitness.solver.IFitnessSolver;
 import com.alesegdia.jsearchgen.fitness.solver.MultiObjectiveFitness;
-import com.alesegdia.jsearchgen.fitness.solver.MultiObjectiveFitnessSolver;
 import com.alesegdia.jsearchgen.model.room.AInstanceManager;
 import com.alesegdia.jsearchgen.model.room.Door;
 import com.alesegdia.jsearchgen.model.room.DoorPairEntry;
@@ -253,6 +251,7 @@ public class GraphGridModel {
 		return feasible_entries;
 	}
 	
+	Vec2 offset = new Vec2(0,0);
 	private Vec2 CheckInsert(Door door_other, Door door_this, int dr, int dc, Door.Type doortype)
 	{
 		Vec2 ret = null;
@@ -261,12 +260,16 @@ public class GraphGridModel {
 			Vec2 this_global = door_this.GetGlobalPosition();
 			if( door_other.type == doortype )
 			{
-				if( this.tilemap.Get(this_global.y + dr, this_global.x + dc) == TileType.FREE )
+				int dx, dy;
+				dy = this_global.y + dr;
+				dx = this_global.x + dc;
+				if( this.tilemap.Get(dy, dx) == TileType.FREE )
 				{
-					Vec2 offset = new Vec2(this_global.y + dr - door_other.localPosition.y, this_global.x + dc - door_other.localPosition.x);
+					offset.Set(dy - door_other.localPosition.y, dx - door_other.localPosition.x);
 					if( !this.tilemap.CollideWith(door_other.ri_owner.prefab.map, offset.x, offset.y) )
 					{
-						ret = offset;
+						ret = new Vec2(0,0);
+						ret.Set(offset);
 					}
 				}
 			}
