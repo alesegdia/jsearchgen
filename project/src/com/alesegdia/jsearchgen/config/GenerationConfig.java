@@ -6,7 +6,6 @@ import com.alesegdia.jsearchgen.fitness.solver.MultiObjectiveFitness;
 public class GenerationConfig {
 
 	public long random_seed; 					// seed for the RNG
-	public static int MAX_PREFABS = 2; 			// max prefabs there will be
 	public int num_instances_per_prefab[]; 	// num instances per prefab
 	public SolverType solver_type; 				// solver to perform each generation step
 	public ManagerType manager_type; 			// defines the way to manage room instances
@@ -14,8 +13,8 @@ public class GenerationConfig {
 	public boolean cloned_rooms; 				// set to true if want to use same rooms for each prefab instance
 	public CacheType cache_type;
 	
-	public GenerationConfig () {
-		num_instances_per_prefab = new int[MAX_PREFABS];
+	public GenerationConfig (int num_prefabs) {
+		num_instances_per_prefab = new int[num_prefabs];
 	}
 	
 	public CombinatorType combinator_type;
@@ -23,4 +22,6 @@ public class GenerationConfig {
 	public float combinator_attack;
 	public float[] fitnesses_params = new float[MultiObjectiveFitness.NUM_OBJECTIVES];
 
+	
+	
 }

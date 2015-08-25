@@ -12,9 +12,14 @@ import com.alesegdia.jsearchgen.model.room.PrefabManager;
 
 public class Test_Machine {
 
+	private static PrefabManager pmgr;
+
 	public static void main (String args[]) throws Exception {
-		
-		GenerationConfig gc = new GenerationConfig();
+		pmgr = new PrefabManager();
+		pmgr.AddPrefab("rooms/room0.json");
+		pmgr.AddPrefab("rooms/room1.json");
+
+		GenerationConfig gc = new GenerationConfig(pmgr.numPrefabs());
 		gc.num_instances_per_prefab = new int[2];
 		gc.num_instances_per_prefab[0] = 	20;
 		gc.num_instances_per_prefab[1] = 	20;
@@ -40,9 +45,6 @@ public class Test_Machine {
 	
 	static void LaunchMachineWithParams(GenerationConfig gc) throws Exception {
 		DungeonMachine dm = new DungeonMachine();
-		PrefabManager pmgr = new PrefabManager();
-		pmgr.AddPrefab("rooms/room0.json");
-		pmgr.AddPrefab("rooms/room1.json");
 		dm.Reset(gc, pmgr);
 		dm.Run();
 	}

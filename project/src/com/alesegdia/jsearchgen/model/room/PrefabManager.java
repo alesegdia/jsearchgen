@@ -26,4 +26,8 @@ public final class PrefabManager {
 		prefabs.add(rp);
 	}
 
+	public int numPrefabs() {
+		return prefabs.size();
+	}
+
 }

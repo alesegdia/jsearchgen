@@ -30,20 +30,22 @@ public class GUIBuilder extends JPanel {
 	
 	private Dimension dimension;
 	
-	private GenerationConfig genConfig = new GenerationConfig();
+	private GenerationConfig genConfig;
 	
 	private JTextField jtf_seed = new JTextField();
 	private JComboBox<SolverType> jcb_solverType = new JComboBox<SolverType>();
     private JComboBox<ManagerType> jcb_managerType = new JComboBox<ManagerType>();
     private JComboBox<DoorGenType> jcb_doorGenType = new JComboBox<DoorGenType>();
     private JComboBox<CacheType> jcb_cacheType = new JComboBox<CacheType>();
-    private JTextField jtf_prefabInstances[] = new JTextField[GenerationConfig.MAX_PREFABS];
+    private JTextField jtf_prefabInstances[];
     private JComboBox<CombinatorType> jcb_combinatorType = new JComboBox<CombinatorType>();
     private JTextField jtf_combinatorDecay = new JTextField();
     private JTextField jtf_combinatorAttack = new JTextField();
     private JTextField jtf_fitnesses_params[] = new JTextField[MultiObjectiveFitness.NUM_OBJECTIVES];
     private JTextField jtf_solver_params[] = new JTextField[MultiObjectiveFitness.NUM_OBJECTIVES];
     private JButton jbtn_generate = new JButton("Generate!");
+
+	private PrefabManager pmgr;
     
 	public GUIBuilder () {
 		super(new GridLayout(0,2,10,10));
@@ -71,7 +73,15 @@ public class GUIBuilder extends JPanel {
 		jcb_cacheType.addItem(CacheType.INTERVAL_NOT_IMPL);
 		jcb_cacheType.addItem(CacheType.ADAPTATIVE_NOT_IMPL);
 		
-		for( int i = 0; i < GenerationConfig.MAX_PREFABS; i++ ) {
+		pmgr = new PrefabManager();
+		pmgr.AddPrefab("rooms/room0.json");
+		pmgr.AddPrefab("rooms/room1.json");
+
+		genConfig = new GenerationConfig(pmgr.numPrefabs());
+		
+		this.jtf_prefabInstances = new JTextField[pmgr.numPrefabs()];
+		
+		for( int i = 0; i < pmgr.numPrefabs(); i++ ) {
 			jtf_prefabInstances[i] = new JTextField();
 			this.AddElement("Num prefabs for type " + i, jtf_prefabInstances[i]);
 		}
@@ -112,7 +122,7 @@ public class GUIBuilder extends JPanel {
 			GenerationConfig gc = this.genConfig;
 			gc.random_seed = 					Integer.parseInt(this.jtf_seed.getText());
 			gc.cloned_rooms = 					false;
-			for( int i = 0; i < GenerationConfig.MAX_PREFABS; i++ ) {
+			for( int i = 0; i < pmgr.numPrefabs(); i++ ) {
 				gc.num_instances_per_prefab[i] = Integer.parseInt(this.jtf_prefabInstances[i].getText());
 			}
 			gc.doorgen_type = 					this.jcb_doorGenType.getItemAt(jcb_doorGenType.getSelectedIndex());
@@ -123,13 +133,10 @@ public class GUIBuilder extends JPanel {
 			gc.combinator_decay = 				Float.parseFloat(this.jtf_combinatorDecay.getText());
 			gc.combinator_attack = 				Float.parseFloat(this.jtf_combinatorAttack.getText());
 
-			for( int i = 0; i < GenerationConfig.MAX_PREFABS; i++ ) {
+			for( int i = 0; i < pmgr.numPrefabs(); i++ ) {
 				gc.fitnesses_params[i] = Float.parseFloat(this.jtf_fitnesses_params[i].getText());
 			}
 			
-			PrefabManager pmgr = new PrefabManager();
-			pmgr.AddPrefab("rooms/room0.json");
-			pmgr.AddPrefab("rooms/room1.json");
 			dm.Reset(gc, pmgr);
 			dm.Run();
 		} catch (Exception e) {
