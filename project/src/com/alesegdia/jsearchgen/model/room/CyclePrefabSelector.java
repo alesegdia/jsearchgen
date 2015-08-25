@@ -13,7 +13,6 @@ public class CyclePrefabSelector implements IPrefabSelector {
 	public Iterator<RoomInstance> GetPrefabIterator(List<RoomInstance> modelInstances) {
 		list = new ArrayList<RoomInstance>();
 		list.add(modelInstances.get(nextSelectedPrefab));
-		System.out.println(nextSelectedPrefab);
 		nextSelectedPrefab = (nextSelectedPrefab + 1) % modelInstances.size();
 		return list.iterator();
 	}
