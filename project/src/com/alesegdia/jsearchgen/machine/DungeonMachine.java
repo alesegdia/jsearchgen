@@ -32,6 +32,9 @@ public class DungeonMachine {
 		RNG.rng = new RNG();
 		RNG.rng.setSeed(config.random_seed);
 		PrefabManager pmgr = new PrefabManager();
+		pmgr.AddPrefab("rooms/room0.json");
+		pmgr.AddPrefab("rooms/room1.json");
+
 		
 		AInstanceManager rm;
 		if( config.manager_type == ManagerType.BRUTE_FORCE ) {

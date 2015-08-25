@@ -12,12 +12,16 @@ public final class PrefabManager {
 	
 	public PrefabManager() {
 		prefabs = new ArrayList<RoomPrefab>();
-		AddPrefab("rooms/room0.json");
-		AddPrefab("rooms/room1.json");
 	}
 	
-	private void AddPrefab(String string) {
+	public void AddPrefab(String string) {
 		RoomPrefab rp = new RoomPrefab(new TileMap(string));
+		rp.id = nextID; nextID++;
+		prefabs.add(rp);
+	}
+	
+	public void AddPrefab(TileMap tm) {
+		RoomPrefab rp = new RoomPrefab(tm);
 		rp.id = nextID; nextID++;
 		prefabs.add(rp);
 	}
