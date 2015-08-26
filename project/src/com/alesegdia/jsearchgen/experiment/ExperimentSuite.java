@@ -76,6 +76,8 @@ public class ExperimentSuite {
 				s += "NO CACHE";
 			} else if( this.cache_type == CacheType.ALWAYS ) {
 				s += "ALWAYS CACHE";
+			} else if( this.cache_type == CacheType.REFRESHER ) {
+				s += "REFRESHER CACHE";
 			}
 			return s;
 		}
@@ -102,7 +104,8 @@ public class ExperimentSuite {
 
 		List<IncompleteGenerationConfig> genConfigs = new ArrayList<IncompleteGenerationConfig>();
 		IncompleteGenerationConfig icfg;
-
+		
+		/******************************************/
 		icfg = new IncompleteGenerationConfig();
 		icfg.solver_type = SolverType.RANDOM;
 		icfg.manager_type = ManagerType.PREFAB_MODEL;
@@ -112,12 +115,38 @@ public class ExperimentSuite {
 		icfg.divisor_n = 2;
 
 		//genConfigs.add(icfg);
-
+		/******************************************/		
+		
 		/******************************************/
 		icfg = new IncompleteGenerationConfig();
 
 		icfg.solver_type = SolverType.BEST_SEARCH;
 		icfg.cache_type = CacheType.NO_CACHE;
+		icfg.manager_type = ManagerType.PREFAB_MODEL;
+		icfg.combinator_type = CombinatorType.PARAMETRIZED;
+		
+		icfg.doorgen_type = DoorGenType.RANDOM;
+		icfg.divisor_n = 2;
+
+		icfg.combinator_attack = 0;
+		icfg.combinator_decay = 0;
+
+		icfg.fitnesses_params[0] = 1;
+		icfg.fitnesses_params[1] = 1;
+		icfg.fitnesses_params[2] = 1;
+		icfg.fitnesses_params[3] = 1;
+
+		icfg.random_seed = 1234;
+
+		genConfigs.add(icfg);
+		/******************************************/
+
+		/******************************************/
+		icfg = new IncompleteGenerationConfig();
+
+		icfg.solver_type = SolverType.BEST_SEARCH;
+		icfg.cache_type = CacheType.REFRESHER;
+		icfg.refresher_divisor = 5;
 		icfg.manager_type = ManagerType.PREFAB_MODEL;
 		icfg.combinator_type = CombinatorType.PARAMETRIZED;
 		
@@ -186,6 +215,8 @@ public class ExperimentSuite {
 	
 							gcfg.fitnesses_params = cfg.fitnesses_params;
 							gcfg.random_seed = cfg.random_seed;
+							gcfg.divisor_n = cfg.divisor_n;
+							gcfg.refresher_divisor = cfg.refresher_divisor;
 							gcfg.num_instances_per_prefab = new int[pmgr.numPrefabs()];
 							for( int i = 0; i < gcfg.num_instances_per_prefab.length; i++ ) {
 								gcfg.num_instances_per_prefab[i] = numRooms;
