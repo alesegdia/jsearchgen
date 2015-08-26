@@ -62,6 +62,15 @@ public class TileMap extends Matrix2D<Integer> {
 		
 	}
 	
+	@Override
+	public Integer Get( int row, int col ) {
+		if( col < 0 ) col = 0;
+		if( row < 0 ) row = 0;
+		if( col > this.cols-1 ) col = this.cols-1;
+		if( row > this.rows-1 ) row = this.rows-1;
+		return super.Get(row, col);
+	}
+	
 	public boolean CollideWith(TileMap other, int top, int left)
 	{
 		if( top < 0 || top + other.rows > this.rows ||
