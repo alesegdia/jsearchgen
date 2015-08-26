@@ -5,7 +5,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.alesegdia.jsearchgen.config.CacheType;
+import com.alesegdia.jsearchgen.config.GenerationConfig;
 import com.alesegdia.jsearchgen.fitness.cache.DpeAlwaysCache;
+import com.alesegdia.jsearchgen.fitness.cache.DpeCacheRefresher;
 import com.alesegdia.jsearchgen.fitness.cache.DpeDummyCache;
 import com.alesegdia.jsearchgen.fitness.cache.IDpeFitnessCache;
 import com.alesegdia.jsearchgen.fitness.solver.IFitnessSolver;
@@ -182,6 +184,7 @@ public class GraphGridModel {
 			}
 		}
 		fitnessSolver.NotifySelected(best.fitness);
+		fitness_cache.NotifyStep();
 		return best;
 	}
 
@@ -347,12 +350,15 @@ public class GraphGridModel {
 		return this.added_rooms;
 	}
 
-	public void SetupCache(CacheType cache_type) {
-		if( cache_type == CacheType.NO_CACHE ) {
+	public void SetupCache(GenerationConfig cfg) {
+		if( cfg.cache_type == CacheType.NO_CACHE ) {
 			this.fitness_cache = new DpeDummyCache();
-		} else if ( cache_type == CacheType.ALWAYS ) {
+		} else if ( cfg.cache_type == CacheType.ALWAYS ) {
 			this.fitness_cache = new DpeAlwaysCache();
+		} else if( cfg.cache_type == CacheType.REFRESHER ) {
+			this.fitness_cache = new DpeCacheRefresher(cfg.refresher_divisor);
 		}
+		
 	}
 
 }

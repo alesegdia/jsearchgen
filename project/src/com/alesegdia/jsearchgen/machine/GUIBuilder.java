@@ -37,6 +37,7 @@ public class GUIBuilder extends JPanel {
     private JComboBox<ManagerType> jcb_managerType = new JComboBox<ManagerType>();
     private JComboBox<DoorGenType> jcb_doorGenType = new JComboBox<DoorGenType>();
     private JComboBox<CacheType> jcb_cacheType = new JComboBox<CacheType>();
+    private JTextField jtf_refresherParam = new JTextField();
     private JTextField jtf_prefabInstances[];
     private JComboBox<CombinatorType> jcb_combinatorType = new JComboBox<CombinatorType>();
     private JTextField jtf_combinatorDecay = new JTextField();
@@ -70,6 +71,7 @@ public class GUIBuilder extends JPanel {
 		this.AddElement("Manager type", jcb_cacheType);
 		jcb_cacheType.addItem(CacheType.NO_CACHE);
 		jcb_cacheType.addItem(CacheType.ALWAYS);
+		jcb_cacheType.addItem(CacheType.REFRESHER);
 		jcb_cacheType.addItem(CacheType.INTERVAL_NOT_IMPL);
 		jcb_cacheType.addItem(CacheType.ADAPTATIVE_NOT_IMPL);
 		
@@ -89,6 +91,7 @@ public class GUIBuilder extends JPanel {
 		jcb_combinatorType.addItem(CombinatorType.PARAMETRIZED);
 		jcb_combinatorType.addItem(CombinatorType.ADAPTATIVE_PARAMETRIZED);
 
+		this.AddElement("RefresherN (if cache refresher)", jtf_refresherParam);
 		this.AddElement("Combinator type", jcb_combinatorType);
 		this.AddElement("Combinator decay (if adaptative)", jtf_combinatorDecay);
 		this.AddElement("Combinator attack (if adaptative)", jtf_combinatorAttack);
@@ -132,6 +135,7 @@ public class GUIBuilder extends JPanel {
 			gc.combinator_type =				this.jcb_combinatorType.getItemAt(jcb_combinatorType.getSelectedIndex());
 			gc.combinator_decay = 				Float.parseFloat(this.jtf_combinatorDecay.getText());
 			gc.combinator_attack = 				Float.parseFloat(this.jtf_combinatorAttack.getText());
+			gc.refresher_divisor = 				Integer.parseInt(this.jtf_refresherParam.getText());
 
 			for( int i = 0; i < pmgr.numPrefabs(); i++ ) {
 				gc.fitnesses_params[i] = Float.parseFloat(this.jtf_fitnesses_params[i].getText());

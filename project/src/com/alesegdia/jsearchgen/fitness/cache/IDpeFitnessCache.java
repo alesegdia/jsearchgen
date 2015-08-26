@@ -16,5 +16,7 @@ public interface IDpeFitnessCache {
 	 * @param dpe to store
 	 */
 	public void Cache(DoorPairEntry dpe);
+
+	public void NotifyStep();
 	
 }

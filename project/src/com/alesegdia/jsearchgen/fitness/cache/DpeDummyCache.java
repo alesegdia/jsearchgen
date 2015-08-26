@@ -14,4 +14,10 @@ public class DpeDummyCache implements IDpeFitnessCache {
 		return;
 	}
 
+	@Override
+	public void NotifyStep() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

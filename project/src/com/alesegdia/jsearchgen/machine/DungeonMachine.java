@@ -59,7 +59,7 @@ public class DungeonMachine {
 		}
 		this.ggm = new GraphGridModel(rm);
 
-		this.ggm.SetupCache(config.cache_type);
+		this.ggm.SetupCache(config);
 		
 		this.ggm.SetFitnessSolver(new MultiObjectiveFitnessSolver(combinator));
 		

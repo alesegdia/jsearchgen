@@ -5,13 +5,15 @@ import java.util.List;
 
 import com.alesegdia.jsearchgen.model.room.DoorPairEntry;
 
-public class DpeAlwaysCache implements IDpeFitnessCache {
+public class DpeCacheRefresher implements IDpeFitnessCache {
 
 	List<DoorPairEntry> cached_dpes = new LinkedList<DoorPairEntry>();
 	float param;
+	private int numStepsToRefresh;
+	int currentStep = 0;
 	
-	public DpeAlwaysCache () {
-		
+	public DpeCacheRefresher ( int numStepsToRefresh ) {
+		this.numStepsToRefresh = numStepsToRefresh;
 	}
 	
 	/**
@@ -36,8 +38,11 @@ public class DpeAlwaysCache implements IDpeFitnessCache {
 
 	@Override
 	public void NotifyStep() {
-		// TODO Auto-generated method stub
-		
+		currentStep++;
+		if( currentStep >= this.numStepsToRefresh ) {
+			currentStep = 0;
+			cached_dpes.clear();
+		}
 	}
 	
 }

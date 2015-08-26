@@ -23,6 +23,7 @@ public class GenerationConfig {
 	public float[] fitnesses_params = new float[MultiObjectiveFitness.NUM_OBJECTIVES];
 	public int divisor_n = 2;
 
+	public int refresher_divisor = 1;
 	
 	
 }
