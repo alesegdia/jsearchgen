@@ -1,5 +1,5 @@
 package com.alesegdia.jsearchgen.config;
 
 public enum SolverType {
-	BEST_SEARCH, RANDOM,
+	BEST_SEARCH, RANDOM, MIXED
 }

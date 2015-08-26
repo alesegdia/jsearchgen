@@ -58,6 +58,7 @@ public class GUIBuilder extends JPanel {
 		this.AddElement("Solver type", jcb_solverType);
 		jcb_solverType.addItem(SolverType.RANDOM);
 		jcb_solverType.addItem(SolverType.BEST_SEARCH);
+		jcb_solverType.addItem(SolverType.MIXED);
 		
 		this.AddElement("Manager type", jcb_managerType);
 		jcb_managerType.addItem(ManagerType.BRUTE_FORCE);
