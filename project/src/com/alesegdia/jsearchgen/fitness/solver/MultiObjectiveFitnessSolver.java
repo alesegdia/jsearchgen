@@ -1,7 +1,11 @@
 package com.alesegdia.jsearchgen.fitness.solver;
 
+import com.alesegdia.jsearchgen.matrixsolver.BFSSolver;
 import com.alesegdia.jsearchgen.matrixsolver.FloydWarshallSolver;
+import com.alesegdia.jsearchgen.model.map.GraphGridModel;
+import com.alesegdia.jsearchgen.model.room.RoomInstance;
 import com.alesegdia.jsearchgen.util.UpperMatrix2D;
+import com.alesegdia.jsearchgen.util.Vec2;
 
 public class MultiObjectiveFitnessSolver implements IFitnessSolver {
 
@@ -11,10 +15,15 @@ public class MultiObjectiveFitnessSolver implements IFitnessSolver {
 		this.combinator = combinator;
 	}
 
-	private MultiObjectiveFitness ComputeAllFitness(UpperMatrix2D<Float> graph_matrix) {
-		UpperMatrix2D<Float> clone = new UpperMatrix2D<Float>(graph_matrix);
+	private MultiObjectiveFitness ComputeAllFitness(GraphGridModel ggm, int riID, Vec2 relativeToSolutionMap) {
+		UpperMatrix2D<Float> clone = new UpperMatrix2D<Float>(ggm.graph_matrix);
+		
+		//BFSSolver ds = new BFSSolver();
+		//ds.Solve(graph_matrix, riID, relativeToSolutionMap);
+
 		FloydWarshallSolver fws = new FloydWarshallSolver();
-		fws.Solve(new UpperMatrix2D<Float>(graph_matrix));
+		fws.Solve(new UpperMatrix2D<Float>(ggm.graph_matrix));
+		
 		//return fws.GetDistance();
 
 		FloodFillGraphMatrixSolver ffs = new FloodFillGraphMatrixSolver();
@@ -29,8 +38,8 @@ public class MultiObjectiveFitnessSolver implements IFitnessSolver {
 	}
 	
 	@Override
-	public MultiObjectiveFitness ComputeFitness(UpperMatrix2D<Float> graph_matrix) {
-		MultiObjectiveFitness mof = ComputeAllFitness(graph_matrix);
+	public MultiObjectiveFitness ComputeFitness(GraphGridModel ggm, int riID, Vec2 relativeToSolutionMap) {
+		MultiObjectiveFitness mof = ComputeAllFitness(ggm, riID, relativeToSolutionMap);
 		combinator.CombineFitness( mof );
 		return mof;
 	}

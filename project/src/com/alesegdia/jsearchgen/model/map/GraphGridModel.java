@@ -26,8 +26,8 @@ import com.alesegdia.jsearchgen.view.TileMapRenderer;
  */
 public class GraphGridModel {
 	
-	private static final int SOLUTION_WIDTH = 200;
-	private static final int SOLUTION_HEIGHT = 200;
+	private static final int SOLUTION_WIDTH = 500;
+	private static final int SOLUTION_HEIGHT = 500;
 	/**
 	 * TileMap representing the entire map as a Matrix2D, with proper rooms placed
 	 */
@@ -113,18 +113,19 @@ public class GraphGridModel {
 	}
 	
 	public List<DoorPairEntry> ComputeAllFeasibleDPE() {
-		// precompute if needed 
+		// precompute if needed
+		
 		// extract feasible doors for each room
 		List<DoorPairEntry> feasible_door_pairs = new LinkedList<DoorPairEntry>();
 		for( Iterator<RoomInstance> it = imgr.RemainingInstanceslIterator(); it.hasNext(); )
 		{
 			RoomInstance room = it.next();
 			if( imgr.IsThereAvailableInstances(room) ){
-			List<DoorPairEntry> l = this.GetFeasibleDoorsForRoom(room);
-			feasible_door_pairs.addAll(l);
-			//System.out.println("ROOM " + l.size());
-
-			all_feasible_dpes.addAll(l);
+				List<DoorPairEntry> l = this.GetFeasibleDoorsForRoom(room);
+				feasible_door_pairs.addAll(l);
+				//System.out.println("ROOM " + l.size());
+	
+				all_feasible_dpes.addAll(l);
 			}
 		}
 		return feasible_door_pairs;
@@ -137,7 +138,7 @@ public class GraphGridModel {
 			throw new Exception("el enlace " + r1.id + ", " + r2_id + " estaba creado " + this.graph_matrix.GetUpper(r1.id, r2_id));
 		} else {
 			this.graph_matrix.SetUpper(r1.id, r2_id, r1.globalPosition.distance(dpe.relativeToSolutionMap));
-			dpe.fitness = ComputeFitness();
+			dpe.fitness = ComputeFitness(r2_id, dpe.relativeToSolutionMap);
 			this.graph_matrix.SetUpper(r1.id, r2_id, Float.MAX_VALUE);
 		}
 	}
@@ -147,8 +148,8 @@ public class GraphGridModel {
 
 	IFitnessSolver fitnessSolver;
 	
-	private MultiObjectiveFitness ComputeFitness() {
-		return fitnessSolver.ComputeFitness(graph_matrix);
+	private MultiObjectiveFitness ComputeFitness(int riID, Vec2 relativeToSolutionMap) {
+		return fitnessSolver.ComputeFitness(this, riID, relativeToSolutionMap);
 	}
 	
 	public static long fitness_time = 0;
