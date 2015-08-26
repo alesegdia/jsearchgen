@@ -11,6 +11,7 @@ import com.alesegdia.jsearchgen.fitness.solver.MultiObjectiveFitnessSolver;
 import com.alesegdia.jsearchgen.fitness.solver.ParametrizedMultiObjectiveFitnessCombinator;
 import com.alesegdia.jsearchgen.generatorsolver.BestSearchSolver;
 import com.alesegdia.jsearchgen.generatorsolver.IMapGenSolver;
+import com.alesegdia.jsearchgen.generatorsolver.MixedSearchRandomSolver;
 import com.alesegdia.jsearchgen.generatorsolver.RandomSolver;
 import com.alesegdia.jsearchgen.model.map.GraphGridModel;
 import com.alesegdia.jsearchgen.model.room.AInstanceManager;
@@ -67,6 +68,8 @@ public class DungeonMachine {
 			this.mapgenerator = new RandomSolver();
 		} else if( config.solver_type == SolverType.BEST_SEARCH ) {
 			this.mapgenerator = new BestSearchSolver();
+		} else if( config.solver_type == SolverType.MIXED ) {
+			this.mapgenerator = new MixedSearchRandomSolver();
 		}
 
 		
