@@ -63,6 +63,23 @@ public class ExperimentSuite {
 			super(num_prefabs);
 		}
 		
+		public String toString() {
+			String s = "";
+			
+			if( this.solver_type == SolverType.BEST_SEARCH ) {
+				s += "BestSearch, ";
+			} else if( this.solver_type == SolverType.RANDOM ) {
+				s += "Random, ";
+			}
+			
+			if( this.cache_type == CacheType.NO_CACHE ) {
+				s += "NO CACHE";
+			} else if( this.cache_type == CacheType.ALWAYS ) {
+				s += "ALWAYS CACHE";
+			}
+			return s;
+		}
+		
 	}
 
 	public static void main(String[] args) throws Exception {
@@ -90,9 +107,11 @@ public class ExperimentSuite {
 		icfg.solver_type = SolverType.RANDOM;
 		icfg.manager_type = ManagerType.PREFAB_MODEL;
 		icfg.cache_type = CacheType.NO_CACHE;
-		icfg.doorgen_type = DoorGenType.ALL;
 
-		genConfigs.add(icfg);
+		icfg.doorgen_type = DoorGenType.RANDOM;
+		icfg.divisor_n = 2;
+
+		//genConfigs.add(icfg);
 
 		/******************************************/
 		icfg = new IncompleteGenerationConfig();
@@ -101,7 +120,33 @@ public class ExperimentSuite {
 		icfg.cache_type = CacheType.NO_CACHE;
 		icfg.manager_type = ManagerType.PREFAB_MODEL;
 		icfg.combinator_type = CombinatorType.PARAMETRIZED;
-		icfg.doorgen_type = DoorGenType.ALL;
+		
+		icfg.doorgen_type = DoorGenType.RANDOM;
+		icfg.divisor_n = 2;
+
+		icfg.combinator_attack = 0;
+		icfg.combinator_decay = 0;
+
+		icfg.fitnesses_params[0] = 1;
+		icfg.fitnesses_params[1] = 1;
+		icfg.fitnesses_params[2] = 1;
+		icfg.fitnesses_params[3] = 1;
+
+		icfg.random_seed = 1234;
+
+		genConfigs.add(icfg);
+		/******************************************/
+
+		/******************************************/
+		icfg = new IncompleteGenerationConfig();
+
+		icfg.solver_type = SolverType.BEST_SEARCH;
+		icfg.cache_type = CacheType.ALWAYS;
+		icfg.manager_type = ManagerType.PREFAB_MODEL;
+		icfg.combinator_type = CombinatorType.PARAMETRIZED;
+		
+		icfg.doorgen_type = DoorGenType.RANDOM;
+		icfg.divisor_n = 2;
 
 		icfg.combinator_attack = 0;
 		icfg.combinator_decay = 0;
@@ -117,40 +162,40 @@ public class ExperimentSuite {
 		/******************************************/
 
 		System.in.read();
-		System.out.println("sizes\t\tnumModels\troomsPerModel\tconfig\ttime");
-		for( int numModel : numModels ) {
+		System.out.println("sizes\t\tnumModels\troomsPerModel\ttime");
+
+		for( IncompleteGenerationConfig cfg : genConfigs ) {
+			System.out.println(cfg);
 
 			for( Vec2 size : sizes ) {
-				for( int numRooms : roomsPerType ) {
-					int k = 0;
-					for( IncompleteGenerationConfig cfg : genConfigs ) {
-						DungeonMachine m = new DungeonMachine();
-						PrefabManager pmgr = makeRandomModels(numModel, size);
-						GenerationConfig gcfg = new GenerationConfig(pmgr.numPrefabs());
-						gcfg.solver_type = cfg.solver_type;
-						gcfg.cache_type = cfg.cache_type;
-						gcfg.manager_type = cfg.manager_type;
-						gcfg.combinator_type = cfg.combinator_type;
-						gcfg.doorgen_type = cfg.doorgen_type;
 
-						gcfg.combinator_attack = cfg.combinator_attack;
-						gcfg.combinator_decay = cfg.combinator_decay;
+				for( int numModel : numModels ) {
 
-						gcfg.fitnesses_params = cfg.fitnesses_params;
-						gcfg.random_seed = cfg.random_seed;
-						gcfg.num_instances_per_prefab = new int[pmgr.numPrefabs()];
-						for( int i = 0; i < gcfg.num_instances_per_prefab.length; i++ ) {
-							gcfg.num_instances_per_prefab[i] = numRooms;
+					for( int numRooms : roomsPerType ) {
+							DungeonMachine m = new DungeonMachine();
+							PrefabManager pmgr = makeRandomModels(numModel, size);
+							GenerationConfig gcfg = new GenerationConfig(pmgr.numPrefabs());
+							gcfg.solver_type = cfg.solver_type;
+							gcfg.cache_type = cfg.cache_type;
+							gcfg.manager_type = cfg.manager_type;
+							gcfg.combinator_type = cfg.combinator_type;
+							gcfg.doorgen_type = cfg.doorgen_type;
+							
+							gcfg.combinator_attack = cfg.combinator_attack;
+							gcfg.combinator_decay = cfg.combinator_decay;
+	
+							gcfg.fitnesses_params = cfg.fitnesses_params;
+							gcfg.random_seed = cfg.random_seed;
+							gcfg.num_instances_per_prefab = new int[pmgr.numPrefabs()];
+							for( int i = 0; i < gcfg.num_instances_per_prefab.length; i++ ) {
+								gcfg.num_instances_per_prefab[i] = numRooms;
+							}
+	
+							m.Reset(gcfg, pmgr);
+							float time = m.Generate();
+							System.out.println(size + "\t\t" + numModel + "\t\t" + numRooms + "\t\t" + time/10e8);
 						}
-
-						m.Reset(gcfg, pmgr);
-						float time = m.Generate();
-						System.out.println(size + "\t\t" + numModel + "\t\t" + numRooms + "\t\t" + k + "\t" + time/10e8);
-						//System.out.println("SIZE: " + "(" + size.x + "," + size.y + "), numRooms: " + numRooms + ", config: " + k);
-						//System.out.println("time: " + time/10e8);
-						k++;
 					}
-				}
 				System.out.println();
 			}
 		}
