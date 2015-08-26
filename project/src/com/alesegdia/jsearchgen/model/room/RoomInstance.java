@@ -76,7 +76,6 @@ public class RoomInstance {
 				PotentialDoorEntry pde = prefab.potentialDoors.get(i);
 				this.AddDoor(pde.localPosition.x, pde.localPosition.y, pde.type);
 			}
-			i++;
 		}
 	}
 
