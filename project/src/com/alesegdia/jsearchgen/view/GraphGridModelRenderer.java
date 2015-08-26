@@ -31,7 +31,7 @@ public class GraphGridModelRenderer extends JComponent implements KeyListener {
 	
 	public void ComputePath() {
 		FloydWarshallSolver fws = new FloydWarshallSolver();
-		fws.Solve(ggs.graph_matrix.Clone());
+		fws.Solve(ggs, 0, null);
 		r_start = fws.GetSpawnRoom();
 		r_end = fws.GetGoalRoom();
 		path = fws.GetPath();
