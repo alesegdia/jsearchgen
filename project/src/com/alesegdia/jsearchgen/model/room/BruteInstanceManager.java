@@ -59,4 +59,9 @@ public class BruteInstanceManager extends AInstanceManager {
 		remaining_rooms.add(ri);
 	}
 
+	@Override
+	public int getNumRooms() {
+		return remaining_rooms.size();
+	}
+
 }

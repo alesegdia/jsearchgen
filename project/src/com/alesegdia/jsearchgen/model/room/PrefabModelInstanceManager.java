@@ -90,5 +90,10 @@ public class PrefabModelInstanceManager extends AInstanceManager {
 		allRemainingRooms.add(ri);
 	}
 
+	@Override
+	public int getNumRooms() {
+		return allRemainingRooms.size();
+	}
+
 	
 }

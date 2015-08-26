@@ -125,6 +125,8 @@ public abstract class AInstanceManager {
 		return ri;
 	}
 
+	public abstract int getNumRooms();
+
 	
 
 
