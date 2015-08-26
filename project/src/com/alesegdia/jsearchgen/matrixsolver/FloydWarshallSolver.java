@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.alesegdia.jsearchgen.model.map.GraphGridModel;
 import com.alesegdia.jsearchgen.util.UpperMatrix2D;
+import com.alesegdia.jsearchgen.util.Vec2;
 
 
-public class FloydWarshallSolver {
+public class FloydWarshallSolver implements IGraphPathSolver {
 
 
 	public FloydWarshallSolver() {
@@ -19,7 +21,8 @@ public class FloydWarshallSolver {
 	private float distance;
 	private List<Integer> path;
 	
-	public void Solve(UpperMatrix2D<Float> matrix) {
+	public void Solve(GraphGridModel ggm, int riID, Vec2 relativeToSolutionMap) {
+		UpperMatrix2D<Float> matrix = ggm.graph_matrix;
 		min_distances = matrix;
 		UpperMatrix2D<Integer> next = new UpperMatrix2D<Integer>(matrix.cols, matrix.rows, -1);
 
