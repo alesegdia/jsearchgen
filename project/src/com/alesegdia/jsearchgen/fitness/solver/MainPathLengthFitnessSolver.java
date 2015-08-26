@@ -11,7 +11,7 @@ public class MainPathLengthFitnessSolver implements IFitnessSolver {
 	@Override
 	public MultiObjectiveFitness ComputeFitness(GraphGridModel ggm, int riID, Vec2 relativeToSolutionMap) {
 		FloydWarshallSolver fws = new FloydWarshallSolver();
-		fws.Solve(new UpperMatrix2D<Float>(ggm.graph_matrix));
+		fws.Solve(ggm, 0, null);
 		MultiObjectiveFitness mof = new MultiObjectiveFitness();
 		mof.objectives[MultiObjectiveFitness.FO_MAIN_PATH_LENGTH] = fws.GetDistance();
 		mof.total_fitness = mof.objectives[MultiObjectiveFitness.FO_MAIN_PATH_LENGTH];
