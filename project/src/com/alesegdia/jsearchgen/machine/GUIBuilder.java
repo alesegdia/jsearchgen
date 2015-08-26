@@ -138,6 +138,7 @@ public class GUIBuilder extends JPanel {
 			}
 			
 			dm.Reset(gc, pmgr);
+			dm.setShow(true);
 			dm.Run();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
