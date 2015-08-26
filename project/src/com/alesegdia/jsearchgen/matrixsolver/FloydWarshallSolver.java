@@ -22,7 +22,7 @@ public class FloydWarshallSolver implements IGraphPathSolver {
 	private List<Integer> path;
 	
 	public void Solve(GraphGridModel ggm, int riID, Vec2 relativeToSolutionMap) {
-		UpperMatrix2D<Float> matrix = ggm.graph_matrix;
+		UpperMatrix2D<Float> matrix = new UpperMatrix2D<Float>(ggm.graph_matrix);
 		min_distances = matrix;
 		UpperMatrix2D<Integer> next = new UpperMatrix2D<Integer>(matrix.cols, matrix.rows, -1);
 
