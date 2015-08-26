@@ -5,6 +5,7 @@ import com.alesegdia.jsearchgen.config.GenerationConfig;
 import com.alesegdia.jsearchgen.config.ManagerType;
 import com.alesegdia.jsearchgen.config.SolverType;
 import com.alesegdia.jsearchgen.fitness.solver.AdaptativeParametrizedMultiObjectiveFitnessCombinator;
+import com.alesegdia.jsearchgen.fitness.solver.FloodFillGraphMatrixSolver;
 import com.alesegdia.jsearchgen.fitness.solver.IMultiObjectiveFitnessCombinator;
 import com.alesegdia.jsearchgen.fitness.solver.MultiObjectiveFitnessSolver;
 import com.alesegdia.jsearchgen.fitness.solver.ParametrizedMultiObjectiveFitnessCombinator;
@@ -17,6 +18,7 @@ import com.alesegdia.jsearchgen.model.room.BruteInstanceManager;
 import com.alesegdia.jsearchgen.model.room.PrefabModelInstanceManager;
 import com.alesegdia.jsearchgen.model.room.PrefabManager;
 import com.alesegdia.jsearchgen.util.RNG;
+import com.alesegdia.jsearchgen.util.UpperMatrix2D;
 import com.alesegdia.jsearchgen.view.GraphGridModelRenderer;
 
 public class DungeonMachine {
@@ -25,6 +27,7 @@ public class DungeonMachine {
 	private GraphGridModel ggm;
 	private IMapGenSolver mapgenerator;
 	GraphGridModelRenderer ggsr;
+	AInstanceManager imgr;
 
 	boolean show = false;
 	
@@ -46,6 +49,7 @@ public class DungeonMachine {
 			rm = new PrefabModelInstanceManager(pmgr);
 		}
 		
+		imgr = rm;
 		rm.GenRooms(config);
 		IMultiObjectiveFitnessCombinator combinator;
 		if( config.combinator_type == CombinatorType.PARAMETRIZED ) {
@@ -66,7 +70,7 @@ public class DungeonMachine {
 		}
 
 		
-		if( show ) this.ggsr = new GraphGridModelRenderer(ggm);
+		this.ggsr = new GraphGridModelRenderer(ggm);
 
 	}
 	
@@ -78,6 +82,9 @@ public class DungeonMachine {
 	}
 	
 	public long Generate() throws Exception {
+
+		int n = imgr.getNumRooms();
+		FloodFillGraphMatrixSolver.visited = new UpperMatrix2D<Boolean>(n+1,n+1,false);
 		long t1 = System.nanoTime();
 		while(!this.ggm.IsComplete()){
 			if(!this.mapgenerator.Step(this.ggm)) {

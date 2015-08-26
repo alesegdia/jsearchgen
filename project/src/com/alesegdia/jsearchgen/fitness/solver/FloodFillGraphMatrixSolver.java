@@ -8,14 +8,19 @@ import com.alesegdia.jsearchgen.util.UpperMatrix2D;
 public class FloodFillGraphMatrixSolver {
 	
 	private List<Integer> main_path;
-	private UpperMatrix2D<Boolean> visited;
+	public static UpperMatrix2D<Boolean> visited;
 	private UpperMatrix2D<Float> graph_matrix;
 	private float branching_fitness = 0;
 	private float alt_path_length_fitness = 0;
-
+	
 	public void Solve(UpperMatrix2D<Float> matrix, List<Integer> main_path ) {
 		
-		this.visited = new UpperMatrix2D<Boolean>(matrix.cols, matrix.cols, false);
+		for( int i = 0; i < matrix.cols; i++ ) {
+			for( int j = 0; j < matrix.rows; j++ ) {
+				visited.SetUpper(i, j, false);
+			}
+		}
+		//this.visited = new UpperMatrix2D<Boolean>(matrix.cols, matrix.cols, false);
 		this.main_path = main_path;
 		this.graph_matrix = matrix;
 		
