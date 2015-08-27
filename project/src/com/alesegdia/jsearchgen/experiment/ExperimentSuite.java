@@ -77,7 +77,7 @@ public class ExperimentSuite {
 			} else if( this.cache_type == CacheType.ALWAYS ) {
 				s += "ALWAYS CACHE";
 			} else if( this.cache_type == CacheType.REFRESHER ) {
-				s += "REFRESHER CACHE";
+				s += "REFRESHER CACHE " + this.refresher_divisor;
 			}
 			return s;
 		}
@@ -109,10 +109,9 @@ public class ExperimentSuite {
 		icfg = new IncompleteGenerationConfig();
 		icfg.solver_type = SolverType.RANDOM;
 		icfg.manager_type = ManagerType.PREFAB_MODEL;
-		icfg.cache_type = CacheType.NO_CACHE;
-
+		
 		icfg.doorgen_type = DoorGenType.RANDOM;
-		icfg.divisor_n = 2;
+		icfg.doorgen_divisor = 2;
 
 		//genConfigs.add(icfg);
 		/******************************************/		
@@ -121,12 +120,39 @@ public class ExperimentSuite {
 		icfg = new IncompleteGenerationConfig();
 
 		icfg.solver_type = SolverType.BEST_SEARCH;
-		icfg.cache_type = CacheType.NO_CACHE;
+		icfg.bestsearch_dpe_divisor = 0.1f;
+		icfg.cache_type = CacheType.REFRESHER;
+		icfg.refresher_divisor = 10;
 		icfg.manager_type = ManagerType.PREFAB_MODEL;
 		icfg.combinator_type = CombinatorType.PARAMETRIZED;
 		
 		icfg.doorgen_type = DoorGenType.RANDOM;
-		icfg.divisor_n = 2;
+		icfg.doorgen_divisor = 20;
+
+		icfg.combinator_attack = 0;
+		icfg.combinator_decay = 0;
+
+		icfg.fitnesses_params[0] = 1;
+		icfg.fitnesses_params[1] = 1;
+		icfg.fitnesses_params[2] = 1;
+		icfg.fitnesses_params[3] = 1;
+
+		icfg.random_seed = 1234;
+
+		genConfigs.add(icfg);
+		/******************************************/
+		
+		/******************************************/
+		icfg = new IncompleteGenerationConfig();
+
+		icfg.solver_type = SolverType.BEST_SEARCH;
+		icfg.bestsearch_dpe_divisor = 0f;
+		icfg.cache_type = CacheType.NO_CACHE;
+		icfg.manager_type = ManagerType.PREFAB_MODEL;
+		icfg.combinator_type = CombinatorType.PARAMETRIZED;
+		
+		icfg.doorgen_type = DoorGenType.ALL;
+		icfg.doorgen_divisor = 1;
 
 		icfg.combinator_attack = 0;
 		icfg.combinator_decay = 0;
@@ -145,13 +171,13 @@ public class ExperimentSuite {
 		icfg = new IncompleteGenerationConfig();
 
 		icfg.solver_type = SolverType.BEST_SEARCH;
-		icfg.cache_type = CacheType.REFRESHER;
-		icfg.refresher_divisor = 5;
+		icfg.bestsearch_dpe_divisor = 0f;
+		icfg.cache_type = CacheType.NO_CACHE;
 		icfg.manager_type = ManagerType.PREFAB_MODEL;
 		icfg.combinator_type = CombinatorType.PARAMETRIZED;
 		
 		icfg.doorgen_type = DoorGenType.RANDOM;
-		icfg.divisor_n = 2;
+		icfg.doorgen_divisor = 5;
 
 		icfg.combinator_attack = 0;
 		icfg.combinator_decay = 0;
@@ -175,7 +201,7 @@ public class ExperimentSuite {
 		icfg.combinator_type = CombinatorType.PARAMETRIZED;
 		
 		icfg.doorgen_type = DoorGenType.RANDOM;
-		icfg.divisor_n = 2;
+		icfg.doorgen_divisor = 2;
 
 		icfg.combinator_attack = 0;
 		icfg.combinator_decay = 0;
@@ -215,7 +241,8 @@ public class ExperimentSuite {
 	
 							gcfg.fitnesses_params = cfg.fitnesses_params;
 							gcfg.random_seed = cfg.random_seed;
-							gcfg.divisor_n = cfg.divisor_n;
+							gcfg.doorgen_divisor = cfg.doorgen_divisor;
+							gcfg.bestsearch_dpe_divisor = cfg.bestsearch_dpe_divisor;
 							gcfg.refresher_divisor = cfg.refresher_divisor;
 							gcfg.num_instances_per_prefab = new int[pmgr.numPrefabs()];
 							for( int i = 0; i < gcfg.num_instances_per_prefab.length; i++ ) {
