@@ -27,9 +27,8 @@ public class MultiObjectiveFitnessSolver implements IFitnessSolver {
 		//ds.Solve(graph_matrix, riID, relativeToSolutionMap);
 		
 		IGraphPathSolver igps;
-		if( i % 2 == 0 ) {
+		if( true ) {
 			igps = new FloydWarshallSolver();
-			
 		} else {
 			igps = new DijkstraSolver();
 		}
