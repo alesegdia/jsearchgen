@@ -8,9 +8,9 @@ public class MixedSearchRandomSolver implements IMapGenSolver {
 	BestSearchSolver bss;
 	int i = 0;
 	
-	public MixedSearchRandomSolver() {
+	public MixedSearchRandomSolver(float bestsearch_dpe_divisor) {
 		rs = new RandomSolver();
-		bss = new BestSearchSolver();
+		bss = new BestSearchSolver(bestsearch_dpe_divisor);
 	}
 	
 	@Override
