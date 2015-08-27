@@ -67,9 +67,9 @@ public class DungeonMachine {
 		if( config.solver_type == SolverType.RANDOM ) {
 			this.mapgenerator = new RandomSolver();
 		} else if( config.solver_type == SolverType.BEST_SEARCH ) {
-			this.mapgenerator = new BestSearchSolver();
+			this.mapgenerator = new BestSearchSolver(config.bestsearch_dpe_divisor);
 		} else if( config.solver_type == SolverType.MIXED ) {
-			this.mapgenerator = new MixedSearchRandomSolver();
+			this.mapgenerator = new MixedSearchRandomSolver(config.bestsearch_dpe_divisor);
 		}
 
 		
