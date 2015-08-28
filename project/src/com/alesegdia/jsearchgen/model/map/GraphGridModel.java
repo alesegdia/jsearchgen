@@ -356,7 +356,7 @@ public class GraphGridModel {
 		} else if ( cfg.cache_type == CacheType.ALWAYS ) {
 			this.fitness_cache = new DpeAlwaysCache();
 		} else if( cfg.cache_type == CacheType.REFRESHER ) {
-			this.fitness_cache = new DpeCacheRefresher(cfg.refresher_divisor);
+			this.fitness_cache = new DpeCacheRefresher(cfg.refresher_n);
 		}
 		
 	}
