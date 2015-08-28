@@ -1,10 +1,16 @@
 package com.alesegdia.jsearchgen.config;
 
+import java.io.Serializable;
+
 import com.alesegdia.jsearchgen.fitness.solver.MultiObjectiveFitness;
 
 
-public class GenerationConfig {
+public class GenerationConfig implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	public long random_seed; 					// seed for the RNG
 	public int num_instances_per_prefab[]; 	// num instances per prefab
 	public SolverType solver_type; 				// solver to perform each generation step
@@ -24,9 +30,10 @@ public class GenerationConfig {
 	public float combinator_decay;
 	public float combinator_attack;
 	public float[] fitnesses_params = new float[MultiObjectiveFitness.NUM_OBJECTIVES];
-	public int doorgen_divisor = 2;
+	public float doorgen_random_doors = 1f;
+	public float doorgen_divisor = 1f;
 
-	public int refresher_divisor = 1;
+	public int refresher_n = 1;
 	
 	
 }
