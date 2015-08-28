@@ -12,13 +12,14 @@ public class BestSearchSolver implements IMapGenSolver {
 	private float dpe_divisor;
 
 	public BestSearchSolver( float bestsearch_dpe_divisor ) {
-		this.dpe_divisor = bestsearch_dpe_divisor;
+		this.dpe_divisor = 1f-bestsearch_dpe_divisor;
 	}
 	
 	@Override
 	public boolean Step(GraphGridModel ggm)
 	{
 		List<DoorPairEntry> feasible_door_pairs = ggm.ComputeAllFeasibleDPE();
+		shuffle(feasible_door_pairs);
 		List<DoorPairEntry> aux = new LinkedList<DoorPairEntry>();
 		int k = (int) (feasible_door_pairs.size() * dpe_divisor);
 		if( k <= 0 ) {
