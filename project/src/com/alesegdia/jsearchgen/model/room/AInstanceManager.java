@@ -37,9 +37,9 @@ public abstract class AInstanceManager {
 		for( RoomPrefab prefab : prefabMgr.prefabs ) {
 			int n = num_instances_per_prefab[i];
 			if( gc.doorgen_type == DoorGenType.RANDOM && gc.cloned_rooms ) {
-				this.GenerateSetWithSameRandomDoors(prefab, n, gc.doorgen_divisor);
+				this.GenerateSetWithSameRandomDoors(prefab, n, gc.doorgen_random_doors);
 			} else if ( gc.doorgen_type == DoorGenType.RANDOM && !gc.cloned_rooms ) {
-				this.GenerateSetWithRandomDoors(prefab, n, gc.doorgen_divisor);
+				this.GenerateSetWithRandomDoors(prefab, n, gc.doorgen_random_doors);
 			} else if ( gc.doorgen_type == DoorGenType.ALL ) {
 				this.GenerateSetWithAllDoors(prefab, n);
 			} else if ( gc.doorgen_type == DoorGenType.DIVISOR ) {
@@ -49,12 +49,12 @@ public abstract class AInstanceManager {
 		}
 	}
 	
-	private List<RoomInstance> GenerateSetWithDivisorDoors(RoomPrefab prefab, int num_rooms, int divisor) {
+	private List<RoomInstance> GenerateSetWithDivisorDoors(RoomPrefab prefab, int num_rooms, float divisor_k) {
 		List<RoomInstance> retlist = new LinkedList<RoomInstance>();
 		for( int i = 0; i < num_rooms; i++ )
 		{
 			RoomInstance ri = CreateRoomInstance(prefab);
-			ri.GenerateDivisorDoors(RNG.rng, divisor);
+			ri.GenerateDivisorDoors(RNG.rng, divisor_k);
 			retlist.add(ri);
 		}
 		return retlist;
@@ -69,15 +69,13 @@ public abstract class AInstanceManager {
 		}
 	}
 	
-	public List<RoomInstance> GenerateSetWithRandomDoors( RoomPrefab prefab, int num_rooms, int divisor )
+	public List<RoomInstance> GenerateSetWithRandomDoors( RoomPrefab prefab, int num_rooms, float num_doors_k )
 	{
 		List<RoomInstance> retlist = new LinkedList<RoomInstance>();
 		for( int i = 0; i < num_rooms; i++ )
 		{
 			RoomInstance ri = CreateRoomInstance(prefab);
-
-			int n = prefab.GetTileMap().cols + prefab.GetTileMap().rows/divisor;
-			ri.GenerateRandomDoors(RNG.rng, n);
+			ri.GenerateRandomDoors(RNG.rng, num_doors_k);
 			retlist.add(ri);
 		}
 		return retlist;
@@ -95,12 +93,11 @@ public abstract class AInstanceManager {
 		return retlist;
 	}
 	
-	public List<RoomInstance> GenerateSetWithSameRandomDoors( RoomPrefab prefab, int num_rooms, int divisor )
+	public List<RoomInstance> GenerateSetWithSameRandomDoors( RoomPrefab prefab, int num_rooms, float num_doors_k )
 	{
 		List<RoomInstance> retlist = new LinkedList<RoomInstance>();
 		RoomInstance sample = CreateRoomInstance(prefab);
-		int n = prefab.GetTileMap().cols + prefab.GetTileMap().rows/divisor;
-		sample.GenerateRandomDoors(RNG.rng, num_rooms);
+		sample.GenerateRandomDoors(RNG.rng, num_doors_k);
 		retlist.add(sample);
 		for( int i = 0; i < num_rooms - 1; i++ )
 		{

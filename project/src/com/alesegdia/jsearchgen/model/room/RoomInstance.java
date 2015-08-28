@@ -56,9 +56,10 @@ public class RoomInstance {
 	 * @param rng RNG class object used for random generation
 	 * @param num_doors number of doors to be generated
 	 */
-	public void GenerateRandomDoors(RNG rng, int num_doors)
+	public void GenerateRandomDoors(RNG rng, float num_doors_k)
 	{
 		List<PotentialDoorEntry> possible_doors = new ArrayList<PotentialDoorEntry>(this.prefab.potentialDoors);
+		int num_doors = (int) (possible_doors.size() * num_doors_k);
 		while(num_doors > 0 && possible_doors.size() > 0)
 		{
 			int selected = rng.nextInt(possible_doors.size());
@@ -69,8 +70,10 @@ public class RoomInstance {
 		}
 	}
 	
-	public void GenerateDivisorDoors(RNG rng, int divisor) {
+	public void GenerateDivisorDoors(RNG rng, float divisor_k) {
 
+		int divisor = (int) (prefab.potentialDoors.size() * divisor_k);
+		if( divisor == 0 ) divisor = 1;
 		for( int i = 0; i < prefab.potentialDoors.size(); i++ ) {
 			if( i % divisor == 0 ) {
 				PotentialDoorEntry pde = prefab.potentialDoors.get(i);
