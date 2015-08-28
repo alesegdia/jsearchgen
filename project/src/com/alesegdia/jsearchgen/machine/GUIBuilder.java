@@ -136,7 +136,7 @@ public class GUIBuilder extends JPanel {
 			gc.combinator_type =				this.jcb_combinatorType.getItemAt(jcb_combinatorType.getSelectedIndex());
 			gc.combinator_decay = 				Float.parseFloat(this.jtf_combinatorDecay.getText());
 			gc.combinator_attack = 				Float.parseFloat(this.jtf_combinatorAttack.getText());
-			gc.refresher_divisor = 				Integer.parseInt(this.jtf_refresherParam.getText());
+			gc.refresher_n = 				Integer.parseInt(this.jtf_refresherParam.getText());
 
 			for( int i = 0; i < pmgr.numPrefabs(); i++ ) {
 				gc.fitnesses_params[i] = Float.parseFloat(this.jtf_fitnesses_params[i].getText());
