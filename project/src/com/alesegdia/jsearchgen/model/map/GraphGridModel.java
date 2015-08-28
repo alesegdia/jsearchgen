@@ -139,9 +139,17 @@ public class GraphGridModel {
 		if( this.graph_matrix.GetUpper(r1.id, r2_id) != Float.MAX_VALUE ) {
 			throw new Exception("el enlace " + r1.id + ", " + r2_id + " estaba creado " + this.graph_matrix.GetUpper(r1.id, r2_id));
 		} else {
+			RoomInstance test = dpe.other_door.ri_owner;
+			Vec2 prevPos = test.globalPosition;
+			test.globalPosition = dpe.relativeToSolutionMap;
+			this.added_rooms.add(test);
 			this.graph_matrix.SetUpper(r1.id, r2_id, r1.globalPosition.distance(dpe.relativeToSolutionMap));
+			
 			dpe.fitness = ComputeFitness(r2_id, dpe.relativeToSolutionMap);
+			
 			this.graph_matrix.SetUpper(r1.id, r2_id, Float.MAX_VALUE);
+			test.globalPosition = prevPos;
+			this.added_rooms.remove(test);
 		}
 	}
 	public void SetFitnessSolver(IFitnessSolver solver) {
