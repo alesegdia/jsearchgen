@@ -136,8 +136,7 @@ public class ExperimentSuite {
 			if( propsMap.size() == 0 ) {
 				this.buildPropsMap();
 			}
-			String s = "=============\n" +
-						this.name + "\n";
+			String s = "";
 			s += "\\begin{center}\n" +
 					   "	\\begin{tabular}{ | c | c | }\n\\hline\n" +
 					   " 		Property & Value \\\\ \\hline\n";
@@ -165,7 +164,7 @@ public class ExperimentSuite {
 			s += "\\begin{center}\n" +
 				 "	\\begin{tabular}{ | c | c | c | c | c | }\n\\hline\n";
 
-			s += "Tamaño habitaciones & Número de modelos & Instancias/Modelo & Total habs. & Tiempo de ejecución \\\\ \\hline \n";
+			s += "Tam. habs. & Num. modelos & Instancias/modelo & Total habs. & Tiempo ejec. \\\\ \\hline \n";
 			for( TestEntry te : entries ) {
 				s += te.toString();
 			}
@@ -336,10 +335,11 @@ public class ExperimentSuite {
 		IncompleteGenerationConfig bs_opt_varfix = new IncompleteGenerationConfig("bs-opt-variability-fix");
 		bs_opt_varfix.solver_type = SolverType.BEST_SEARCH;
 		bs_opt_varfix.bestsearch_dpe_divisor = 0.5f;
-		bs_opt_varfix.cache_type = CacheType.ALWAYS;
+		bs_opt_varfix.cache_type = CacheType.REFRESHER;
 		bs_opt_varfix.refresher_n = 10;
 		bs_opt_varfix.manager_type = ManagerType.PREFAB_MODEL;
 		bs_opt_varfix.doorgen_type = DoorGenType.RANDOM;
+		bs_opt_varfix.cloned_rooms = true;
 		bs_opt_varfix.doorgen_random_doors = 0.3f;
 		/******************************************/
 		
@@ -388,6 +388,7 @@ public class ExperimentSuite {
 		IncompleteGenerationConfig bs_dpediv095f = MakeDpeDivConfig("bs_dpediv095f", 0.95f);
 		/******************************************/
 		
+		/*
 		makeTestCase("bs-randoors08f", bs_randoors_08f, seeds,
 				mkList(10),
 				mkList(4, 6),
@@ -468,6 +469,12 @@ public class ExperimentSuite {
 				mkList(8), 		// room sizes
 				mkList(4, 6, 8), 		// num models
 				mkList(2, 4, 6, 8));		// rooms per model
+		*/
+		
+		makeTestCase("bs-opt-big-sample", bs_opt_varfix, mkList(0),
+				mkList(15), 		// room sizes
+				mkList(5, 10), 		// num models
+				mkList(5, 10, 15));		// rooms per model
 
 	}
 
