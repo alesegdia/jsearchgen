@@ -387,8 +387,8 @@ public class ExperimentSuite {
 		IncompleteGenerationConfig bs_dpediv085f = MakeDpeDivConfig("bs_dpediv085f", 0.85f);
 		IncompleteGenerationConfig bs_dpediv095f = MakeDpeDivConfig("bs_dpediv095f", 0.95f);
 		/******************************************/
-
-		makeTestCase("bs-randoors04f", bs_randoors_04f, seeds,
+		
+		makeTestCase("bs-randoors08f", bs_randoors_08f, seeds,
 				mkList(10),
 				mkList(4, 6),
 				mkList(8, 10));
@@ -397,8 +397,8 @@ public class ExperimentSuite {
 				mkList(10),
 				mkList(4, 6),
 				mkList(8, 10));
-		
-		makeTestCase("bs-randoors08f", bs_randoors_08f, seeds,
+
+		makeTestCase("bs-randoors04f", bs_randoors_04f, seeds,
 				mkList(10),
 				mkList(4, 6),
 				mkList(8, 10));
@@ -454,17 +454,17 @@ public class ExperimentSuite {
 				mkList(50), 		// num models
 				mkList(2));		// rooms per model
 		
-		makeTestCase("bs-nocache", bs_nocache, mkList(0),
+		makeTestCase("bs-alwayscache-compare", bs_alwayscache, seeds,
 				mkList(8), 		// room sizes
 				mkList(4, 6, 8), 		// num models
 				mkList(2, 4, 6, 8));		// rooms per model
 
-		makeTestCase("bs-alwayscache", bs_alwayscache, seeds,
+		makeTestCase("bs-opt-compare", bs_opt, seeds,
 				mkList(8), 		// room sizes
 				mkList(4, 6, 8), 		// num models
 				mkList(2, 4, 6, 8));		// rooms per model
-
-		makeTestCase("bs-opt-comp", bs_opt, seeds,
+		
+		makeTestCase("bs-nocache-compare", bs_nocache, seeds,
 				mkList(8), 		// room sizes
 				mkList(4, 6, 8), 		// num models
 				mkList(2, 4, 6, 8));		// rooms per model
