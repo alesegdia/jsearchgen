@@ -31,6 +31,7 @@ public class ExperimentDumper {
 		};
 
 		for( String experiment : experiments ) {
+			System.out.println(experiment);
 			FileInputStream fos = new FileInputStream("../experiments/" + experiment);
 			ObjectInputStream oos = new ObjectInputStream(fos);
 			TestCase tc = (TestCase) oos.readObject();
