@@ -25,11 +25,13 @@ public class Test_Machine {
 		gc.num_instances_per_prefab[1] = 	20;
 		gc.random_seed = 					0xDEADBEEF;
 		gc.cloned_rooms = 					false;
+		gc.doorgen_divisor = 				0.5f;
+		gc.bestsearch_dpe_divisor = 		1f;
 		gc.doorgen_type = 					DoorGenType.ALL;
 		gc.manager_type = 					ManagerType.PREFAB_MODEL;
 		gc.cache_type = 					CacheType.NO_CACHE;
-		gc.combinator_type = 				CombinatorType.ADAPTATIVE_PARAMETRIZED;
-		gc.fitnesses_params[MultiObjectiveFitness.FO_ALT_PATH_BRANCHING] = 100f;
+		gc.combinator_type = 				CombinatorType.PARAMETRIZED;
+		gc.fitnesses_params[MultiObjectiveFitness.FO_ALT_PATH_BRANCHING] = 0f;
 		gc.fitnesses_params[MultiObjectiveFitness.FO_ALT_PATH_LENGTH] = 0f;
 		gc.fitnesses_params[MultiObjectiveFitness.FO_MAIN_PATH_LENGTH] = 100f;
 		gc.fitnesses_params[MultiObjectiveFitness.FO_ROOM_CONDENSATION] = 0f;
@@ -37,7 +39,7 @@ public class Test_Machine {
 		gc.combinator_attack = 				1.f;		
 
 		gc.solver_type = 					SolverType.RANDOM;
-		LaunchMachineWithParams(gc);
+		//LaunchMachineWithParams(gc);
 		
 		gc.solver_type = 					SolverType.BEST_SEARCH;
 		LaunchMachineWithParams(gc);
@@ -45,6 +47,7 @@ public class Test_Machine {
 	
 	static void LaunchMachineWithParams(GenerationConfig gc) throws Exception {
 		DungeonMachine dm = new DungeonMachine();
+		dm.setShow(true);
 		dm.Reset(gc, pmgr);
 		dm.Run();
 	}
