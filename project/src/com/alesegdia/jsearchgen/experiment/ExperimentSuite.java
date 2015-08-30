@@ -472,7 +472,7 @@ public class ExperimentSuite {
 		*/
 		
 		makeTestCase("bs-opt-big-sample", bs_opt_varfix, mkList(0),
-				mkList(15), 		// room sizes
+				mkList(20), 		// room sizes
 				mkList(5, 10), 		// num models
 				mkList(5, 10, 15));		// rooms per model
 
