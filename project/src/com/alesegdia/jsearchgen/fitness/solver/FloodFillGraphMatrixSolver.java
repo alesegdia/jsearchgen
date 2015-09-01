@@ -31,23 +31,31 @@ public class FloodFillGraphMatrixSolver {
 	private void RecursiveFloodFill( int current_room, int from_alt ) {
 		GraphMatrixLinksIterator it = new GraphMatrixLinksIterator( this.graph_matrix, current_room );
 		int num_neighboors = 0;
+		if( !this.main_path.contains(current_room) ) {
+			from_alt++;
+		} else {
+			from_alt = 1;
+		}
 		while( it.hasNext() ) {
 			int neighboor = it.next();
 			num_neighboors++;
-			if( num_neighboors > 2 ) {
-				this.branching_fitness += num_neighboors;
-			}
 			if( !this.visited.GetUpper( current_room, it.next() ) ) {
 				this.visited.SetUpper(current_room, neighboor, true);
-				if( !this.main_path.contains(neighboor) ) {
-					this.alt_path_length_fitness += 1+from_alt;
-					from_alt++;
-				} else {
-					from_alt = 1;
-				}
 				RecursiveFloodFill(neighboor, from_alt);
 			}
 		}
+		if( num_neighboors > 2 ) {
+			if( !this.main_path.contains(current_room) ) {
+				num_neighboors *= 2;
+			}
+			this.branching_fitness += num_neighboors;
+		}
+
+			if( !this.main_path.contains(current_room) ) {
+				this.alt_path_length_fitness += 1 + from_alt;
+			}
+
+
 	}
 	
 	public float GetBranchingFitness() {
