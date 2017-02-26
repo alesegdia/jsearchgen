@@ -6,8 +6,11 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.List;
 
+import javax.imageio.ImageIO;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.KeyStroke;
@@ -27,7 +30,7 @@ public class GraphGridModelRenderer extends JComponent implements KeyListener {
 	int r_start = 0;
 	int r_end = 1;
 	private List<Integer> path;
-	public static int TILE_SIZE = 5;
+	public static int TILE_SIZE = 3;
 	
 	public void ComputePath() {
 		FloydWarshallSolver fws = new FloydWarshallSolver();
@@ -93,7 +96,7 @@ public class GraphGridModelRenderer extends JComponent implements KeyListener {
 			     g.setFont(f); 
 		     g.setColor(new Color(255,0,0));
 			}
-			g.drawString(Integer.toString(ri.id), ri.globalPosition.x * TILE_SIZE + 30, ri.globalPosition.y * TILE_SIZE + 30);
+			g.drawString(Integer.toString(ri.id), ri.globalPosition.x * TILE_SIZE + 10, ri.globalPosition.y * TILE_SIZE + 20);
 		}
 	     g.setColor(new Color(0,0,0));
 		g.drawString(current_mode , 20, 20);
@@ -105,6 +108,14 @@ public class GraphGridModelRenderer extends JComponent implements KeyListener {
 
 	public Dimension getMinimumSize() {
 		return getPreferredSize();
+	}
+	
+	public void saveScreenshot(String filename) {
+		BufferedImage bi = new BufferedImage(this.getSize().width, this.getSize().height, BufferedImage.TYPE_INT_ARGB); 
+		Graphics g = bi.createGraphics();
+		this.paint(g);  //this == JComponent
+		g.dispose();
+		try{ImageIO.write(bi,"png",new File(filename));}catch (Exception e) {}
 	}
 	
 	public void Show()

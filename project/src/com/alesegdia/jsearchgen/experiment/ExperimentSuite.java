@@ -175,6 +175,8 @@ public class ExperimentSuite {
 					
 			return s;
 		}
+
+		
 	}
 	
 	public static class TestEntry implements Serializable {
@@ -343,6 +345,19 @@ public class ExperimentSuite {
 		bs_opt_varfix.doorgen_random_doors = 0.3f;
 		/******************************************/
 		
+		/****************************************************************/
+		/* OPTIMAL: BESTSEARCH, REFRESHER 10, DPEDIVISOR 0.5, RANDOM DOORGEN 0.3 */
+		IncompleteGenerationConfig bs_opt_varfix2 = new IncompleteGenerationConfig("bs-opt-variability-fix");
+		bs_opt_varfix2.solver_type = SolverType.BEST_SEARCH;
+		bs_opt_varfix2.bestsearch_dpe_divisor = 0.2f;
+		bs_opt_varfix2.cache_type = CacheType.REFRESHER;
+		bs_opt_varfix2.refresher_n = 10;
+		bs_opt_varfix2.manager_type = ManagerType.PREFAB_MODEL;
+		bs_opt_varfix2.doorgen_type = DoorGenType.RANDOM;
+		bs_opt_varfix2.cloned_rooms = true;
+		bs_opt_varfix2.doorgen_random_doors = 0.1f;
+		/******************************************/
+		
 		/*************************************************/
 		/* BESTSEARCH, NO CACHE, ALLDOORS, DPEDIVISOR 1f */
 		IncompleteGenerationConfig bs_nocache = new IncompleteGenerationConfig("bs-nocache");
@@ -449,33 +464,31 @@ public class ExperimentSuite {
 				mkList(6), 		// room sizes
 				mkList(20, 30, 40, 50), 		// num models
 				mkList(1, 2));		// rooms per model
-		
 		makeTestCase("bs-opt-variabilty-sample-fixed", bs_opt_varfix, seeds,
 				mkList(6), 		// room sizes
-				mkList(50), 		// num models
-				mkList(2));		// rooms per model
+				mkList(20, 30, 40, 50), 		// num models
+				mkList(1, 2, 3));		// rooms per model
 		
-		makeTestCase("bs-alwayscache-compare", bs_alwayscache, seeds,
+		makeTestCase("bs-alwayscache-compare", bs_alwayscache, mkList(0),
 				mkList(8), 		// room sizes
-				mkList(4, 6, 8), 		// num models
+				mkList(10), 		// num models
 				mkList(2, 4, 6, 8));		// rooms per model
 
-		makeTestCase("bs-opt-compare", bs_opt, seeds,
+		makeTestCase("bs-opt-compare", bs_opt, mkList(0),
 				mkList(8), 		// room sizes
-				mkList(4, 6, 8), 		// num models
+				mkList(10), 		// num models
 				mkList(2, 4, 6, 8));		// rooms per model
 		
-		makeTestCase("bs-nocache-compare", bs_nocache, seeds,
+		makeTestCase("bs-nocache-compare", bs_nocache, mkList(0),
 				mkList(8), 		// room sizes
-				mkList(4, 6, 8), 		// num models
+				mkList(10), 		// num models
 				mkList(2, 4, 6, 8));		// rooms per model
-		*/
 		
-		makeTestCase("bs-opt-big-sample", bs_opt_varfix, mkList(0),
+		makeTestCase("bs-opt-big-sample", bs_opt_varfix2, mkList(0),
 				mkList(20), 		// room sizes
-				mkList(5, 10), 		// num models
-				mkList(5, 10, 15));		// rooms per model
-
+				mkList(10, 20, 30, 40, 50), 		// num models
+				mkList(1, 2, 3, 4));		// rooms per model
+		*/
 	}
 
 }
